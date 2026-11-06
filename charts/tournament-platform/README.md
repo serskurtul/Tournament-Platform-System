@@ -41,14 +41,14 @@ charts/tournament-platform/
 
 | Ключ | За замовчуванням | Опис |
 |------|------------------|------|
-| `api.image.repository` | `ghcr.io/katushhiaa/tournament-platform-server` | Образ API |
+| `api.image.repository` | `ghcr.io/serskurtul/tournament-platform-server` | Образ API |
 | `api.image.tag` | `1.0.0` | Конкретний тег (не `latest`) |
 | `api.image.pullPolicy` | `IfNotPresent` | Політика завантаження |
 | `api.replicaCount` | `2` | Кількість реплік API |
 | `api.failRate` | `"0"` | Частка запитів із 500 (демо ЛР-7); `0` вимкнено |
 | `api.service.type` / `.port` | `ClusterIP` / `80` | Тип і порт Service API |
 | `api.resources` | requests 100m/256Mi, limits 500m/512Mi | Ресурси API |
-| `client.image.repository` / `.tag` | `ghcr.io/katushhiaa/tournament-platform-client` / `1.0.0` | Образ клієнта |
+| `client.image.repository` / `.tag` | `ghcr.io/serskurtul/tournament-platform-client` / `1.0.0` | Образ клієнта |
 | `client.replicaCount` | `2` | Репліки клієнта |
 | `client.service.type` / `.port` / `.nodePort` | `NodePort` / `80` / `30173` | Доступ з хоста |
 | `postgres.image.repository` / `.tag` | `postgres` / `15` | Образ БД |

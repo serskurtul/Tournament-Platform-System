@@ -29,7 +29,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: ghcr.io/katushhiaa/tournament-platform-server:1.0.0
+          image: ghcr.io/serskurtul/tournament-platform-server:1.0.0
           env:
             - name: POSTGRES_USER
               valueFrom:

@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: ghcr.io/katushhiaa/tournament-platform-server:1.0.0
+          image: ghcr.io/serskurtul/tournament-platform-server:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

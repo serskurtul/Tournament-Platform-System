@@ -12,7 +12,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/katushhiaa/Tournament-Platform-System.git
+    repoURL: https://github.com/serskurtul/Tournament-Platform-System.git
     targetRevision: main
     path: charts/tournament-platform
     helm:

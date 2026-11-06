@@ -5,7 +5,7 @@
 
 api:
   image:
-    repository: ghcr.io/katushhiaa/tournament-platform-server
+    repository: ghcr.io/serskurtul/tournament-platform-server
     # Concrete version tag. The tag is also exported as APP_VERSION (shown by /version). Never "latest".
     tag: "1.0.0"
     pullPolicy: IfNotPresent
@@ -25,7 +25,7 @@ api:
 
 client:
   image:
-    repository: ghcr.io/katushhiaa/tournament-platform-client
+    repository: ghcr.io/serskurtul/tournament-platform-client
     tag: "1.0.0"
     pullPolicy: IfNotPresent
   replicaCount: 2

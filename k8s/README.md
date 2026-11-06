@@ -35,7 +35,7 @@ kubectl -n kube-system get pods
 ```
 
 Образи мають бути в реєстрі (ЛР-2 CI публікує їх у GHCR при push тегу `vX.Y.Z`, наприклад `v1.0.0`):
-`ghcr.io/katushhiaa/tournament-platform-server:1.0.0` і `ghcr.io/katushhiaa/tournament-platform-client:1.0.0`.
+`ghcr.io/serskurtul/tournament-platform-server:1.0.0` і `ghcr.io/serskurtul/tournament-platform-client:1.0.0`.
 
 ## Розгортання однією командою з каталогу `k8s/`
 
@@ -91,13 +91,13 @@ kubectl -n tournament-platform run curl --rm -it --image=curlimages/curl -- \
   sh -c 'for i in $(seq 1 10); do curl -s http://tournament-api/version; echo; done'
 
 # 6c–6e. Оновлення, історія, відкат, доступність
-kubectl -n tournament-platform set image deploy/tournament-api api=ghcr.io/katushhiaa/tournament-platform-server:1.1.0
+kubectl -n tournament-platform set image deploy/tournament-api api=ghcr.io/serskurtul/tournament-platform-server:1.1.0
 kubectl -n tournament-platform rollout status deploy/tournament-api
 kubectl -n tournament-platform rollout history deploy/tournament-api
 kubectl -n tournament-platform rollout undo deploy/tournament-api
 
 # 7a. Навмисна помилка: неіснуючий тег -> ImagePullBackOff
-kubectl -n tournament-platform set image deploy/tournament-api api=ghcr.io/katushhiaa/tournament-platform-server:9.9.9
+kubectl -n tournament-platform set image deploy/tournament-api api=ghcr.io/serskurtul/tournament-platform-server:9.9.9
 kubectl -n tournament-platform get pods
 kubectl -n tournament-platform describe pod -l app.kubernetes.io/name=tournament-api | sed -n '/Events:/,$p'
 
@@ -106,7 +106,7 @@ kubectl -n tournament-platform logs deploy/tournament-api --tail=50
 kubectl -n tournament-platform exec -it deploy/tournament-api -- sh
 
 # 7d. Виправлення
-kubectl -n tournament-platform set image deploy/tournament-api api=ghcr.io/katushhiaa/tournament-platform-server:1.0.0
+kubectl -n tournament-platform set image deploy/tournament-api api=ghcr.io/serskurtul/tournament-platform-server:1.0.0
 kubectl -n tournament-platform rollout status deploy/tournament-api
 ```
 
