@@ -1,0 +1,169 @@
+name: CI
+
+# Runs on every pull request (status shows in the PR UI) and on pushes to main.
+on:
+  pull_request:
+  push:
+    branches: [main]
+    # Release tags (v1.0.0) publish version-tagged images used by the Kubernetes manifests.
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ${{ github.repository_owner }}/tournament-platform
+
+jobs:
+  # ---- Job per service: lint (blocking) -> build -> test. Services run in parallel. ----
+  server:
+    name: server
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+          cache: true
+          cache-dependency-path: server/**/*.csproj
+
+      - name: Restore
+        run: dotnet restore TournamentPlatformSystemWebApi.sln
+
+      - name: Lint (dotnet format whitespace, blocking)
+        # Generated EF Core migrations are excluded: they are produced by tooling, not hand-edited.
+        run: >
+          dotnet format whitespace TournamentPlatformSystemWebApi.sln
+          --verify-no-changes --no-restore
+          --exclude TournamentPlatformSystemWebApi.Infrastructure/Migrations
+
+      - name: Build
+        run: dotnet build TournamentPlatformSystemWebApi.sln -c Release --no-restore
+
+      - name: Test (unit)
+        run: dotnet test Tests/Tests.csproj -c Release --no-build --logger "trx;LogFileName=unit.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-test-results
+          path: server/Tests/TestResults/*.trx
+          if-no-files-found: ignore
+
+  client:
+    name: client
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint (ESLint, blocking)
+        run: npm run lint
+
+      - name: Build (type-check + bundle)
+        # The client has no unit-test suite yet; `tsc -b` inside the build step is its test gate.
+        run: npm run build
+
+  # ---- Image build: needs ALL test jobs green. Built locally in the runner, not published. ----
+  docker-build:
+    name: docker-build (${{ matrix.service }})
+    needs: [server, client]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: server
+            context: server
+          - service: client
+            context: client
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build image (load into runner, no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          load: true
+          tags: local/${{ matrix.service }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+
+      - name: Vulnerability scan (Trivy, blocking on CRITICAL/HIGH)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: local/${{ matrix.service }}:${{ github.sha }}
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '1'
+
+  # ---- Publish: only on push (never for pull requests); tags = commit SHA, plus latest on main. ----
+  publish:
+    name: publish (${{ matrix.service }})
+    needs: docker-build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: server
+            context: server
+          - service: client
+            context: client
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR (GITHUB_TOKEN, no stored credentials)
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image metadata (tags)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-${{ matrix.service }}
+          tags: |
+            type=sha,format=long
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.service }}
