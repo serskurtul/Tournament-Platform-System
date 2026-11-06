@@ -1,0 +1,98 @@
+# DVO-L3-7F2A91
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tournament-api
+  namespace: tournament-platform
+  labels:
+    app.kubernetes.io/name: tournament-api
+    app.kubernetes.io/part-of: tournament-platform
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot-name: "кабачок"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tournament-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tournament-api
+        app.kubernetes.io/part-of: tournament-platform
+        mascot: kabachok
+      annotations:
+        devops-lab/mascot-approved: "true"
+        devops-lab/mascot-name: "кабачок"
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/katushhiaa/tournament-platform-server:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: APP_VERSION
+              value: "1.0.0"
+            - name: ASPNETCORE_ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: tournament-config
+                  key: ASPNETCORE_ENVIRONMENT
+            - name: FRONTEND_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: tournament-config
+                  key: FRONTEND_ORIGIN
+            - name: JWT__ISSUER
+              valueFrom:
+                configMapKeyRef:
+                  name: tournament-config
+                  key: JWT__ISSUER
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: tournament-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: tournament-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tournament-secrets
+                  key: POSTGRES_PASSWORD
+            - name: JWT__KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tournament-secrets
+                  key: JWT__KEY
+            # $(VAR) is expanded by Kubernetes from the variables declared above.
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=postgres;Port=5432;Database=$(POSTGRES_DB);User Id=$(POSTGRES_USER);Password=$(POSTGRES_PASSWORD);"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          # Liveness must not depend on the database: /version is process-only.
+          livenessProbe:
+            httpGet:
+              path: /version
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          # Readiness includes the DB check (/health returns 503 when the DB is down).
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3

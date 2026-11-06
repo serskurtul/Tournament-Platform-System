@@ -1,0 +1,23 @@
+# DVO-L3-7F2A91
+# NodePort: reachable from the host (minikube) on the node port 30173, and inside the cluster by name.
+apiVersion: v1
+kind: Service
+metadata:
+  name: tournament-client
+  namespace: tournament-platform
+  labels:
+    app.kubernetes.io/name: tournament-client
+    app.kubernetes.io/part-of: tournament-platform
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot-name: "кабачок"
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: tournament-client
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      nodePort: 30173

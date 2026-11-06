@@ -1,0 +1,19 @@
+# DVO-L3-7F2A91
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tournament-config
+  namespace: tournament-platform
+  labels:
+    app.kubernetes.io/part-of: tournament-platform
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot-name: "кабачок"
+data:
+  # Non-sensitive application configuration (injected as environment variables).
+  ASPNETCORE_ENVIRONMENT: "Production"
+  FRONTEND_ORIGIN: "http://tournament.local"
+  JWT__ISSUER: "tournament-api"
+  POSTGRES_DB: "tournament_db"
+  POSTGRES_USER: "postgres"

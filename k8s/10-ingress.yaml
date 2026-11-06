@@ -1,0 +1,26 @@
+# DVO-L3-7F2A91
+# Optional HTTP entry point (requires: minikube addons enable ingress). Host: tournament.local
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tournament-ingress
+  namespace: tournament-platform
+  labels:
+    app.kubernetes.io/part-of: tournament-platform
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot-name: "кабачок"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: tournament.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tournament-client
+                port:
+                  name: http
