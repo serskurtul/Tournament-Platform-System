@@ -1,0 +1,47 @@
+# ЛР-7 п.1: Prometheus + Alertmanager + Grafana. Values are inline; no secrets stored here.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 92.22.0
+    helm:
+      valuesObject:
+        prometheus:
+          prometheusSpec:
+            # Select ServiceMonitors / PrometheusRules from ALL namespaces, not only those labelled with the Helm release.
+            serviceMonitorSelectorNilUsesHelmValues: false
+            podMonitorSelectorNilUsesHelmValues: false
+            ruleSelectorNilUsesHelmValues: false
+        grafana:
+          # Load dashboards from ConfigMaps labelled grafana_dashboard="1" in every namespace (our chart ships one).
+          sidecar:
+            dashboards:
+              enabled: true
+              label: grafana_dashboard
+              searchNamespace: ALL
+          additionalDataSources:
+            - name: Loki
+              uid: loki
+              type: loki
+              access: proxy
+              url: http://loki.monitoring.svc.cluster.local:3100
+              isDefault: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # CRDs are large: server-side apply avoids the last-applied-configuration size limit.
+      - ServerSideApply=true

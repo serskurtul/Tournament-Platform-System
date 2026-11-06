@@ -1,0 +1,73 @@
+# ЛР-7 п.1: Grafana Alloy collects stdout logs of the tournament namespace and ships them to Loki.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: alloy
+    # TODO(verify): set to the newest chart version (`helm search repo grafana/alloy`).
+    # Not resolved in the authoring environment, so this Application will report an error until it is set.
+    targetRevision: "VERIFY-LATEST-VERSION"
+    helm:
+      valuesObject:
+        controller:
+          type: deployment
+        alloy:
+          configMap:
+            content: |
+              // Discover pods, keep only the tournament namespace, and attach useful labels.
+              discovery.kubernetes "pods" {
+                role = "pod"
+              }
+
+              discovery.relabel "tournament" {
+                targets = discovery.kubernetes.pods.targets
+
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  regex         = "tournament-platform"
+                  action        = "keep"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  target_label  = "namespace"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_name"]
+                  target_label  = "pod"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_container_name"]
+                  target_label  = "container"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_component"]
+                  target_label  = "component"
+                }
+              }
+
+              loki.source.kubernetes "tournament" {
+                targets    = discovery.relabel.tournament.output
+                forward_to = [loki.write.default.receiver]
+              }
+
+              loki.write "default" {
+                endpoint {
+                  url = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+                }
+              }
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

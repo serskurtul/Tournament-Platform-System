@@ -1,0 +1,36 @@
+# The ZVYTIAHA application itself: Helm chart from this repository, minikube values, automated sync.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tournament-platform
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # Sync after the Argo Rollouts CRDs (sync-wave -1) exist.
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/katushhiaa/Tournament-Platform-System.git
+    targetRevision: main
+    path: charts/tournament-platform
+    helm:
+      releaseName: tp
+      valueFiles:
+        - values-minikube.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: tournament-platform
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
