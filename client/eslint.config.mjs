@@ -30,6 +30,8 @@ export default [
             quotes: ['error', 'single'],
             'max-len': ['warn', { code: 100 }],
             'vue/multi-word-component-names': 'off',
+            // A leading underscore marks an intentionally unused argument (e.g. interface stubs).
+            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         },
     },
     prettier,

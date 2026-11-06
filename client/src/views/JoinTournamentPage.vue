@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ApiError } from '../types/ApiError'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/authStore'
@@ -24,7 +25,8 @@ onMounted(async () => {
   try {
     await participationService.addParticipant(id, authStore.currentUser!.userId)
     sessionStorage.setItem('joinToast', `You have successfully joined the tournament!`)
- } catch (e: any) {
+ } catch (err) {
+    const e = err as ApiError
     const msg = e?.response?.data?.message ?? 'Failed to join the tournament.'
     sessionStorage.setItem('joinToastError', msg)
   }

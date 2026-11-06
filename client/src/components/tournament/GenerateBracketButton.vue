@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ApiError } from '../../types/ApiError'
 import { computed, ref } from 'vue'
 import { tournamentService } from '../../services/tournamentService'
 import ConfirmModal from '../ui/ConfirmModal.vue'
@@ -27,7 +28,8 @@ const handleGenerate = async () => {
     loading.value = true
     await tournamentService.startTournament(props.tournamentId)
     emit('generated')
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     toastType.value = 'error'
     if (e?.errorCode === 'CONFLICT') {
       toast.value = 'Not enough participants or tournament already started.'

@@ -1,3 +1,4 @@
+import type { ApiError } from '../types/ApiError';
 import axiosInstance from '../api/axiosInstance'
 import type { IBracketStructure } from '../types/Bracket'
 
@@ -11,7 +12,8 @@ export const bracketService = {
             )
 
             return response.data
-        } catch (error: any) {
+        } catch (err) {
+            const error = err as ApiError;
             if (
                 error.response?.status === 404 ||
                 error.response?.status === 400

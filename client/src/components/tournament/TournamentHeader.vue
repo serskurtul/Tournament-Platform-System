@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ApiError } from '../../types/ApiError'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -92,7 +93,8 @@ const handleJoin = async () => {
     )
     emit('refresh-participants')
     emit('show-toast', `You have successfully joined ${props.tournament.title}!`)
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     const status = e?.response?.status
     const msg = e?.response?.data?.error?.message
 
@@ -124,7 +126,8 @@ const handleCancelConfirm = async () => {
     showCancelConfirm.value = false
     emit('refresh-participants')
     emit('show-toast', 'You have successfully cancelled your participation.')
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     const status = e?.response?.status
     const msg = e?.response?.data?.error?.message
     showCancelConfirm.value = false

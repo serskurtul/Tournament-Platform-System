@@ -1,6 +1,6 @@
 import type { MatchInfo } from '../types/Match';
 
-export interface IBracketMatch extends MatchInfo { }
+export type IBracketMatch = MatchInfo;
 
 export interface IBracketRound {
     round: number;

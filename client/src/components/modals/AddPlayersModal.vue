@@ -79,6 +79,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ApiError } from '../../types/ApiError'
 import { computed, ref, watch } from 'vue'
 import { userService, type IUserSearchItem } from '../../services/userService'
 import { participationService } from '../../services/participationService'
@@ -170,7 +171,8 @@ const handleAdd = async () => {
     selectedUser.value = null
     searchResults.value = []
     emit('playerAdded')
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     if (e?.response?.status === 409) {
       addError.value = 'This player is already added or the tournament is full.'
     } else {
