@@ -18,4 +18,9 @@ public static class MiddlewareExtensions
     {
         return app.UseMiddleware<ResponseWrappingMiddleware>();
     }
+
+    public static IApplicationBuilder UseFaultInjection(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<FaultInjectionMiddleware>();
+    }
 }
