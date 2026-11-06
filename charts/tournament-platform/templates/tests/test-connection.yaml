@@ -1,0 +1,26 @@
+# DVO-L4-3C8B52
+# `helm test <release>` target: checks the API version endpoint and the client through their Services.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "test-connection") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  restartPolicy: Never
+  containers:
+    - name: connection-test
+      image: busybox:1.36
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          set -e
+          wget -qO- http://{{ include "tournament.componentName" (dict "root" . "component" "api") }}:{{ .Values.api.service.port }}/version
+          echo
+          wget -qO- http://{{ include "tournament.componentName" (dict "root" . "component" "client") }}:{{ .Values.client.service.port }}/ > /dev/null
+          echo "connection test passed"

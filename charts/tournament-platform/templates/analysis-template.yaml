@@ -1,0 +1,31 @@
+# DVO-L4-3C8B52
+# Argo Rollouts AnalysisTemplate (ЛР-7): share of successful (non-5xx) requests of the NEW (canary) ReplicaSet.
+{{- if and .Values.rollout.enabled .Values.analysis.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: {{ include "tournament.fullname" . }}-success-rate
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  args:
+    - name: canary-hash
+  metrics:
+    - name: success-rate
+      interval: 30s
+      count: 4
+      failureLimit: 1
+      successCondition: result[0] >= {{ .Values.analysis.successRateThreshold }}
+      provider:
+        prometheus:
+          address: {{ .Values.analysis.prometheusAddress | quote }}
+          query: |
+            (
+              sum(rate(http_requests_total{job="{{ include "tournament.componentName" (dict "root" . "component" "api") }}",rollouts_pod_template_hash="{{ `{{args.canary-hash}}` }}",status!~"5.."}[1m]))
+              /
+              sum(rate(http_requests_total{job="{{ include "tournament.componentName" (dict "root" . "component" "api") }}",rollouts_pod_template_hash="{{ `{{args.canary-hash}}` }}"}[1m]))
+            ) or vector(1)
+{{- end }}

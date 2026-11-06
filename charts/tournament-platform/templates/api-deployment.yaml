@@ -1,0 +1,20 @@
+# DVO-L4-3C8B52
+{{- if not .Values.rollout.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "api") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+    {{- include "tournament.selectorLabels" (dict "root" . "component" "api") | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "tournament.selectorLabels" (dict "root" . "component" "api") | nindent 6 }}
+  template:
+    {{- include "tournament.apiPodTemplate" . | nindent 4 }}
+{{- end }}

@@ -1,0 +1,22 @@
+# DVO-L4-3C8B52
+{{- if .Values.postgres.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "postgres") }}-data
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+    {{- include "tournament.selectorLabels" (dict "root" . "component" "postgres") | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- with .Values.postgres.persistence.storageClass }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.postgres.persistence.size }}
+{{- end }}
