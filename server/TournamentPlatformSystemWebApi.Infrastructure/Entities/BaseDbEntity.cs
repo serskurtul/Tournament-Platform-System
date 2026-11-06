@@ -6,4 +6,3 @@ public abstract class BaseDbEntity
 {
     public Guid Id { get; set; }
 }
-

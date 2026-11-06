@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace TournamentPlatformSystemWebApi.Infrastructure.Migrations
 {
-    
+
     public partial class AddIndexes : Migration
     {
-        
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateIndex(
@@ -21,7 +21,7 @@ namespace TournamentPlatformSystemWebApi.Infrastructure.Migrations
                 column: "token");
         }
 
-        
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(

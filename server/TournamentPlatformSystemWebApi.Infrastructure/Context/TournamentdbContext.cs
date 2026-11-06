@@ -402,10 +402,10 @@ public partial class TournamentdbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            
+
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.ThemeId).HasColumnName("theme_id");
-            
+
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -462,4 +462,3 @@ public partial class TournamentdbContext : DbContext
     }
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
-
