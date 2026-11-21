@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using TournamentPlatformSystemWebApi.Core.Entities;
 using TournamentPlatformSystemWebApi.Infrastructure.Context;
@@ -33,7 +34,7 @@ namespace Tests
                     .ForMember(d => d.Tournaments, o => o.Ignore())
                     .ForMember(d => d.UserTeams, o => o.Ignore());
                 c.CreateMap<UserDetail, UserDetailModel>();
-            });
+            }, NullLoggerFactory.Instance);
 
             _mapper = cfg.CreateMapper();
         }

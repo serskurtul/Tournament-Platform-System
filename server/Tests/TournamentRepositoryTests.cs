@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using TournamentPlatformSystemWebApi.Core.Entities;
 using TournamentPlatformSystemWebApi.Infrastructure.Context;
@@ -21,7 +22,7 @@ namespace Tests
             var cfg = new MapperConfiguration(c =>
             {
                 c.AddProfile<TournamentProfile>();
-            });
+            }, NullLoggerFactory.Instance);
 
             _mapper = cfg.CreateMapper();
         }

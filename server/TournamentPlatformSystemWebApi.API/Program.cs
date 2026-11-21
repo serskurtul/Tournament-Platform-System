@@ -158,7 +158,7 @@ builder.Services.AddAuthorization();
 // Swagger configuration moved to Swagger/SwaggerExtensions.cs
 builder.Services.AddConfiguredSwagger();
 // Register AutoMapper profiles from Infrastructure assembly
-builder.Services.AddAutoMapper(typeof(TournamentPlatformSystemWebApi.Infrastructure.Mappings.UserProfile).Assembly);
+builder.Services.AddAutoMapper(_ => { }, typeof(TournamentPlatformSystemWebApi.Infrastructure.Mappings.UserProfile).Assembly);
 
 var app = builder.Build();
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 using TournamentPlatformSystemWebApi.Infrastructure.Entities;
 using TournamentPlatformSystemWebApi.Core.Entities;
@@ -15,7 +16,7 @@ public class MappingTests
         return new MapperConfiguration(cfg =>
         {
             cfg.AddMaps(typeof(UserProfile).Assembly);
-        });
+        }, NullLoggerFactory.Instance);
     }
 
     [Fact]
