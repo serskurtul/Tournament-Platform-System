@@ -4,7 +4,7 @@
 For every documentation artifact in REGISTRY:
   * Last Updated Age      git log -1 --format=%cs -- <doc>   -> days before --as-of (90 suspicious, 180 stale)
   * Code-Doc Change Ratio commits to the related code component since the doc was last updated
-                          (git log --since=<doc date> --oneline -- <component> | wc -l); > 20 = structural drift
+                          (git rev-list --count <last doc commit>..HEAD -- <component>); > 20 = structural drift
   * Broken links          relative Markdown links / images that point to files that do not exist
   * Inbound references    other tracked text files that link to the doc (proxy for access evidence)
 Usage: doc_audit.py [--as-of 2026-11-21] [--json out.json] [--md out.md]
@@ -23,6 +23,10 @@ REGISTRY = {
     "README.md": ("продукт", "експлуатаційна", "новачок, бізнес, DevOps", ["server", "client/src", "docker-compose.yml"]),
     "CONTRIBUTORS.md": ("процес", "—", "команда", []),
     "client/README.md": ("продукт", "технічна", "розробники (фронтенд)", ["client/src"]),
+    "docs/sdd.md": ("продукт", "архітектурна", "розробники, QA", ["server/TournamentPlatformSystemWebApi.API/Controllers", "server/TournamentPlatformSystemWebApi.Infrastructure/Services"]),
+    "docs/isd.md": ("продукт", "експлуатаційна", "DevOps", ["docker-compose.yml", "k8s", "charts/tournament-platform", ".github/workflows"]),
+    "docs/architecture/adr/README.md": ("процес", "архітектурна", "розробники", []),
+    "docs/maintenance.md": ("процес", "експлуатаційна", "усі", []),
     "docs/ADR_System_Style.md": ("процес", "архітектурна", "розробники", ["server"]),
     "docs/SAD_Internal_View.md": ("продукт", "архітектурна", "розробники", ["server"]),
     "docs/DATA_DICTIONARY.md": ("продукт", "технічна", "розробники, QA", ["server/TournamentPlatformSystemWebApi.Infrastructure/Entities", "db"]),
@@ -78,8 +82,10 @@ def audit(as_of: date) -> list[dict]:
         last = git("log", "-1", "--format=%cs", "--", doc)
         age = (as_of - date.fromisoformat(last)).days if last else None
         doc_commits = int(git("rev-list", "--count", "HEAD", "--", doc) or 0)
-        code_since = (len(git("log", f"--since={last}", "--oneline", "--", *components).splitlines())
-                      if components and last else None)
+        last_sha = git("log", "-1", "--format=%H", "--", doc)
+        # Exact range: code commits made after the commit that last touched the document.
+        code_since = (int(git("rev-list", "--count", f"{last_sha}..HEAD", "--", *components) or 0)
+                      if components and last_sha else None)
         flags = []
         if age is not None and age > 180:
             flags.append("stale>180d")

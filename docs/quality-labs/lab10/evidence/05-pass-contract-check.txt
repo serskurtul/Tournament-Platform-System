@@ -1,0 +1,4 @@
+$ python3 scripts/quality/doc_contract_check.py
+routes in code: 25, documented: 25; compose dependencies: 5, documented: 5
+RESULT: PASS (documentation matches code)
+exit=0

@@ -7,7 +7,7 @@
     "last_updated": "2026-06-19",
     "age_days": 155,
     "doc_commits": 16,
-    "code_commits_since_doc": 13,
+    "code_commits_since_doc": 14,
     "broken_links": [],
     "inbound_refs": 2,
     "flags": [
@@ -115,7 +115,7 @@
     "last_updated": "2026-04-06",
     "age_days": 229,
     "doc_commits": 2,
-    "code_commits_since_doc": 97,
+    "code_commits_since_doc": 98,
     "broken_links": [],
     "inbound_refs": 0,
     "flags": [
@@ -177,7 +177,7 @@
     "last_updated": "2026-11-06",
     "age_days": 15,
     "doc_commits": 2,
-    "code_commits_since_doc": 2,
+    "code_commits_since_doc": 0,
     "broken_links": [],
     "inbound_refs": 2,
     "flags": []
@@ -190,7 +190,7 @@
     "last_updated": "2026-11-06",
     "age_days": 15,
     "doc_commits": 2,
-    "code_commits_since_doc": 2,
+    "code_commits_since_doc": 0,
     "broken_links": [],
     "inbound_refs": 2,
     "flags": []
@@ -203,7 +203,7 @@
     "last_updated": "2026-11-06",
     "age_days": 15,
     "doc_commits": 2,
-    "code_commits_since_doc": 7,
+    "code_commits_since_doc": 4,
     "broken_links": [],
     "inbound_refs": 1,
     "flags": []

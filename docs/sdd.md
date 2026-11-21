@@ -34,7 +34,7 @@ C4Container
 | **Web client** (`client/`) | UI для гравців і організаторів, зберігання JWT, автоматичний refresh (axios-перехоплювач) | API через nginx `/api/` → `API_UPSTREAM` | [ISD §2](isd.md#2-топологія-розгортання) |
 | **API: контролери** (`server/*.API/Controllers`) | HTTP-контракти (§4), авторизація за ролями `organizer` / `player` | сервіси нижче | [ISD §2](isd.md#2-топологія-розгортання) |
 | `TournamentManagementService` | Створення, чернетка, редагування турніру, банер | `ITournamentRepository`, `IThemeRepository`, `IStorageService`, `IParticipantRoster` | у процесі API |
-| `ParticipantService` (+ `IParticipantRoster`) | Додавання, видалення, дискваліфікація учасників; єдине джерело кількості активних учасників | `ITournamentRepository`, `IUserRepository`, `TournamentdbContext`, `ITournamentStatusResolver` | у процесі API |
+| `ParticipantService` (+ `IParticipantRoster`) | Додавання, видалення, дискваліфікація учасників; єдине джерело кількості активних учасників (також публічно через `GET …/participants/count`) | `ITournamentRepository`, `IUserRepository`, `TournamentdbContext`, `ITournamentStatusResolver` | у процесі API |
 | `MatchService` | Старт турніру (генерація сітки), матчі, результати | `ITournamentRepository`, `TournamentdbContext`, `ITournamentStatusResolver`, `IParticipantRoster`, `IBracketGenerator`, `ISeedingStrategy` | у процесі API |
 | `TournamentDetailsService` | Деталі турніру і таймлайн подій | `ITournamentStatusResolver`, `IParticipantRoster` | у процесі API |
 | `TournamentCatalogService` | Списки, пошук, персоналізація за темами | `ITournamentRepository`, `TournamentdbContext` | у процесі API |
@@ -97,6 +97,7 @@ erDiagram
 | `GET /api/v1/tournaments/{id}` | Деталі турніру | анонімно | TournamentDetailsService |
 | `GET /api/v1/tournaments/{id}/events` | Таймлайн подій | анонімно | TournamentDetailsService |
 | `GET /api/v1/tournaments/{id}/participants` | Учасники | анонімно | ParticipantService |
+| `GET /api/v1/tournaments/{id}/participants/count` | Кількість активних (недискваліфікованих) учасників | анонімно | IParticipantRoster (ParticipantService) |
 | `POST /api/v1/tournaments/{id}/participants` | Подати заявку / додати гравця | JWT | ParticipantService |
 | `DELETE /api/v1/tournaments/{id}/participants` | Скасувати власну участь | JWT | ParticipantService |
 | `DELETE /api/v1/tournaments/{id}/participants/{userId}` | Дискваліфікувати учасника | organizer | ParticipantService |

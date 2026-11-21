@@ -14,7 +14,7 @@
 
 ## 2. Топологія розгортання
 
-**Локально (Docker Compose).** Контейнери `db` (PostgreSQL 15, порт 5432), `init` (міграції + seed, завершується), `app` (API, порт 5050 → 80), `client` (nginx зі SPA, порт 5173 → 80), `pgadmin` (8080).
+**Локально (Docker Compose).** Контейнери `db` (PostgreSQL 15, порт 5432), `init` (міграції + seed, завершується), `app` (API, порт 5050 → 80, healthcheck `GET /version`), `client` (nginx зі SPA, порт 5173 → 80), `pgadmin` (8080).
 
 Порядок старту (з `docker-compose.yml`; перевіряється `scripts/quality/doc_contract_check.py`):
 
@@ -24,7 +24,7 @@
 | `app -> db (service_healthy)` | API стартує після готовності БД |
 | `app -> init (service_completed_successfully)` | API стартує лише після успішних міграцій |
 | `pgadmin -> db (service_healthy)` | адмінка чекає на БД |
-| `client -> app (service_started)` | SPA стартує, щойно запущено контейнер API |
+| `client -> app (service_healthy)` | SPA стартує лише після того, як API пройшов healthcheck (`curl /version`, кожні 10 с, до 10 спроб) |
 
 **Kubernetes.** Namespace `tournament-platform`: Deployment (або Argo Rollout) API з liveness `/version` і readiness `/health`; Deployment клієнта; PostgreSQL з PVC; Job/hook міграцій; Service-и `ClusterIP` / `NodePort 30173`; Ingress `tournament.local`. Деталі — [`k8s/README.md`](../k8s/README.md), [`charts/tournament-platform/README.md`](../charts/tournament-platform/README.md).
 
