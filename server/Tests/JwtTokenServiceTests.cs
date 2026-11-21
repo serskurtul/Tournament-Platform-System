@@ -134,5 +134,24 @@ namespace Tests
             // JWT `exp` has second precision.
             Assert.InRange((expiresAt - tokenExpiry).Duration().TotalSeconds, 0, 1);
         }
+
+        [Fact]
+        public void GenerateToken_WithFixedClock_ExpiryIsNowPlusLifetimeExactly()
+        {
+            var now = new DateTimeOffset(2026, 11, 21, 12, 0, 0, TimeSpan.Zero);
+            var svc = new JwtTokenService(
+                new JwtTokenOptions("fixed-clock-key-that-is-long-enough-1234567890", "test-issuer", 10),
+                new FixedTimeProvider(now));
+
+            var (tokenString, _, expiresAt) = svc.GenerateToken(Guid.NewGuid(), "c@x.com", "player", false);
+
+            Assert.Equal(now.UtcDateTime.AddMinutes(10), expiresAt);
+            Assert.Equal(expiresAt, new JwtSecurityTokenHandler().ReadJwtToken(tokenString).ValidTo);
+        }
+
+        private sealed class FixedTimeProvider(DateTimeOffset now) : TimeProvider
+        {
+            public override DateTimeOffset GetUtcNow() => now;
+        }
     }
 }

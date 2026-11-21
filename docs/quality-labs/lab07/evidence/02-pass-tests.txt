@@ -1,0 +1,8 @@
+  Passed Tests.JwtTokenServiceTests.GenerateToken_WithFixedClock_ExpiryIsNowPlusLifetimeExactly [40 ms]
+  Passed Tests.JwtTokenServiceTests.GenerateToken_IncludesExpectedClaimsAndExpiry [7 ms]
+  Passed Tests.JwtTokenServiceTests.GenerateRefreshToken_ReturnsUniqueNonEmptyValues [2 ms]
+  Passed Tests.JwtTokenServiceTests.GenerateToken_ReturnedExpiry_MatchesTokenExpClaim [< 1 ms]
+  Passed Tests.JwtTokenServiceTests.ValidateToken_ExpiredToken_ThrowsSecurityTokenExpiredException [12 ms]
+  Passed Tests.JwtTokenServiceTests.ValidateToken_InvalidSignature_ThrowsSecurityTokenInvalidSignatureException [< 1 ms]
+  Passed Tests.JwtTokenServiceTests.ValidateToken_ValidToken_ReturnsClaimsPrincipal [7 ms]
+Total tests: 7

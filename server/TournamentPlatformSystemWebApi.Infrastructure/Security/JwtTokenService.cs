@@ -11,46 +11,25 @@ namespace TournamentPlatformSystemWebApi.Infrastructure.Security
     public class JwtTokenService : IJwtTokenService
     {
         private readonly JwtTokenOptions _options;
+        private readonly JwtSigningSettings _signing;
+        private readonly TimeProvider _clock;
 
         public JwtTokenService(JwtTokenOptions options)
+            : this(options, TimeProvider.System)
+        {
+        }
+
+        public JwtTokenService(JwtTokenOptions options, TimeProvider clock)
         {
             _options = options;
+            _signing = JwtSigningSettings.From(options);
+            _clock = clock;
         }
 
         public (string Token, string JwtId, DateTime ExpiresAt) GenerateToken(Guid userId, string email, string role, bool isOrganizer)
         {
-            var key = _options.Key ?? "default-development-key-change-in-production";
-            var issuer = _options.Issuer ?? "tournament-api";
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var jwtId = Guid.NewGuid().ToString();
-            var expiresAt = DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes);
-
-            var claims = new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, jwtId),
-                new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim("role", role),
-                new Claim("isOrganizer", isOrganizer.ToString())
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: issuer,
-                claims: claims,
-                expires: expiresAt,
-                signingCredentials: credentials
-            );
-
-            // ЛР-7 FAIL simulation: the mutable local `expiresAt` is accidentally adjusted a second time
-            // after the token has already been built (copy-paste defect). The token keeps the original `exp`,
-            // but callers receive a later ExpiresAt, so the client thinks the session lives twice as long.
-            expiresAt = expiresAt.AddMinutes(_options.ExpirationMinutes);
-
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            return (tokenString, jwtId, expiresAt);
+            var issued = _signing.Issue(new AccessTokenSubject(userId, email, role, isOrganizer), _clock.GetUtcNow());
+            return (issued.Token, issued.JwtId, issued.ExpiresAt);
         }
 
         public string GenerateRefreshToken()
