@@ -1,0 +1,29 @@
+$ python3 scripts/quality/git_effort.py --follow --until 2026-11-01 <auth module paths>
+author                       commits sessions   hours
+Serhii Skurtul                    25       18    21.3
+LYarmoliuk                        21       17    18.5
+Volodymyr Dudko                    2        2     2.0
+TOTAL                             48             41.8
+params: max gap 120 min, first-commit credit 60 min, window start .. 2026-11-01
+
+# sensitivity: first-commit credit 120 min
+TOTAL                             48             78.8
+
+# module paths:
+#   server/TournamentPlatformSystemWebApi.API/Controllers/AuthController.cs
+#   server/TournamentPlatformSystemWebApi.Infrastructure/Services/AuthenticationService.cs
+#   server/TournamentPlatformSystemWebApi.Application/Interfaces/IAuthenticationService.cs
+#   server/TournamentPlatformSystemWebApi.Infrastructure/Security
+#   server/TournamentPlatformSystemWebApi.Application/DTOs/Auth
+#   server/TournamentPlatformSystemWebApi.Infrastructure/Entities/RefreshToken.cs
+#   server/TournamentPlatformSystemWebApi.Infrastructure/Entities/AccountState.cs
+#   server/TournamentPlatformSystemWebApi.Common/Exceptions/InvalidCredentialsException.cs
+#   server/TournamentPlatformSystemWebApi.Common/Exceptions/DuplicateEmailException.cs
+#   server/TournamentPlatformSystemWebApi.Common/Exceptions/TooManyLoginAttemptsException.cs
+#   client/src/services/authService.ts
+#   client/src/stores/authStore.ts
+#   client/src/components/forms/LoginForm.vue
+#   client/src/components/forms/RegisterForm.vue
+#   client/src/views/LoginPage.vue
+#   client/src/views/RegisterPage.vue
+#   client/src/types/Auth.ts
