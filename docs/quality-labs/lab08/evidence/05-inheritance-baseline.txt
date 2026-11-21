@@ -1,0 +1,12 @@
+# Lorenz & Kidd baseline for the repository hierarchy (tools/CkMetrics, Roslyn)
+# DIT counts System.Object (a plain class has DIT = 1). NOO = overridden methods, PIM = public instance methods.
+class                                                      base                                          DIT NOO PIM methods
+Infrastructure.Repositories.BaseRepository<TEntity, TDBEntity> object                                          1   0   5       5
+Infrastructure.Repositories.ThemeRepository                Infrastructure.Repositories.BaseRepository<Core.Entities.TournamentTheme, Infrastructure.Entities.TournamentThemeModel>   2   0   2       2
+Infrastructure.Repositories.TournamentRepository           Infrastructure.Repositories.BaseRepository<Core.Entities.Tournament, Infrastructure.Entities.TournamentModel>   2   2  16      19
+Infrastructure.Repositories.UserRepository                 Infrastructure.Repositories.BaseRepository<Core.Entities.User, Infrastructure.Entities.UserModel>   2   1  13      14
+
+# Children reach into the base class through protected state:
+#   TournamentRepository: _context x29, _mapper x8
+#   UserRepository: _context x32, _mapper x3
+#   ThemeRepository: _context x2, _mapper x0
