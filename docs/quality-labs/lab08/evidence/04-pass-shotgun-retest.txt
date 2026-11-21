@@ -1,0 +1,13 @@
+# Shotgun Surgery re-test after decomposition
+# Same supplier change: ITournamentRepository.GetParticipantsCountAsync(Guid, bool includeDisqualified)
+$ grep -rn "GetParticipantsCountAsync" server --include=*.cs | grep -v Repositories/ | grep -v Interfaces/
+TournamentPlatformSystemWebApi.Infrastructure/Services/ParticipantService.cs:34:        _tournamentRepository.GetParticipantsCountAsync(tournamentId, includeDisqualified: false);
+
+# Every other service depends on the IParticipantRoster contract instead:
+TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentManagementService.cs:204
+TournamentPlatformSystemWebApi.Infrastructure/Services/MatchService.cs:47
+TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentDetailsService.cs:32
+
+$ dotnet build && dotnet test
+Build succeeded. 0 Error(s)
+Passed!  - Failed: 0, Passed: 45, Skipped: 0, Total: 45

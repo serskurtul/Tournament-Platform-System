@@ -120,7 +120,17 @@ var jwtOptions = new JwtTokenOptions(
 builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>(sp => new JwtTokenService(jwtOptions));
 
 // Register tournament service
-builder.Services.AddScoped<ITournamentService, TournamentService>();
+// Tournament domain, decomposed by responsibility (ЛР-8). ParticipantService also owns IParticipantRoster.
+builder.Services.AddScoped<ITournamentStatusResolver, TournamentStatusResolver>();
+builder.Services.AddScoped<ParticipantService>();
+builder.Services.AddScoped<IParticipantService>(sp => sp.GetRequiredService<ParticipantService>());
+builder.Services.AddScoped<IParticipantRoster>(sp => sp.GetRequiredService<ParticipantService>());
+builder.Services.AddScoped<ITournamentManagementService, TournamentManagementService>();
+builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<ITournamentDetailsService, TournamentDetailsService>();
+builder.Services.AddScoped<ITournamentCatalogService, TournamentCatalogService>();
+builder.Services.AddTransient<TournamentPlatformSystemWebApi.Core.Logic.IBracketGenerator, TournamentPlatformSystemWebApi.Core.Logic.SingleEliminationBracketGenerator>();
+builder.Services.AddTransient<TournamentPlatformSystemWebApi.Core.Logic.ISeedingStrategy, TournamentPlatformSystemWebApi.Core.Logic.RandomSeedingStrategy>();
 
 // Register storage service (Google Drive)
 builder.Services.AddSingleton<IStorageService, GoogleDriveStorageService>();

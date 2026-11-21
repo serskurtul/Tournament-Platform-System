@@ -21,11 +21,24 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
     public class TournamentsController : ControllerBase
     {
-        private readonly ITournamentService _tournamentService;
+        private readonly ITournamentManagementService _managementService;
+        private readonly IParticipantService _participantService;
+        private readonly IMatchService _matchService;
+        private readonly ITournamentDetailsService _detailsService;
+        private readonly ITournamentCatalogService _catalogService;
 
-        public TournamentsController(ITournamentService tournamentService)
+        public TournamentsController(
+            ITournamentManagementService managementService,
+            IParticipantService participantService,
+            IMatchService matchService,
+            ITournamentDetailsService detailsService,
+            ITournamentCatalogService catalogService)
         {
-            _tournamentService = tournamentService;
+            _managementService = managementService;
+            _participantService = participantService;
+            _matchService = matchService;
+            _detailsService = detailsService;
+            _catalogService = catalogService;
         }
         [HttpPost]
         [Authorize(Roles = "organizer")]
@@ -59,7 +72,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
             }
             try
             {
-                var created = await _tournamentService.CreateTournamentAsync(dto, organizerId);
+                var created = await _managementService.CreateTournamentAsync(dto, organizerId);
 
                 var detailsUrl = Url.Action(nameof(GetTournamentDetails), "Tournaments", new { id = created.Id }, Request.Scheme) ?? $"/api/v1/tournaments/{created.Id}/details";
 
@@ -168,7 +181,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                var created = await _tournamentService.SaveTournamentDraftAsync(dto, organizerId);
+                var created = await _managementService.SaveTournamentDraftAsync(dto, organizerId);
 
                 var detailsUrl = Url.Action(nameof(GetTournamentDetails), "Tournaments", new { id = created.Id }, Request.Scheme) ?? $"/api/v1/tournaments/{created.Id}/details";
 
@@ -263,7 +276,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                var updated = await _tournamentService.UpdateTournamentAsync(id, dto, organizerId);
+                var updated = await _managementService.UpdateTournamentAsync(id, dto, organizerId);
                 return Ok(updated);
             }
             catch (ValidationException ex)
@@ -480,7 +493,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                var upload = await _tournamentService.UploadImageAsync(id, organizerId, ms, file.FileName, file.ContentType, file.Length);
+                var upload = await _managementService.UploadImageAsync(id, organizerId, ms, file.FileName, file.ContentType, file.Length);
                 return Ok(new { url = upload.Url, id = upload.FileId });
             }
             catch (ValidationException ex)
@@ -584,7 +597,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                var dto = await _tournamentService.StartTournament(id, organizerId);
+                var dto = await _matchService.StartTournament(id, organizerId);
 
                 return Ok(dto);
             }
@@ -728,11 +741,11 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
                     var sub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value;
                     if (Guid.TryParse(sub, out var userId))
                     {
-                        var preferredThemeIds = await _tournamentService.GetUserPreferredThemeIdsAsync(userId);
+                        var preferredThemeIds = await _catalogService.GetUserPreferredThemeIdsAsync(userId);
 
                         if (preferredThemeIds != null && preferredThemeIds.Count > 0)
                         {
-                            tournaments = await _tournamentService.GetPersonalizedTournamentsAsync(preferredThemeIds, page, pageSize, randomize, statuses, searchQuery);
+                            tournaments = await _catalogService.GetPersonalizedTournamentsAsync(preferredThemeIds, page, pageSize, randomize, statuses, searchQuery);
                             if (tournaments.Count > 0)
                             {
                                 isResponsePersonalized = true;
@@ -755,7 +768,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
                 if (!isResponsePersonalized)
                 {
-                    tournaments = await _tournamentService.GetAllTournamentsAsync(page, pageSize, randomize, statuses, searchQuery);
+                    tournaments = await _catalogService.GetAllTournamentsAsync(page, pageSize, randomize, statuses, searchQuery);
                 }
 
                 var response = new TournamentPreviewListResponseDto
@@ -831,7 +844,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
             try
             {
                 var statuses = ParseStatuses(status);
-                var tournaments = await _tournamentService.GetTournamentsForUserAsync(userId, page, pageSize, statuses);
+                var tournaments = await _catalogService.GetTournamentsForUserAsync(userId, page, pageSize, statuses);
                 return Ok(tournaments);
             }
             catch (ValidationException ex)
@@ -900,7 +913,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
         {
             try
             {
-                var tournamentDto = await _tournamentService.GetTournamentDetailsAsync(id);
+                var tournamentDto = await _detailsService.GetTournamentDetailsAsync(id);
 
                 if (tournamentDto.Status == "draft")
                 {
@@ -954,7 +967,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
         {
             try
             {
-                var rounds = await _tournamentService.GetTournamentMatchesAsync(id);
+                var rounds = await _matchService.GetTournamentMatchesAsync(id);
                 return Ok(rounds);
             }
             catch (KeyNotFoundException)
@@ -1006,7 +1019,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                var updatedMatch = await _tournamentService.SaveMatchResultAsync(id, matchId, dto, organizerId);
+                var updatedMatch = await _matchService.SaveMatchResultAsync(id, matchId, dto, organizerId);
                 return Ok(updatedMatch);
             }
             catch (MatchNotFoundException)
@@ -1121,7 +1134,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
         {
             try
             {
-                var participants = await _tournamentService.GetTournamentParticipantsAsync(id);
+                var participants = await _participantService.GetTournamentParticipantsAsync(id);
                 return Ok(participants);
             }
             catch (KeyNotFoundException)
@@ -1151,7 +1164,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
         {
             try
             {
-                var events = await _tournamentService.GetTournamentEventsAsync(id);
+                var events = await _detailsService.GetTournamentEventsAsync(id);
                 return Ok(events);
             }
             catch (KeyNotFoundException)
@@ -1222,7 +1235,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                var created = await _tournamentService.AddParticipantAsync(id, dto.UserId, actorId);
+                var created = await _participantService.AddParticipantAsync(id, dto.UserId, actorId);
 
                 return CreatedAtAction(nameof(GetTournamentDetails), new { id = id }, created);
             }
@@ -1377,7 +1390,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                await _tournamentService.RemoveParticipantAsync(id, userId);
+                await _participantService.RemoveParticipantAsync(id, userId);
                 return NoContent();
             }
             catch (TournamentPlatformSystemWebApi.Common.Exceptions.ParticipantNotFoundException ex)
@@ -1481,7 +1494,7 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
             try
             {
-                await _tournamentService.DisqualifyParticipantAsync(id, userId, actorId);
+                await _participantService.DisqualifyParticipantAsync(id, userId, actorId);
                 return NoContent();
             }
             catch (TournamentPlatformSystemWebApi.Common.Exceptions.TournamentClosedForChangesException ex)

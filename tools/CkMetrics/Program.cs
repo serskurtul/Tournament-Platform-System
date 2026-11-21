@@ -14,6 +14,7 @@
 //          invocations, object creation). Framework types are reported separately as CBO_ext.
 //   LCOM – Henderson-Sellers LCOM* in [0..1]: (mean_A(mu(A)) - m) / (1 - m), m = instance methods,
 //          mu(A) = methods that use instance field A. 0 = perfectly cohesive, 1 = no cohesion.
+//   LCOM4 – connected components of methods linked by shared fields or calls (SonarQube `lcom4`).
 //   DIT  – Depth of Inheritance Tree, counting System.Object (a plain class has DIT = 1).
 //   NOC  – Number Of Children inside the system.
 //   RFC  – Response For a Class: own methods + distinct methods it invokes.
@@ -193,6 +194,33 @@ foreach (var (symbol, (syntax, model)) in declared.OrderBy(kv => kv.Key.ToDispla
         lcom = Math.Round(Math.Clamp((mean - m) / (1.0 - m), 0, 1), 3);
     }
 
+    // LCOM4 (Hitz & Montazeri, the metric SonarQube exposed as `lcom4`): number of connected
+    // components in the graph of ordinary methods, where two methods are linked if they use a
+    // common instance field or one calls the other. 1 = cohesive; >1 = the class does several jobs.
+    var lcom4 = 0;
+    if (ordinary.Count > 0)
+    {
+        var methodSet = ordinary.Select(m => model.GetDeclaredSymbol(m)).ToList();
+        var usesField = ordinary.Select(m => instanceFields.Where(f =>
+            m.DescendantNodes().OfType<IdentifierNameSyntax>()
+             .Any(id => SymbolEqualityComparer.Default.Equals(model.GetSymbolInfo(id).Symbol?.OriginalDefinition, f.OriginalDefinition)))
+            .ToHashSet<ISymbol>(SymbolEqualityComparer.Default)).ToList();
+        var calls = ordinary.Select(m => m.DescendantNodes().OfType<InvocationExpressionSyntax>()
+            .Select(inv => model.GetSymbolInfo(inv).Symbol?.OriginalDefinition)
+            .Where(s => s is not null && methodSet.Contains(s, SymbolEqualityComparer.Default))
+            .ToHashSet(SymbolEqualityComparer.Default)).ToList();
+        var parent = Enumerable.Range(0, ordinary.Count).ToArray();
+        int Find(int x) => parent[x] == x ? x : parent[x] = Find(parent[x]);
+        for (var a = 0; a < ordinary.Count; a++)
+        for (var b2 = a + 1; b2 < ordinary.Count; b2++)
+        {
+            var linked = usesField[a].Overlaps(usesField[b2])
+                         || calls[a].Contains(methodSet[b2]) || calls[b2].Contains(methodSet[a]);
+            if (linked) parent[Find(a)] = Find(b2);
+        }
+        lcom4 = Enumerable.Range(0, ordinary.Count).Select(Find).Distinct().Count();
+    }
+
     var dit = 0;
     for (var b = symbol.BaseType; b is not null; b = b.BaseType) dit++;
     var noc = systemTypes.Count(t => SymbolEqualityComparer.Default.Equals(t.BaseType?.OriginalDefinition, symbol.OriginalDefinition));
@@ -205,6 +233,7 @@ foreach (var (symbol, (syntax, model)) in declared.OrderBy(kv => kv.Key.ToDispla
         ["CBO"] = systemDeps.Count,
         ["CBO_ext"] = externalDeps.Count,
         ["LCOM"] = lcom,
+        ["LCOM4"] = lcom4,
         ["DIT"] = dit,
         ["NOC"] = noc,
         ["RFC"] = methodSymbols.Count + invoked.Count(m => !methodSymbols.Contains(m, SymbolEqualityComparer.Default)),
