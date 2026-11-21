@@ -44,6 +44,11 @@ namespace TournamentPlatformSystemWebApi.Infrastructure.Security
                 signingCredentials: credentials
             );
 
+            // ЛР-7 FAIL simulation: the mutable local `expiresAt` is accidentally adjusted a second time
+            // after the token has already been built (copy-paste defect). The token keeps the original `exp`,
+            // but callers receive a later ExpiresAt, so the client thinks the session lives twice as long.
+            expiresAt = expiresAt.AddMinutes(_options.ExpirationMinutes);
+
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return (tokenString, jwtId, expiresAt);
         }

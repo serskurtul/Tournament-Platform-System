@@ -1,0 +1,15 @@
+Test run for server/Tests/bin/Release/net9.0/Tests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 18.0.2 (x64)
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.27]     Tests.JwtTokenServiceTests.GenerateToken_ReturnedExpiry_MatchesTokenExpClaim [FAIL]
+  Failed Tests.JwtTokenServiceTests.GenerateToken_ReturnedExpiry_MatchesTokenExpClaim [3 ms]
+  Error Message:
+   Assert.InRange() Failure: Value not in range
+Range:  (0 - 1)
+Actual: 900.95120959999997
+  Stack Trace:
+     at Tests.JwtTokenServiceTests.GenerateToken_ReturnedExpiry_MatchesTokenExpClaim() in server/Tests/JwtTokenServiceTests.cs:line 135
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Failed!  - Failed:     1, Passed:     5, Skipped:     0, Total:     6, Duration: 85 ms - Tests.dll (net9.0)

@@ -121,5 +121,18 @@ namespace Tests
             // Act & Assert: validation with wrong key should throw invalid signature
             Assert.Throws<SecurityTokenSignatureKeyNotFoundException>(() => svcB.ValidateToken(tokenA));
         }
+
+        [Fact]
+        public void GenerateToken_ReturnedExpiry_MatchesTokenExpClaim()
+        {
+            // ЛР-7: the expiry handed to callers (cookies, refresh logic) must be the one signed into the token.
+            var svc = new JwtTokenService(new JwtTokenOptions("expiry-consistency-key-long-enough-1234567890", "test-issuer", 15));
+
+            var (tokenString, _, expiresAt) = svc.GenerateToken(Guid.NewGuid(), "e@x.com", "player", false);
+            var tokenExpiry = new JwtSecurityTokenHandler().ReadJwtToken(tokenString).ValidTo;
+
+            // JWT `exp` has second precision.
+            Assert.InRange((expiresAt - tokenExpiry).Duration().TotalSeconds, 0, 1);
+        }
     }
 }
