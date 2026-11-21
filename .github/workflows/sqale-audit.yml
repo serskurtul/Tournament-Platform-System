@@ -1,0 +1,71 @@
+name: SQALE audit & financial ledger
+
+# ЛР-9 (Інженерія якості), Завдання 1–2.
+# 1. Pick a large public project on https://sonarcloud.io/explore/projects (your stack, ncloc >= 50000)
+#    and copy its project key from the URL (?id=<key>).
+# 2. Actions -> "SQALE audit & financial ledger" -> Run workflow -> paste the key.
+# The public SonarCloud API needs no token. The run stores the raw JSON, the SQALE audit and
+# FINANCIAL_LEDGER.md, uploads them as an artifact and commits them back to the branch.
+on:
+  workflow_dispatch:
+    inputs:
+      project_key:
+        description: SonarCloud project key of the audited open-source project
+        required: true
+      hourly_rate:
+        description: HOURLY_RATE, $ (35..50)
+        default: '40'
+
+permissions:
+  contents: write
+
+jobs:
+  sqale:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_KEY: ${{ github.event.inputs.project_key }}
+      HOURLY_RATE: ${{ github.event.inputs.hourly_rate }}
+      OVERLOAD_COEFF: '1.3'
+      DISCOUNT_RATE: '0.01'
+      OUT_DIR: docs/quality-labs/lab09/audit
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Unit-test the calculators
+        run: python -m unittest discover -s scripts/quality/tests -v
+
+      - name: Cloud API call (SQALE metrics, raw JSON)
+        run: |
+          mkdir -p "$OUT_DIR"
+          URL="https://sonarcloud.io/api/measures/component?component=${PROJECT_KEY}&metricKeys=sqale_index,ncloc,sqale_rating"
+          echo "curl \"$URL\"" | tee "$OUT_DIR/request.log"
+          curl -sS --fail-with-body "$URL" -o "$OUT_DIR/report.json" -w "HTTP %{http_code}\n" | tee -a "$OUT_DIR/request.log"
+          cat "$OUT_DIR/report.json"
+
+      - name: SQALE audit (person-days, TDD, rating check)
+        run: python scripts/quality/sqale_audit.py "$OUT_DIR/report.json" --out "$OUT_DIR/SQALE_AUDIT.md"
+
+      - name: Financial simulation -> FINANCIAL_LEDGER.md
+        run: |
+          python scripts/quality/financial_simulator.py "$OUT_DIR/report.json" --out FINANCIAL_LEDGER.md | tee "$OUT_DIR/simulator-console.log"
+          cat FINANCIAL_LEDGER.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqale-audit
+          path: |
+            ${{ env.OUT_DIR }}/
+            FINANCIAL_LEDGER.md
+
+      - name: Commit results back to the branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$OUT_DIR" FINANCIAL_LEDGER.md
+          git commit -m "docs(quality): ЛР-9 SQALE audit and financial ledger for ${PROJECT_KEY}" || echo "nothing to commit"
+          git push
