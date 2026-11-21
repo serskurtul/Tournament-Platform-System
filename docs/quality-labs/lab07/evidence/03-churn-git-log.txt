@@ -1,0 +1,43 @@
+$ git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -nr | head -25
+     19 README.md
+     17 server/TournamentPlatformSystemWebApi.API/Program.cs
+     16 client/src/components/dashboard/RoleDashboard.vue
+     15 client/src/views/TournamentsPage.vue
+     14 server/TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs
+     14 client/src/views/HomePage.vue
+     13 client/src/views/ViewTournament.vue
+     12 server/TournamentPlatformSystemWebApi.Infrastructure/TournamentPlatformSystemWebApi.Infrastructure.csproj
+     12 server/TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs
+     12 server/TournamentPlatformSystemWebApi.API/Controllers/TournamentsController.cs
+     12 docker-compose.yml
+     12 client/src/views/MyTournamentsPage.vue
+     12 client/src/router/index.ts
+     12 client/src/components/forms/RegisterForm.vue
+     10 server/TournamentPlatformSystemWebApi.Application/Interfaces/IUserRepository.cs
+     10 server/TournamentPlatformSystemWebApi.API/TournamentPlatformSystemWebApi.API.csproj
+     10 db/init_db.sql
+     10 client/src/services/tournamentService.ts
+     10 client/src/components/tournament/TournamentHeader.vue
+      9 client/src/views/JoinTournamentPage.vue
+      9 client/src/components/forms/EditTournamentForm.vue
+      9 client/src/components/AppHeader.vue
+      9 client/package-lock.json
+      9 .gitignore
+      8 server/seeds/seed.sql
+
+$ git log --since="90 days ago" --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -nr | head -15
+      3 server/TournamentPlatformSystemWebApi.Infrastructure/Security/JwtTokenService.cs
+      3 server/Tests/JwtTokenServiceTests.cs
+      2 server/TournamentPlatformSystemWebApi.API/TournamentPlatformSystemWebApi.API.csproj
+      2 server/TournamentPlatformSystemWebApi.API/Program.cs
+      2 server/Tests/UserRepositoryTests.cs
+      2 server/Tests/TournamentRepositoryTests.cs
+      2 server/Tests/MappingTests.cs
+      2 server/Tests/BaseRepositoryTests.cs
+      2 k8s/README.md
+      2 k8s/11-db-init-job.yaml
+      2 k8s/08-client-deployment.yaml
+      2 k8s/06-api-deployment.yaml
+      2 docs/labs/README.md
+      2 client/eslint.config.mjs
+      2 client/Dockerfile
