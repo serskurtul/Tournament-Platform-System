@@ -37,6 +37,7 @@
 | [docs/isd.md](docs/isd.md) | DevOps | Середовища, змінні, CI/CD, моніторинг, резервне копіювання (RTO/RPO) |
 | [docs/architecture/adr/](docs/architecture/adr/README.md) | розробники, архітектор | Журнал архітектурних рішень |
 | [docs/maintenance.md](docs/maintenance.md) | усі | Власники документів і цикли перегляду |
+| [docs/handover.md](docs/handover.md) | команда супроводу | Пакет передачі знань, Bus Factor |
 | [docs/TestPlan.md](docs/TestPlan.md), [docs/ErrorCatalog.md](docs/ErrorCatalog.md) | QA | План тестування, каталог помилок API |
 
 ## ✨ Features

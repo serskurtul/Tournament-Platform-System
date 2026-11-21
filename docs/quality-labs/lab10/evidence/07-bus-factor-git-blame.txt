@@ -1,0 +1,11 @@
+# Code ownership at 6bb342a (git blame -w -M -C), lines per author
+component                                 lines  top author (share)            bus factor  authors
+Автентифікація (бекенд)                     739  Serhii Skurtul          97.8%     1        Volodymyr Dudko 2%
+Турнірний домен (сервіс + контролер)       2493  Serhii Skurtul          94.9%     1        Volodymyr Dudko 5%
+Репозиторії та DbContext                   1393  Serhii Skurtul          84.9%     1        Volodymyr Dudko 15%
+Сітка турніру (Core/Logic)                  265  Serhii Skurtul         100.0%     1        
+Схема БД і seed                            1918  Volodymyr Dudko         85.1%     1        Serhii Skurtul 13%, copilot-swe-agent[bot] 1%
+Frontend: сторінки                         2450  Liudmila Yarmoliuk     100.0%     1        
+Frontend: компоненти                       7254  Liudmila Yarmoliuk     100.0%     1        Volodymyr Dudko 0%
+Frontend: сервіси, API, стор                863  Liudmila Yarmoliuk      99.5%     1        Serhii Skurtul 0%
+Контейнеризація                             167  Serhii Skurtul          59.9%     1        Volodymyr Dudko 29%, Liudmila Yarmoliuk 10%

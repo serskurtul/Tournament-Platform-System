@@ -15,6 +15,7 @@
 | [docs/TestPlan.md](TestPlan.md) | технічна | Загребенюк Богдан (QA) | 180 днів | 2026-04-07 | **прострочено** → 2026-12-08 |
 | [docs/Data_Flow_Specification.md](Data_Flow_Specification.md) | архітектурна | Скуртул Сергій | 180 днів | 2026-04-06 | **прострочено** → 2026-12-08 |
 | [client/README.md](../client/README.md) | технічна | Ярмолюк Людмила (Frontend) | 180 днів | 2026-11-21 | 2027-05-20 |
+| [docs/handover.md](handover.md) | експлуатаційна | Анур'єва Катерина (PM) | 90 днів | 2026-11-21 | 2027-02-19 |
 
 Історичні записи (звіти лабораторних, `ADR_System_Style.md`, deprecated `SAD_Internal_View.md`, повідомлення комітів) — документація процесу. Вони не оновлюються, а лише позначаються `Deprecated` / `Superseded`.
 
