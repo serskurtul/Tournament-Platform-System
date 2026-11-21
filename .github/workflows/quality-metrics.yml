@@ -54,3 +54,15 @@ jobs:
           name: quality-report
           path: quality-report/
           if-no-files-found: error
+
+  # ЛР-10: "code change = documentation change" — routes must be in docs/sdd.md, start-up order in docs/isd.md.
+  doc-contract:
+    name: documentation contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --no-cache-dir pyyaml==6.0.2
+      - run: python scripts/quality/doc_contract_check.py

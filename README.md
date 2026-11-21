@@ -27,6 +27,7 @@
 2. Відкрити http://localhost:5173 і зареєструватися як Organizer, щоб пройти основний сценарій: турнір → учасники → старт → результати.
 3. Карта системи — [SDD](docs/sdd.md) (компоненти, модель даних, API), середовища й CI/CD — [ISD](docs/isd.md).
 4. Чому система влаштована саме так — [ADR](docs/architecture/adr/README.md).
+5. Перед першим PR — [регламент документації](docs/maintenance.md): зміна коду = зміна документації.
 
 ### 📚 Документація (архітектурний паспорт)
 
@@ -35,6 +36,7 @@
 | [docs/sdd.md](docs/sdd.md) | розробники, QA | C4-контейнери, компоненти, модель даних, API-контракти |
 | [docs/isd.md](docs/isd.md) | DevOps | Середовища, змінні, CI/CD, моніторинг, резервне копіювання (RTO/RPO) |
 | [docs/architecture/adr/](docs/architecture/adr/README.md) | розробники, архітектор | Журнал архітектурних рішень |
+| [docs/maintenance.md](docs/maintenance.md) | усі | Власники документів і цикли перегляду |
 | [docs/TestPlan.md](docs/TestPlan.md), [docs/ErrorCatalog.md](docs/ErrorCatalog.md) | QA | План тестування, каталог помилок API |
 
 ## ✨ Features
