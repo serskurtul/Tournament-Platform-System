@@ -11,8 +11,8 @@ namespace TournamentPlatformSystemWebApi.Infrastructure.Repositories;
 
 public class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> where TEntity : BaseEntity where TDBEntity : BaseDbEntity
 {
-    protected readonly TournamentdbContext _context;
-    protected readonly IMapper _mapper;
+    private readonly TournamentdbContext _context;
+    private readonly IMapper _mapper;
 
     public BaseRepository(TournamentdbContext context, IMapper mapper)
     {

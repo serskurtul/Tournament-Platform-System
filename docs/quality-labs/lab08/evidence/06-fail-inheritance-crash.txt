@@ -1,0 +1,83 @@
+# Change in the TOP of the hierarchy only (BaseRepository.cs):
+#   protected readonly TournamentdbContext _context;  ->  private readonly TournamentdbContext _context;
+#   protected readonly IMapper _mapper;               ->  private readonly IMapper _mapper;
+$ dotnet build server/TournamentPlatformSystemWebApi.Infrastructure -c Release
+Build FAILED: 74 error(s), all CS0122, all in child classes:
+        2 TournamentPlatformSystemWebApi.Infrastructure/Repositories/ThemeRepository.cs
+       37 TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs
+       35 TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs
+
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/ThemeRepository.cs(21,22): error CS0122: 'BaseRepository<TournamentTheme, TournamentThemeModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/ThemeRepository.cs(32,27): error CS0122: 'BaseRepository<TournamentTheme, TournamentThemeModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(104,22): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(122,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(132,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(134,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(136,16): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(141,30): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(149,9): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(153,35): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(156,17): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(160,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(167,30): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(181,9): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(182,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(193,22): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(210,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(211,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(216,22): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(223,76): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(23,29): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(231,29): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(235,9): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(246,9): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(247,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(249,16): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(259,21): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(29,16): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(305,21): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(34,22): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(37,36): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(48,28): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(58,29): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(66,9): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(67,15): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(74,22): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(82,22): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(86,30): error CS0122: 'BaseRepository<Tournament, TournamentModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs(92,22): error CS0122: 'BaseRepository<Tournament, TournamentModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(118,33): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(125,20): error CS0122: 'BaseRepository<User, UserModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(130,26): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(135,32): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(144,32): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(153,13): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(154,19): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(161,58): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(164,38): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(170,21): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(184,27): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(187,23): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(209,26): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(214,33): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(220,20): error CS0122: 'BaseRepository<User, UserModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(225,30): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(251,19): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(252,19): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(258,33): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(28,28): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(282,13): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(283,19): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(29,20): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(291,34): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(302,17): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(310,30): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(321,33): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(40,58): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(45,31): error CS0122: 'BaseRepository<User, UserModel>._mapper' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(54,45): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(61,23): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(62,23): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(76,27): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(91,35): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
+TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs(95,27): error CS0122: 'BaseRepository<User, UserModel>._context' is inaccessible due to its protection level
