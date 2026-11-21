@@ -12,13 +12,32 @@ using TournamentPlatformSystemWebApi.Infrastructure.Entities;
 
 namespace TournamentPlatformSystemWebApi.Infrastructure.Repositories;
 
-public class TournamentRepository : BaseRepository<Tournament, TournamentModel>, ITournamentRepository
+public class TournamentRepository : ITournamentRepository
 {
-    public TournamentRepository(TournamentdbContext context, IMapper mapper) : base(context, mapper)
+    // Composition instead of inheritance (ЛР-8): generic CRUD is delegated to a BaseRepository instance.
+    private readonly TournamentdbContext _context;
+    private readonly IMapper _mapper;
+    private readonly BaseRepository<Tournament, TournamentModel> _crud;
+
+    public TournamentRepository(TournamentdbContext context, IMapper mapper)
+        : this(context, mapper, new BaseRepository<Tournament, TournamentModel>(context, mapper))
     {
     }
 
-    public override async Task<Tournament?> GetByIdAsync(Guid id)
+    public TournamentRepository(TournamentdbContext context, IMapper mapper, BaseRepository<Tournament, TournamentModel> crud)
+    {
+        _context = context;
+        _mapper = mapper;
+        _crud = crud;
+    }
+
+    public Task<Guid> CreateAsync(Tournament entity) => _crud.CreateAsync(entity);
+
+    public Task<Tournament> UpdateAsync(Tournament entity) => _crud.UpdateAsync(entity);
+
+    public Task<bool> DeleteAsync(Guid id) => _crud.DeleteAsync(id);
+
+    public async Task<Tournament?> GetByIdAsync(Guid id)
     {
         var dbModel = await _context.Set<TournamentModel>()
             .Include(x => x.Organizer)
@@ -29,7 +48,7 @@ public class TournamentRepository : BaseRepository<Tournament, TournamentModel>,
         return _mapper.Map<Tournament>(dbModel);
     }
 
-    public override async Task<ICollection<Tournament>> GetAllAsync()
+    public async Task<ICollection<Tournament>> GetAllAsync()
     {
         return await _context.Set<TournamentModel>()
             .Include(x => x.Theme)

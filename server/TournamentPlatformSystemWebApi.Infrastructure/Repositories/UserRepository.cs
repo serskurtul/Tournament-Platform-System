@@ -14,14 +14,34 @@ using TournamentPlatformSystemWebApi.Infrastructure.Security;
 
 namespace TournamentPlatformSystemWebApi.Infrastructure.Repositories
 {
-    public class UserRepository : BaseRepository<User, UserModel>, IUserRepository
+    public class UserRepository : IUserRepository
     {
+        // Composition instead of inheritance (ЛР-8): generic CRUD is delegated to a BaseRepository instance.
+        private readonly TournamentdbContext _context;
+        private readonly IMapper _mapper;
+        private readonly BaseRepository<User, UserModel> _crud;
         private readonly IPasswordHasher _passwordHasher;
 
-        public UserRepository(TournamentdbContext context, IMapper mapper, IPasswordHasher passwordHasher) : base(context, mapper)
+        public UserRepository(TournamentdbContext context, IMapper mapper, IPasswordHasher passwordHasher)
+            : this(context, mapper, passwordHasher, new BaseRepository<User, UserModel>(context, mapper))
         {
-            _passwordHasher = passwordHasher;
         }
+
+        public UserRepository(TournamentdbContext context, IMapper mapper, IPasswordHasher passwordHasher, BaseRepository<User, UserModel> crud)
+        {
+            _context = context;
+            _mapper = mapper;
+            _passwordHasher = passwordHasher;
+            _crud = crud;
+        }
+
+        public Task<ICollection<User>> GetAllAsync() => _crud.GetAllAsync();
+
+        public Task<User?> GetByIdAsync(Guid id) => _crud.GetByIdAsync(id);
+
+        public Task<User> UpdateAsync(User entity) => _crud.UpdateAsync(entity);
+
+        public Task<bool> DeleteAsync(Guid id) => _crud.DeleteAsync(id);
 
         private bool ShouldUseTransaction()
         {
@@ -29,7 +49,7 @@ namespace TournamentPlatformSystemWebApi.Infrastructure.Repositories
             return _context.Database.CurrentTransaction == null && !provider.Contains("InMemory", StringComparison.OrdinalIgnoreCase);
         }
 
-        public async override Task<Guid> CreateAsync(User entity)
+        public async Task<Guid> CreateAsync(User entity)
         {
             if (entity.Password == null)
             {

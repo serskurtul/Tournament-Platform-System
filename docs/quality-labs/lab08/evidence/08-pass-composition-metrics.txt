@@ -1,0 +1,9 @@
+# After Replace Inheritance with Composition (tools/CkMetrics)
+class                                         base     DIT NOO PIM CBO
+BaseRepository<TEntity, TDBEntity>            object     1   0   5   4
+ThemeRepository                               object     1   0   7   6
+TournamentRepository                          object     1   0  19  15
+UserRepository                                object     1   0  17  14
+
+# Same top-level change as in the FAIL commit is now in place (BaseRepository fields are private)
+# and the build is green: descendants no longer see or depend on the base class internals.

@@ -102,6 +102,8 @@ builder.Services.AddTransient<IDbStateChecker, DbStateChecker>(serviceProvider =
 });
 
 // infra services
+// Generic CRUD helper composed into every repository (ЛР-8: composition instead of inheritance).
+builder.Services.AddScoped(typeof(BaseRepository<,>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserPreferencesService, UserPreferencesService>();

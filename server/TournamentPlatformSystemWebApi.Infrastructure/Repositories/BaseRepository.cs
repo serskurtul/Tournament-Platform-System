@@ -9,7 +9,7 @@ using TournamentPlatformSystemWebApi.Infrastructure.Entities;
 
 namespace TournamentPlatformSystemWebApi.Infrastructure.Repositories;
 
-public class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> where TEntity : BaseEntity where TDBEntity : BaseDbEntity
+public sealed class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> where TEntity : BaseEntity where TDBEntity : BaseDbEntity
 {
     private readonly TournamentdbContext _context;
     private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ public class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> whe
         _mapper = mapper;
     }
 
-    public virtual async Task<Guid> CreateAsync(TEntity entity)
+    public async Task<Guid> CreateAsync(TEntity entity)
     {
         var dbModel = _mapper.Map<TDBEntity>(entity);
 
@@ -30,7 +30,7 @@ public class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> whe
         return dbModel.Id;
     }
 
-    public virtual async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         var dbModel = await _context.Set<TDBEntity>().FindAsync(id);
 
@@ -43,7 +43,7 @@ public class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> whe
         return true;
     }
 
-    public virtual async Task<ICollection<TEntity>> GetAllAsync()
+    public async Task<ICollection<TEntity>> GetAllAsync()
     {
         return await _context.Set<TDBEntity>()
             .AsNoTracking()
@@ -51,7 +51,7 @@ public class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> whe
             .ToListAsync();
     }
 
-    public virtual async Task<TEntity?> GetByIdAsync(Guid id)
+    public async Task<TEntity?> GetByIdAsync(Guid id)
     {
         var dbModel = await _context.Set<TDBEntity>()
             .AsNoTracking()
@@ -60,7 +60,7 @@ public class BaseRepository<TEntity, TDBEntity> : IRepository<TEntity, Guid> whe
         return _mapper.Map<TEntity>(dbModel);
     }
 
-    public virtual async Task<TEntity> UpdateAsync(TEntity entity)
+    public async Task<TEntity> UpdateAsync(TEntity entity)
     {
         var existingDbModel = await _context.Set<TDBEntity>()
             .FindAsync(entity.Id);
