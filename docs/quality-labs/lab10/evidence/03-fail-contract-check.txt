@@ -1,0 +1,10 @@
+$ python3 scripts/quality/doc_contract_check.py
+routes in code: 25, documented: 24; compose dependencies: 5, documented: 5
+DRIFT  SDD: routes in code but not documented:
+         GET /api/v1/tournaments/{id}/participants/count
+DRIFT  ISD: start-up dependencies in compose but not documented:
+         client -> app (service_healthy)
+DRIFT  ISD: documented dependencies that no longer exist:
+         client -> app (service_started)
+RESULT: FAIL (documentation drift)
+exit=1

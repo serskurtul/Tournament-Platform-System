@@ -39,6 +39,12 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     container_name: tournament-backend
     env_file: .env
     environment:
@@ -63,7 +69,8 @@ services:
     ports:
       - "5173:80"   
     depends_on:
-      - app
+      app:
+        condition: service_healthy
 
   init:
     container_name: init

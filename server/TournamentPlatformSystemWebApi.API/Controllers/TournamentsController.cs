@@ -1186,6 +1186,15 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
             }
         }
 
+        [HttpGet("{id}/participants/count")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Кількість активних учасників", Description = "Повертає кількість недискваліфікованих учасників турніру.")]
+        public async Task<IActionResult> GetActiveParticipantsCount(Guid id, [FromServices] IParticipantRoster roster)
+        {
+            var count = await roster.CountActiveAsync(id);
+            return Ok(new { tournamentId = id, activeParticipants = count });
+        }
+
         [HttpPost("{id}/participants")]
         [Authorize]
         [SwaggerOperation(Summary = "Додати учасника до турніру", Description = "Додає гравця до турніру. Приймає UserId гравця.")]
