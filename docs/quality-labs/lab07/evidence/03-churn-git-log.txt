@@ -1,31 +1,32 @@
+# Full (unshallowed) history up to the ЛР-7 commit 345d782
 $ git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -nr | head -25
-     19 README.md
-     17 server/TournamentPlatformSystemWebApi.API/Program.cs
-     16 client/src/components/dashboard/RoleDashboard.vue
+     27 server/TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs
+     21 server/TournamentPlatformSystemWebApi.API/Program.cs
+     21 server/TournamentPlatformSystemWebApi.API/Controllers/TournamentsController.cs
+     19 client/src/components/dashboard/RoleDashboard.vue
+     16 client/src/services/tournamentService.ts
+     16 client/src/services/authService.ts
+     16 README.md
+     15 client/src/views/ViewTournament.vue
      15 client/src/views/TournamentsPage.vue
-     14 server/TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs
-     14 client/src/views/HomePage.vue
-     13 client/src/views/ViewTournament.vue
-     12 server/TournamentPlatformSystemWebApi.Infrastructure/TournamentPlatformSystemWebApi.Infrastructure.csproj
-     12 server/TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs
-     12 server/TournamentPlatformSystemWebApi.API/Controllers/TournamentsController.cs
-     12 docker-compose.yml
+     15 client/src/views/HomePage.vue
+     14 server/TournamentPlatformSystemWebApi.Infrastructure/Repositories/UserRepository.cs
+     14 server/TournamentPlatformSystemWebApi.API/Controllers/AuthController.cs
+     14 client/src/router/index.ts
+     13 server/TournamentPlatformSystemWebApi.Application/Interfaces/ITournamentService.cs
+     13 client/src/components/forms/RegisterForm.vue
+     12 server/TournamentPlatformSystemWebApi.Infrastructure/Services/AuthenticationService.cs
      12 client/src/views/MyTournamentsPage.vue
-     12 client/src/router/index.ts
-     12 client/src/components/forms/RegisterForm.vue
-     10 server/TournamentPlatformSystemWebApi.Application/Interfaces/IUserRepository.cs
-     10 server/TournamentPlatformSystemWebApi.API/TournamentPlatformSystemWebApi.API.csproj
-     10 db/init_db.sql
-     10 client/src/services/tournamentService.ts
-     10 client/src/components/tournament/TournamentHeader.vue
-      9 client/src/views/JoinTournamentPage.vue
-      9 client/src/components/forms/EditTournamentForm.vue
-      9 client/src/components/AppHeader.vue
-      9 client/package-lock.json
-      9 .gitignore
-      8 server/seeds/seed.sql
+     12 client/src/components/tournament/TournamentHeader.vue
+     12 client/src/components/forms/CreateTournamentForm.vue
+     11 server/TournamentPlatformSystemWebApi.Infrastructure/TournamentPlatformSystemWebApi.Infrastructure.csproj
+     11 server/TournamentPlatformSystemWebApi.Infrastructure/Repositories/TournamentRepository.cs
+     11 server/TournamentPlatformSystemWebApi.Application/Interfaces/IUserRepository.cs
+     11 docker-compose.yml
+     11 client/src/types/Auth.ts
+     10 client/src/components/forms/EditTournamentForm.vue
 
-$ git log --since="90 days ago" --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -nr | head -15
+$ git log --since="2026-08-23" --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -nr | head -15   # last 90 days before 2026-11-21
       3 server/TournamentPlatformSystemWebApi.Infrastructure/Security/JwtTokenService.cs
       3 server/Tests/JwtTokenServiceTests.cs
       2 server/TournamentPlatformSystemWebApi.API/TournamentPlatformSystemWebApi.API.csproj

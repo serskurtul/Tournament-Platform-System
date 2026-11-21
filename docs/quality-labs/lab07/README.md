@@ -192,39 +192,41 @@ feat(audit): simulate data mutation issue, FAIL
 
 ```
 $ git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -nr | head
-     19 README.md
-     17 server/TournamentPlatformSystemWebApi.API/Program.cs
-     16 client/src/components/dashboard/RoleDashboard.vue
-     15 client/src/views/TournamentsPage.vue
-     14 server/TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs
-     14 client/src/views/HomePage.vue
-     13 client/src/views/ViewTournament.vue
+     27 server/TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs
+     21 server/TournamentPlatformSystemWebApi.API/Program.cs
+     21 server/TournamentPlatformSystemWebApi.API/Controllers/TournamentsController.cs
+     19 client/src/components/dashboard/RoleDashboard.vue
+     16 client/src/services/tournamentService.ts
+     16 client/src/services/authService.ts
+     16 README.md
 ```
 
-Вікно аналізу. Основна розробка йшла з 17.03.2026 по червень 2026, а за останні 90 днів лише 17 комітів (переважно DevOps-лаби). Тому матрицю побудовано за **повною історією семестру** (Варіант 1, «Ретроспективний аудит»). 90-денний зріз CI теж будує окремо (`quality-report/last-90-days`).
+Вікно аналізу. Основна розробка йшла з 06.03.2026 по червень 2026, а за останні 90 днів лише 18 комітів (переважно DevOps-лаби). Тому матрицю побудовано за **повною історією семестру** (Варіант 1, «Ретроспективний аудит», 385 комітів до коміту ЛР-7). 90-денний зріз CI теж будує окремо (`quality-report/last-90-days`).
+
+> Примітка: локальний клон спершу був shallow (обрізана історія), і перші цифри були занижені. Після `git fetch --unshallow` дані перераховано. У CI це не проблема: workflow бере повну історію (`fetch-depth: 0`).
 
 ## 7. Синергетична матриця Hotspots
 
-Пороги: висока складність = max CCN функції у файлі > 10 (за методичкою); висока мінливість = ≥ 6 комітів (75-й перцентиль churn серед 110 проаналізованих файлів, поріг розраховано з даних). Повна матриця на 110 файлів: [evidence/04-hotspots-all-history.md](evidence/04-hotspots-all-history.md).
+Пороги: висока складність = max CCN функції у файлі > 10 (за методичкою); висока мінливість = ≥ 6 комітів (75-й перцентиль churn серед 110 проаналізованих файлів, поріг розраховано з даних). Зріз — код на коміті ЛР-7 (до декомпозиції в ЛР-8). Повна матриця на 110 файлів: [evidence/04-hotspots-all-history.md](evidence/04-hotspots-all-history.md).
 
 | Назва файлу | Max CCN | Комітів | Категорія ризику |
 |-------------|--------:|--------:|------------------|
-| `server/.../Services/TournamentService.cs` | 41 | 14 | **High Risk (Hotspot)** |
-| `server/.../Controllers/TournamentsController.cs` | 23 | 12 | **High Risk (Hotspot)** |
-| `client/src/components/forms/RegisterForm.vue` | 23 | 12 | **High Risk (Hotspot)** |
-| `server/.../Services/AuthenticationService.cs` | 24 | 7 | **High Risk (Hotspot)** |
+| `server/.../Services/TournamentService.cs` | 41 | 27 | **High Risk (Hotspot)** |
+| `server/.../Controllers/TournamentsController.cs` | 23 | 21 | **High Risk (Hotspot)** |
+| `client/src/components/forms/RegisterForm.vue` | 23 | 13 | **High Risk (Hotspot)** |
+| `server/.../Services/AuthenticationService.cs` | 24 | 12 | **High Risk (Hotspot)** |
 | `server/.../Core/Logic/SingleEliminationBracketGenerator.cs` | 13 | 5 | Sleeping Danger |
-| `client/src/components/forms/LoginForm.vue` | 11 | 3 | Sleeping Danger |
-| `client/src/components/dashboard/RoleDashboard.vue` | 5 | 16 | Active Development |
+| `client/src/components/forms/LoginForm.vue` | 11 | 5 | Sleeping Danger |
+| `client/src/components/dashboard/RoleDashboard.vue` | 5 | 19 | Active Development |
 | `client/src/views/TournamentsPage.vue` | 4 | 15 | Active Development |
 | `server/.../Services/GoogleDriveStorageService.cs` | 5 | 3 | Stable Code |
-| `client/src/services/bracketService.ts` | 4 | 4 | Stable Code |
+| `server/.../Core/Logic/MatchStatusHelper.cs` | 10 | 2 | Stable Code |
 
-Розподіл за всіма 110 файлами: Hotspot 10, Sleeping Danger 3, Active Development 31, Stable Code 66.
+Розподіл за всіма 110 файлами: Hotspot 10, Sleeping Danger 3, Active Development 25, Stable Code 72.
 
 ### Пріоритети рефакторингу на наступний спринт
 
-1. **`TournamentService.cs`** — головний Hotspot: найвища складність у проєкті (CCN 41) і серед найчастіше змінюваних файлів. Кожна зміна турнірної логіки торкається цього класу, звідси регресії та конфлікти злиття. Кандидат №1 на декомпозицію (ЛР-8, God Object).
+1. **`TournamentService.cs`** — головний Hotspot: найвища складність у проєкті (CCN 41) і найчастіше змінюваний файл (27 комітів). Кожна зміна турнірної логіки торкається цього класу, звідси регресії та конфлікти злиття. Кандидат №1 на декомпозицію (ЛР-8, God Object).
 2. **`AuthenticationService.cs`** (`RefreshAsync` CCN 24, `RegisterAsync` CCN 22) — безпеково критичний: складність тут напряму означає ризик помилок в автентифікації. Ізоляцію видачі токенів уже почато в цій ЛР.
 3. **`TournamentsController.cs`, `RegisterForm.vue`** — Hotspots на межах системи (HTTP API і форма реєстрації). Варто винести валідацію й мапування з контролера та компонента.
 4. **Sleeping Danger** (`SingleEliminationBracketGenerator.cs`) — не чіпати без потреби, але покрити тестами перед будь-яким Change Request.
