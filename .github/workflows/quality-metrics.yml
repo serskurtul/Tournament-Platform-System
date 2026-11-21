@@ -1,0 +1,56 @@
+name: Quality metrics
+
+# ЛР-7 (Інженерія якості), Завдання 3: on every push / pull request, scan code complexity
+# in a Docker container, collect Git churn and publish the Hotspot matrix as a build artifact.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  complexity-hotspots:
+    name: complexity & hotspots
+    runs-on: ubuntu-latest
+    # Runs inside a Docker container on the cloud runner (python image already ships git).
+    container: python:3.12-bookworm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history is required for churn (commits per file).
+          fetch-depth: 0
+
+      - name: Trust the workspace for git inside the container
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Install complexity scanner (Lizard)
+        run: pip install --no-cache-dir lizard==1.26.1
+
+      - name: Scan complexity (McCabe CCN per function)
+        run: |
+          mkdir -p quality-report
+          lizard server client/src \
+            -l csharp -l typescript -l javascript -l vue \
+            -x "*/Migrations/*" -x "*/Tests/*" -x "*/IntegrationTests/*" -x "*/bin/*" -x "*/obj/*" \
+            --csv > quality-report/lizard.csv
+          echo "functions scanned: $(wc -l < quality-report/lizard.csv)"
+
+      - name: Collect churn (commits per file)
+        run: |
+          git log --format=format: --name-only | grep -Ev '^$' | sort | uniq -c | sort -nr > quality-report/churn-all.txt
+          git log --since="90 days ago" --format=format: --name-only | grep -Ev '^$' | sort | uniq -c | sort -nr > quality-report/churn-90d.txt || true
+          head -15 quality-report/churn-all.txt
+
+      - name: Build Hotspot matrix (whole history and last 90 days)
+        run: |
+          python scripts/quality/hotspot_matrix.py --lizard-csv quality-report/lizard.csv --out-dir quality-report/all-history
+          python scripts/quality/hotspot_matrix.py --lizard-csv quality-report/lizard.csv --out-dir quality-report/last-90-days --since "90 days ago"
+          cat quality-report/all-history/hotspots.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report
+          path: quality-report/
+          if-no-files-found: error
