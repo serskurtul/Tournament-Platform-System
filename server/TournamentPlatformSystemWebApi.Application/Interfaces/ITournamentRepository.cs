@@ -8,7 +8,7 @@ public interface ITournamentRepository : IRepository<Tournament, Guid>
 {
     Task<bool> IsTitleUniqueAsync(string title, Guid organizerId);
     Task<bool> UpdateStatus(Guid id, TournamentStatus status);
-    Task<int> GetParticipantsCountAsync(Guid tournamentId);
+    Task<int> GetParticipantsCountAsync(Guid tournamentId, bool includeDisqualified);
     Task<IReadOnlyList<Team>> GetTeamsAsync(Guid tournamentId);
     Task<bool> IsUserInTournamentAsync(Guid tournamentId, Guid userId);
     Task<bool> IsTeamNameUsedAsync(Guid tournamentId, string teamName);

@@ -69,11 +69,12 @@ public class TournamentRepository : BaseRepository<Tournament, TournamentModel>,
         return true;
     }
 
-    public async Task<int> GetParticipantsCountAsync(Guid tournamentId)
+    public async Task<int> GetParticipantsCountAsync(Guid tournamentId, bool includeDisqualified)
     {
         return await _context.Set<TeamModel>()
             .AsNoTracking()
-            .CountAsync(t => t.TournamentId == tournamentId && (t.IsDisqualified == null || t.IsDisqualified == false));
+            .CountAsync(t => t.TournamentId == tournamentId
+                             && (includeDisqualified || t.IsDisqualified == null || t.IsDisqualified == false));
     }
 
     public async Task<IReadOnlyList<Team>> GetTeamsAsync(Guid tournamentId)

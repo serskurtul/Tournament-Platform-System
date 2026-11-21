@@ -1,0 +1,10 @@
+$ dotnet build server/TournamentPlatformSystemWebApi.sln -c Release
+# after: ITournamentRepository.GetParticipantsCountAsync(Guid) -> GetParticipantsCountAsync(Guid, bool includeDisqualified)
+TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs(202,61): error CS7036: There is no argument given that corresponds to the required parameter 'includeDisqualified' of 'ITournamentRepository.GetParticipantsCountAsync(Guid, bool)'
+TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs(445,61): error CS7036: There is no argument given that corresponds to the required parameter 'includeDisqualified' of 'ITournamentRepository.GetParticipantsCountAsync(Guid, bool)'
+TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs(502,61): error CS7036: There is no argument given that corresponds to the required parameter 'includeDisqualified' of 'ITournamentRepository.GetParticipantsCountAsync(Guid, bool)'
+TournamentPlatformSystemWebApi.Infrastructure/Services/TournamentService.cs(614,65): error CS7036: There is no argument given that corresponds to the required parameter 'includeDisqualified' of 'ITournamentRepository.GetParticipantsCountAsync(Guid, bool)'
+
+# affected features inside the God Object:
+#   line 202 StartTournament | 445 GetTournamentDetailsAsync | 502 UpdateTournamentAsync | 614 AddParticipantAsync
+Build FAILED: 4 error(s), all in TournamentService.cs
