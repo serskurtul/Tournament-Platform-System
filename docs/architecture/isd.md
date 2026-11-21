@@ -26,7 +26,7 @@
 | `pgadmin -> db (service_healthy)` | адмінка чекає на БД |
 | `client -> app (service_healthy)` | SPA стартує лише після того, як API пройшов healthcheck (`curl /version`, кожні 10 с, до 10 спроб) |
 
-**Kubernetes.** Namespace `tournament-platform`: Deployment (або Argo Rollout) API з liveness `/version` і readiness `/health`; Deployment клієнта; PostgreSQL з PVC; Job/hook міграцій; Service-и `ClusterIP` / `NodePort 30173`; Ingress `tournament.local`. Деталі — [`k8s/README.md`](../k8s/README.md), [`charts/tournament-platform/README.md`](../charts/tournament-platform/README.md).
+**Kubernetes.** Namespace `tournament-platform`: Deployment (або Argo Rollout) API з liveness `/version` і readiness `/health`; Deployment клієнта; PostgreSQL з PVC; Job/hook міграцій; Service-и `ClusterIP` / `NodePort 30173`; Ingress `tournament.local`. Деталі — [`k8s/README.md`](../../k8s/README.md), [`charts/tournament-platform/README.md`](../../charts/tournament-platform/README.md).
 
 **GitOps.** Argo CD (App of Apps): `bootstrap/root-app.yaml` → `argocd-apps/` (застосунок, Argo Rollouts, kube-prometheus-stack, Loki, Alloy). Реліз — зміна тегу образу в `values-minikube.yaml`; canary з кроком analysis (поріг успішних запитів 95%).
 
@@ -77,4 +77,4 @@
 | RPO (допустима втрата даних) | ≤ 24 год | Ручний дамп (`db/backups/backup_20260611.sql`); автоматичного розкладу немає — прогалина |
 | RTO (час відновлення) | ≤ 1 год | Відновлення: розгорнути стек → `psql -f <dump>` → перевірити `/health` |
 
-Процедура: щоденний `pg_dump -Fc tournament_db` (CronJob у Kubernetes або cron на хості) у зовнішнє сховище з ротацією 14 днів; щомісячна перевірка відновлення на тестовому стенді. Поки CronJob не впроваджено, цільове RPO не забезпечено, і в [handover](handover.md) це позначено як ризик.
+Процедура: щоденний `pg_dump -Fc tournament_db` (CronJob у Kubernetes або cron на хості) у зовнішнє сховище з ротацією 14 днів; щомісячна перевірка відновлення на тестовому стенді. Поки CronJob не впроваджено, цільове RPO не забезпечено, і в [handover](../developer/handover.md) це позначено як ризик.

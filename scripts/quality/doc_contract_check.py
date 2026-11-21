@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """ЛР-10/11: "code change = documentation change" check.
 
-1. Every HTTP route declared in the ASP.NET controllers must appear in docs/sdd.md as `METHOD /path`.
+1. Every HTTP route declared in the ASP.NET controllers must appear in docs/architecture/sdd.md as `METHOD /path`.
 2. Every service start-up dependency in docker-compose.yml (depends_on + condition) must appear in
-   docs/isd.md as `service -> dependency (condition)`.
+   docs/architecture/isd.md as `service -> dependency (condition)`.
 Exits 1 and lists the drift if anything is undocumented (or documented but no longer exists).
 Usage: doc_contract_check.py [--repo .]
 """
@@ -59,8 +59,8 @@ def main() -> None:
     args = ap.parse_args()
     repo = args.repo.resolve()
 
-    sdd = (repo / "docs/sdd.md").read_text(encoding="utf-8") if (repo / "docs/sdd.md").exists() else ""
-    isd = (repo / "docs/isd.md").read_text(encoding="utf-8") if (repo / "docs/isd.md").exists() else ""
+    sdd = (repo / "docs/architecture/sdd.md").read_text(encoding="utf-8") if (repo / "docs/architecture/sdd.md").exists() else ""
+    isd = (repo / "docs/architecture/isd.md").read_text(encoding="utf-8") if (repo / "docs/architecture/isd.md").exists() else ""
     documented_routes = {f"{m} {normalize(p)}" for m, p in DOC_ROUTE_RE.findall(sdd)}
     documented_deps = {f"{a} -> {b} ({c})" for a, b, c in DOC_DEP_RE.findall(isd)}
 

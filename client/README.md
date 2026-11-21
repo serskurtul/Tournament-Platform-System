@@ -15,4 +15,4 @@ Vue 3 + TypeScript + Vite SPA. In containers it is served by nginx, which proxie
 
 `src/api` HTTP client and token refresh · `src/services` API calls · `src/stores` Pinia state · `src/views` pages · `src/components` UI blocks · `src/router` routes.
 
-System-level documentation: [../docs/sdd.md](../docs/sdd.md) (components, API), [../docs/isd.md](../docs/isd.md) (deployment).
+System-level documentation: [SDD](../docs/architecture/sdd.md) (components, API), [ISD](../docs/architecture/isd.md) (deployment).

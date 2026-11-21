@@ -25,20 +25,20 @@
 
 1. Прочитати це README: призначення і [швидкий старт](#кроки-запуску) (`docker compose up --build`).
 2. Відкрити http://localhost:5173 і зареєструватися як Organizer, щоб пройти основний сценарій: турнір → учасники → старт → результати.
-3. Карта системи — [SDD](docs/sdd.md) (компоненти, модель даних, API), середовища й CI/CD — [ISD](docs/isd.md).
+3. Карта системи — [SDD](docs/architecture/sdd.md) (компоненти, модель даних, API), середовища й CI/CD — [ISD](docs/architecture/isd.md).
 4. Чому система влаштована саме так — [ADR](docs/architecture/adr/README.md).
-5. Перед першим PR — [регламент документації](docs/maintenance.md): зміна коду = зміна документації.
+5. Перед першим PR — [регламент документації](docs/developer/maintenance.md): зміна коду = зміна документації.
 
 ### 📚 Документація (архітектурний паспорт)
 
 | Документ | Для кого | Про що |
 |----------|----------|--------|
-| [docs/sdd.md](docs/sdd.md) | розробники, QA | C4-контейнери, компоненти, модель даних, API-контракти |
-| [docs/isd.md](docs/isd.md) | DevOps | Середовища, змінні, CI/CD, моніторинг, резервне копіювання (RTO/RPO) |
+| [docs/architecture/sdd.md](docs/architecture/sdd.md) | розробники, QA | C4-контейнери, компоненти, модель даних, API-контракти |
+| [docs/architecture/isd.md](docs/architecture/isd.md) | DevOps | Середовища, змінні, CI/CD, моніторинг, резервне копіювання (RTO/RPO) |
 | [docs/architecture/adr/](docs/architecture/adr/README.md) | розробники, архітектор | Журнал архітектурних рішень |
-| [docs/maintenance.md](docs/maintenance.md) | усі | Власники документів і цикли перегляду |
-| [docs/handover.md](docs/handover.md) | команда супроводу | Пакет передачі знань, Bus Factor |
-| [docs/TestPlan.md](docs/TestPlan.md), [docs/ErrorCatalog.md](docs/ErrorCatalog.md) | QA | План тестування, каталог помилок API |
+| [docs/developer/maintenance.md](docs/developer/maintenance.md) | усі | Власники документів і цикли перегляду |
+| [docs/developer/handover.md](docs/developer/handover.md) | команда супроводу | Пакет передачі знань, Bus Factor |
+| [docs/developer/test-plan.md](docs/developer/test-plan.md), [docs/api/error-catalog.md](docs/api/error-catalog.md) | QA | План тестування, каталог помилок API |
 
 ## ✨ Features
 

@@ -1,7 +1,7 @@
 # System Design Document (SDD) — ZVYTIAHA
 
 Що система робить: веб-платформа турнірів. Організатори створюють турніри, гравці реєструються на них, система будує сітку single elimination і фіксує результати матчів.
-Як вона працює в середовищах розгортання, описано в [ISD](isd.md); чому прийнято саме такі рішення — в [ADR](architecture/adr/).
+Як вона працює в середовищах розгортання, описано в [ISD](isd.md); чому прийнято саме такі рішення — в [ADR](adr).
 
 ## 1. C4: контейнери
 
@@ -71,7 +71,7 @@ erDiagram
   REFRESH_TOKEN { uuid Id uuid UserId string Token string JwtId datetime ExpiresAt bool IsUsed bool IsRevoked }
 ```
 
-Повний словник полів: [DATA_DICTIONARY.md](DATA_DICTIONARY.md).
+Повний словник полів: [DATA_DICTIONARY.md](data-dictionary.md).
 
 ## 4. API-контракти (`/api/v1`, JSON)
 

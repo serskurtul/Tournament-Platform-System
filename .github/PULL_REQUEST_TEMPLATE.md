@@ -27,7 +27,7 @@
 ## Self-Review Checklist
 
 ### Code Quality
-- [ ] Код відповідає встановленому [Code Style Guide](../docs/NAMING_CONVENTIONS.md)
+- [ ] Код відповідає встановленому [Code Style Guide](../docs/developer/naming-conventions.md)
 - [ ] Немає дублювання коду
 - [ ] Складні логіки мають коментарі
 - [ ] Назви змінних/функцій зрозумілі та за конвенціями
@@ -113,4 +113,4 @@
 
 ## Документація
 
-- [ ] Зачеплені документи оновлено (README / [SDD](../docs/sdd.md) / [ISD](../docs/isd.md) / ADR) або зміна не впливає на поведінку системи
+- [ ] Зачеплені документи оновлено (README / [SDD](../docs/architecture/sdd.md) / [ISD](../docs/architecture/isd.md) / ADR) або зміна не впливає на поведінку системи

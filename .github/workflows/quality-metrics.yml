@@ -55,7 +55,7 @@ jobs:
           path: quality-report/
           if-no-files-found: error
 
-  # ЛР-10: "code change = documentation change" — routes must be in docs/sdd.md, start-up order in docs/isd.md.
+  # ЛР-10: "code change = documentation change" — routes must be in docs/architecture/sdd.md, start-up order in docs/architecture/isd.md.
   doc-contract:
     name: documentation contract
     runs-on: ubuntu-latest

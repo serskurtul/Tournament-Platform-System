@@ -6,27 +6,27 @@
 
 | Документ | Що відповідає | Власник | Статус актуальності (2026-11-21) |
 |----------|---------------|---------|----------------------------------|
-| [README.md](../README.md) | Що це, як запустити, шлях новачка | Анур'єва Катерина | ✅ актуальний |
-| [docs/sdd.md](sdd.md) | Компоненти, модель даних, API (перевіряється в CI) | Скуртул Сергій | ✅ актуальний |
-| [docs/isd.md](isd.md) | Середовища, змінні, CI/CD, порядок старту (перевіряється в CI), RTO/RPO | Скуртул Сергій | ✅ актуальний |
-| [docs/architecture/adr/](architecture/adr/README.md) | Чому прийнято ключові рішення | Скуртул Сергій, Дудко Володимир | ✅ актуальний |
-| [docs/ErrorCatalog.md](ErrorCatalog.md) | Помилки API для QA і клієнтів | Скуртул Сергій | ✅ оновлено |
-| [docs/DATA_DICTIONARY.md](DATA_DICTIONARY.md) | Поля таблиць | Дудко Володимир | ⚠️ перегляд прострочено (163 дні) |
-| [docs/TestPlan.md](TestPlan.md) | Стратегія тестування | Загребенюк Богдан | ⚠️ дрейф (24 зміни тестів без оновлення) |
-| [docs/Data_Flow_Specification.md](Data_Flow_Specification.md) | Потоки даних між шарами | Скуртул Сергій | ⚠️ дрейф (98 змін коду без оновлення) |
-| [k8s/README.md](../k8s/README.md), [charts/…/README.md](../charts/tournament-platform/README.md) | Розгортання в Kubernetes | Скуртул Сергій | ✅ актуальні |
+| [README.md](../../README.md) | Що це, як запустити, шлях новачка | Анур'єва Катерина | ✅ актуальний |
+| [docs/sdd.md](../architecture/sdd.md) | Компоненти, модель даних, API (перевіряється в CI) | Скуртул Сергій | ✅ актуальний |
+| [docs/isd.md](../architecture/isd.md) | Середовища, змінні, CI/CD, порядок старту (перевіряється в CI), RTO/RPO | Скуртул Сергій | ✅ актуальний |
+| [docs/architecture/adr/](../architecture/adr/README.md) | Чому прийнято ключові рішення | Скуртул Сергій, Дудко Володимир | ✅ актуальний |
+| [docs/ErrorCatalog.md](../api/error-catalog.md) | Помилки API для QA і клієнтів | Скуртул Сергій | ✅ оновлено |
+| [docs/DATA_DICTIONARY.md](../architecture/data-dictionary.md) | Поля таблиць | Дудко Володимир | ⚠️ перегляд прострочено (163 дні) |
+| [docs/TestPlan.md](test-plan.md) | Стратегія тестування | Загребенюк Богдан | ⚠️ дрейф (24 зміни тестів без оновлення) |
+| [docs/Data_Flow_Specification.md](../architecture/data-flow-specification.md) | Потоки даних між шарами | Скуртул Сергій | ⚠️ дрейф (98 змін коду без оновлення) |
+| [k8s/README.md](../../k8s/README.md), [charts/…/README.md](../../charts/tournament-platform/README.md) | Розгортання в Kubernetes | Скуртул Сергій | ✅ актуальні |
 
 ## 2. Онбординг нового розробника (від README до локального запуску)
 
-1. Клонувати репозиторій і прочитати [README](../README.md): призначення, «Шлях новачка».
+1. Клонувати репозиторій і прочитати [README](../../README.md): призначення, «Шлях новачка».
 2. `cp .env.example .env`, за потреби змінити паролі; `docker compose up --build`. Init-контейнер сам застосує міграції й seed.
 3. Перевірити: http://localhost:5050/version (API живий), http://localhost:5050/swagger (контракти), http://localhost:5173 (UI). Пройти сценарій організатора: турнір → учасники → старт → результат.
-4. Знайти свій модуль у [SDD §2](sdd.md#2-компоненти) і його API в [SDD §4](sdd.md#4-api-контракти-apiv1-json); локально: `dotnet test server/Tests`, `npm run lint && npm run build` у `client/`.
+4. Знайти свій модуль у [SDD §2](../architecture/sdd.md#2-компоненти) і його API в [SDD §4](../architecture/sdd.md#4-api-контракти-apiv1-json); локально: `dotnet test server/Tests`, `npm run lint && npm run build` у `client/`.
 5. Перед першим PR — [регламент](maintenance.md): оновити зачеплені документи; CI-джоба `doc-contract` перевірить SDD/ISD.
 
 ## 3. Декларація Bus Factor
 
-Метод: `git blame -w -M -C` на стані до лабораторних змін (коміт `6bb342a`), частка рядків кожного автора в компоненті. Bus Factor = мінімальна кількість людей, які разом написали ≥ 50% коду компонента. Вивід: [evidence/07-bus-factor-git-blame.txt](quality-labs/lab10/evidence/07-bus-factor-git-blame.txt).
+Метод: `git blame -w -M -C` на стані до лабораторних змін (коміт `6bb342a`), частка рядків кожного автора в компоненті. Bus Factor = мінімальна кількість людей, які разом написали ≥ 50% коду компонента. Вивід: [evidence/07-bus-factor-git-blame.txt](../quality-labs/lab10/evidence/07-bus-factor-git-blame.txt).
 
 | Компонент | Рядків | Єдиний носій знань (частка) | Bus Factor | Ризик | План усунення |
 |-----------|-------:|-----------------------------|:----------:|:-----:|---------------|
@@ -44,8 +44,8 @@
 
 ## 4. Відкриті ризики для команди супроводу
 
-- **Резервне копіювання:** автоматичного розкладу `pg_dump` немає, тож цільове RPO ≤ 24 год не забезпечене ([ISD §6](isd.md#6-моніторинг-і-резервне-копіювання)).
-- **`GET /api/v1/users/me` повертає заглушку**, а не дані користувача ([SDD §4](sdd.md#4-api-контракти-apiv1-json)).
+- **Резервне копіювання:** автоматичного розкладу `pg_dump` немає, тож цільове RPO ≤ 24 год не забезпечене ([ISD §6](../architecture/isd.md#6-моніторинг-і-резервне-копіювання)).
+- **`GET /api/v1/users/me` повертає заглушку**, а не дані користувача ([SDD §4](../architecture/sdd.md#4-api-контракти-apiv1-json)).
 - **Прострочені документи:** DATA_DICTIONARY, TestPlan, Data_Flow_Specification (див. реєстр).
 
 ## 5. Вердикт «Always Ready to Handover»
