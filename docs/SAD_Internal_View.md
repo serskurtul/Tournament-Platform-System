@@ -1,5 +1,7 @@
 # Software Architecture Document: Internal View (SAD)
 
+> **Deprecated (2026-11-21).** Документ описує структуру березня 2026 і містить застарілі дані (наприклад, єдиний `TournamentService`). Актуальна внутрішня структура — [sdd.md](sdd.md), рішення — [architecture/adr](architecture/adr/README.md).
+
 **Рівень архітектури:** Micro-level (Внутрішня структура коду)
 
 ## 1. Аналіз складності та вхідні дані (Input)

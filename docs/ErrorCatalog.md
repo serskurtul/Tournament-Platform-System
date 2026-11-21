@@ -44,11 +44,11 @@ Fields:
 
 | HTTP Code | Type | Meaning | Where used |
 |---|---|---|---|
-| 400 | ValidationError | Invalid payload, business validation failure | `TournamentService` methods: `CreateTournamentAsync`, `SaveTournamentDraftAsync`, `UploadImageAsync`, `StartTournament`, `SaveMatchResultAsync`, `UpdateTournamentAsync` |
-| 401 | Unauthorized | User not authorized to perform action | `TournamentService` and controllers |
-| 403 | Forbidden | Tournament closed for changes or not organizer | `TournamentService` |
-| 404 | NotFound | Tournament / match / user not found | `TournamentService` and controllers |
-| 409 | Conflict | Tournament title duplicate, invalid state transition | `TournamentService` / controllers |
+| 400 | ValidationError | Invalid payload, business validation failure | `TournamentManagementService` (`CreateTournamentAsync`, `SaveTournamentDraftAsync`, `UploadImageAsync`), `MatchService` (`StartTournament`, `SaveMatchResultAsync`, `UpdateTournamentAsync` |
+| 401 | Unauthorized | User not authorized to perform action | tournament services (`TournamentManagementService`, `ParticipantService`, `MatchService`) and controllers |
+| 403 | Forbidden | Tournament closed for changes or not organizer | `TournamentManagementService`, `ParticipantService`, `MatchService` |
+| 404 | NotFound | Tournament / match / user not found | tournament services (`TournamentManagementService`, `ParticipantService`, `MatchService`) and controllers |
+| 409 | Conflict | Tournament title duplicate, invalid state transition | `TournamentManagementService`, `MatchService` / controllers |
 | 500 | InternalServerError | Unexpected server-side failure | `TournamentsController` catch-all |
 
 ### 2.3 User preferences
@@ -68,7 +68,7 @@ Fields:
 
 ## 3. Transactional code highlights
 
-### 3.1 `TournamentService.StartTournament`
+### 3.1 `MatchService.StartTournament`
 
 This business flow now wraps match creation and tournament state update in a single DB transaction.
 
@@ -97,7 +97,7 @@ catch
 }
 ```
 
-### 3.2 `TournamentService.SaveMatchResultAsync`
+### 3.2 `MatchService.SaveMatchResultAsync`
 
 Scoring a match now updates both the finished match and the next-round match (when present), then commits in one atomic transaction.
 

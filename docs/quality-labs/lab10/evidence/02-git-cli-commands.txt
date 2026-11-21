@@ -1,0 +1,13 @@
+# Git CLI commands behind the metrics (examples)
+$ git log -1 --format=%cs -- README.md
+2026-06-19
+$ git log -1 --format=%cs -- docs/SAD_Internal_View.md
+2026-03-30
+$ git log -1 --format=%cs -- docs/ErrorCatalog.md
+2026-06-03
+$ git log -1 --format=%cs -- client/README.md
+2026-04-03
+$ git log --since=2026-03-30 --oneline -- server | wc -l   # code changes after SAD was last updated
+119
+$ git log --oneline -- docs/SAD_Internal_View.md | wc -l
+1

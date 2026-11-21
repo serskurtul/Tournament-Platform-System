@@ -1,0 +1,226 @@
+[
+  {
+    "doc": "README.md",
+    "type": "продукт",
+    "category": "експлуатаційна",
+    "audience": "новачок, бізнес, DevOps",
+    "last_updated": "2026-06-19",
+    "age_days": 155,
+    "doc_commits": 16,
+    "code_commits_since_doc": 13,
+    "broken_links": [],
+    "inbound_refs": 2,
+    "flags": [
+      "suspicious>90d"
+    ]
+  },
+  {
+    "doc": "CONTRIBUTORS.md",
+    "type": "процес",
+    "category": "—",
+    "audience": "команда",
+    "last_updated": "2026-03-17",
+    "age_days": 249,
+    "doc_commits": 5,
+    "code_commits_since_doc": null,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "stale>180d"
+    ]
+  },
+  {
+    "doc": "client/README.md",
+    "type": "продукт",
+    "category": "технічна",
+    "audience": "розробники (фронтенд)",
+    "last_updated": "2026-04-03",
+    "age_days": 232,
+    "doc_commits": 1,
+    "code_commits_since_doc": 85,
+    "broken_links": [],
+    "inbound_refs": 2,
+    "flags": [
+      "stale>180d",
+      "drift>20"
+    ]
+  },
+  {
+    "doc": "docs/ADR_System_Style.md",
+    "type": "процес",
+    "category": "архітектурна",
+    "audience": "розробники",
+    "last_updated": "2026-03-30",
+    "age_days": 236,
+    "doc_commits": 1,
+    "code_commits_since_doc": 119,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "stale>180d",
+      "drift>20"
+    ]
+  },
+  {
+    "doc": "docs/SAD_Internal_View.md",
+    "type": "продукт",
+    "category": "архітектурна",
+    "audience": "розробники",
+    "last_updated": "2026-03-30",
+    "age_days": 236,
+    "doc_commits": 1,
+    "code_commits_since_doc": 119,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "stale>180d",
+      "drift>20"
+    ]
+  },
+  {
+    "doc": "docs/DATA_DICTIONARY.md",
+    "type": "продукт",
+    "category": "технічна",
+    "audience": "розробники, QA",
+    "last_updated": "2026-06-11",
+    "age_days": 163,
+    "doc_commits": 2,
+    "code_commits_since_doc": 1,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "suspicious>90d"
+    ]
+  },
+  {
+    "doc": "docs/Storage/Data_Integrity.md",
+    "type": "продукт",
+    "category": "технічна",
+    "audience": "розробники",
+    "last_updated": "2026-06-11",
+    "age_days": 163,
+    "doc_commits": 1,
+    "code_commits_since_doc": 1,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "suspicious>90d"
+    ]
+  },
+  {
+    "doc": "docs/Data_Flow_Specification.md",
+    "type": "продукт",
+    "category": "архітектурна",
+    "audience": "розробники, QA",
+    "last_updated": "2026-04-06",
+    "age_days": 229,
+    "doc_commits": 2,
+    "code_commits_since_doc": 97,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "stale>180d",
+      "drift>20"
+    ]
+  },
+  {
+    "doc": "docs/ErrorCatalog.md",
+    "type": "продукт",
+    "category": "технічна",
+    "audience": "розробники, QA",
+    "last_updated": "2026-06-03",
+    "age_days": 171,
+    "doc_commits": 1,
+    "code_commits_since_doc": 2,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "suspicious>90d"
+    ]
+  },
+  {
+    "doc": "docs/NAMING_CONVENTIONS.md",
+    "type": "процес",
+    "category": "технічна",
+    "audience": "розробники",
+    "last_updated": "2026-03-30",
+    "age_days": 236,
+    "doc_commits": 1,
+    "code_commits_since_doc": null,
+    "broken_links": [],
+    "inbound_refs": 1,
+    "flags": [
+      "stale>180d"
+    ]
+  },
+  {
+    "doc": "docs/TestPlan.md",
+    "type": "процес",
+    "category": "технічна",
+    "audience": "QA",
+    "last_updated": "2026-04-07",
+    "age_days": 228,
+    "doc_commits": 2,
+    "code_commits_since_doc": 24,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "stale>180d",
+      "drift>20"
+    ]
+  },
+  {
+    "doc": "k8s/README.md",
+    "type": "продукт",
+    "category": "експлуатаційна",
+    "audience": "DevOps",
+    "last_updated": "2026-11-06",
+    "age_days": 15,
+    "doc_commits": 2,
+    "code_commits_since_doc": 2,
+    "broken_links": [],
+    "inbound_refs": 2,
+    "flags": []
+  },
+  {
+    "doc": "charts/tournament-platform/README.md",
+    "type": "продукт",
+    "category": "експлуатаційна",
+    "audience": "DevOps",
+    "last_updated": "2026-11-06",
+    "age_days": 15,
+    "doc_commits": 2,
+    "code_commits_since_doc": 2,
+    "broken_links": [],
+    "inbound_refs": 2,
+    "flags": []
+  },
+  {
+    "doc": "docs/labs/README.md",
+    "type": "процес",
+    "category": "експлуатаційна",
+    "audience": "DevOps, викладач",
+    "last_updated": "2026-11-06",
+    "age_days": 15,
+    "doc_commits": 2,
+    "code_commits_since_doc": 7,
+    "broken_links": [],
+    "inbound_refs": 1,
+    "flags": []
+  },
+  {
+    "doc": ".github/PULL_REQUEST_TEMPLATE.md",
+    "type": "процес",
+    "category": "—",
+    "audience": "розробники",
+    "last_updated": "2026-04-09",
+    "age_days": 226,
+    "doc_commits": 2,
+    "code_commits_since_doc": null,
+    "broken_links": [],
+    "inbound_refs": 0,
+    "flags": [
+      "stale>180d"
+    ]
+  }
+]
