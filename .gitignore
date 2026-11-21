@@ -82,3 +82,5 @@ nunit-*.xml
 
 #GoogleCloud
 server/secrets/tournament-platform-system-secrets.json
+# Python bytecode
+__pycache__/
