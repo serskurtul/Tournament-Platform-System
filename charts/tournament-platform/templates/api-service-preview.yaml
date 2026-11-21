@@ -1,0 +1,21 @@
+# DVO-L4-3C8B52
+# Blue-green preview Service (ЛР-6 варіант b). Exists only when rollout.strategy.blueGreen is set.
+{{- if and .Values.rollout.enabled .Values.rollout.strategy.blueGreen }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "api") }}-preview
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+    {{- include "tournament.selectorLabels" (dict "root" . "component" "api") | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "tournament.selectorLabels" (dict "root" . "component" "api") | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.api.service.port }}
+      targetPort: http
+{{- end }}

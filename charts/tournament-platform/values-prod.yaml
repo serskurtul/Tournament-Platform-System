@@ -1,0 +1,35 @@
+# DVO-L4-3C8B52
+# Production-like: more replicas, larger resources, ingress on, production config.
+# Secrets are intentionally EMPTY here. Pass them at install time, never commit them:
+#   helm upgrade --install ... -f values-prod.yaml \
+#     --set-file secrets.postgresPassword=/secure/pg.txt --set-file secrets.jwtKey=/secure/jwt.txt
+api:
+  image:
+    tag: "1.1.0"
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 200m
+      memory: 384Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+client:
+  replicaCount: 2
+
+postgres:
+  persistence:
+    size: 10Gi
+
+config:
+  aspnetEnvironment: Production
+  frontendOrigin: https://tournament.example.com
+
+secrets:
+  postgresPassword: ""
+  jwtKey: ""
+
+ingress:
+  enabled: true
+  host: tournament.example.com

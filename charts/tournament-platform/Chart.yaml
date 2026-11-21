@@ -1,0 +1,9 @@
+# DVO-L4-3C8B52
+apiVersion: v2
+name: tournament-platform
+description: ZVYTIAHA tournament platform (ASP.NET Core API, Vue client, PostgreSQL) packaged for Kubernetes.
+type: application
+# Chart version: bumped whenever templates or values schema change (ЛР-6 bumps it for Rollouts).
+version: 0.1.0
+# appVersion: version of the application images this chart deploys by default.
+appVersion: "1.0.0"

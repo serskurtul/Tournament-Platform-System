@@ -1,0 +1,25 @@
+# DVO-L4-3C8B52
+# Tells Prometheus (kube-prometheus-stack) to scrape /metrics of the API Service.
+{{- if .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "api") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "tournament.selectorLabels" (dict "root" . "component" "api") | nindent 6 }}
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      relabelings:
+        # Copy the Argo Rollouts revision hash of each pod onto its metrics (used by AnalysisTemplate).
+        - sourceLabels: [__meta_kubernetes_pod_label_rollouts_pod_template_hash]
+          targetLabel: rollouts_pod_template_hash
+{{- end }}

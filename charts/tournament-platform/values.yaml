@@ -1,0 +1,103 @@
+# DVO-L4-3C8B52
+# Default values target the DEVELOPMENT environment (minikube / Docker Desktop).
+# Per-environment overrides: values-dev.yaml, values-prod.yaml, values-minikube.yaml (passed with -f).
+# Highest priority wins: --set > -f files (last file wins) > these defaults.
+
+api:
+  image:
+    repository: ghcr.io/serskurtul/tournament-platform-server
+    # Concrete version tag. The tag is also exported as APP_VERSION (shown by /version). Never "latest".
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  # Demo fault injection (ЛР-7): share of /api requests answered with HTTP 500. "0" = off.
+  failRate: "0"
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+client:
+  image:
+    repository: ghcr.io/serskurtul/tournament-platform-client
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30173
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+postgres:
+  image:
+    repository: postgres
+    tag: "15"
+    pullPolicy: IfNotPresent
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+config:
+  aspnetEnvironment: Development
+  frontendOrigin: http://tournament.local
+  jwtIssuer: tournament-api
+  postgresDb: tournament_db
+  postgresUser: postgres
+
+secrets:
+  # PLACEHOLDERS ONLY. Real values are supplied at install time (--set / --set-file) or from an external
+  # secret store. The chart fails with a clear message if these are empty (see templates/secret.yaml).
+  postgresPassword: "CHANGE_ME_postgres_password"
+  jwtKey: "CHANGE_ME_jwt_signing_key_min_32_chars"
+
+ingress:
+  enabled: false
+  className: nginx
+  host: tournament.local
+
+db:
+  # Seed data is applied only on the first install (Release.IsInstall), never on upgrades.
+  seedOnInstall: true
+
+# Progressive delivery (ЛР-6). When enabled, the API runs as an Argo Rollout instead of a Deployment.
+rollout:
+  enabled: false
+  strategy: {}
+
+# Metric-based analysis (ЛР-7). Requires rollout.enabled.
+analysis:
+  enabled: false
+  prometheusAddress: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+  successRateThreshold: 0.95
+
+# Observability (ЛР-7).
+metrics:
+  serviceMonitor:
+    enabled: false
+    interval: 15s
+  alerts:
+    enabled: false
+
+dashboards:
+  enabled: false

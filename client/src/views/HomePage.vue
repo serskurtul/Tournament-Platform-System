@@ -105,10 +105,10 @@ onMounted(async () => {
 
         
         <TournamentCard
-          v-else
           v-for="t in tournaments"
-          :key="t.id"
+          v-else
           :id="t.id"
+          :key="t.id"
           :image="t.backgroundImg ?? defaultCardBg"
           :title="t.title"
           :type="t.sportName"

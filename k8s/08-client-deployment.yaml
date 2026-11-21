@@ -1,0 +1,58 @@
+# DVO-L3-7F2A91
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tournament-client
+  namespace: tournament-platform
+  labels:
+    app.kubernetes.io/name: tournament-client
+    app.kubernetes.io/part-of: tournament-platform
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot-name: "кабачок"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tournament-client
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tournament-client
+        app.kubernetes.io/part-of: tournament-platform
+        mascot: kabachok
+      annotations:
+        devops-lab/mascot-approved: "true"
+        devops-lab/mascot-name: "кабачок"
+    spec:
+      containers:
+        - name: client
+          image: ghcr.io/serskurtul/tournament-platform-client:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            # nginx proxies /api/ to the API Service in this namespace.
+            - name: API_UPSTREAM
+              value: "http://tournament-api:80"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20

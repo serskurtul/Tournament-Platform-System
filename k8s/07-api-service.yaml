@@ -1,0 +1,21 @@
+# DVO-L3-7F2A91
+apiVersion: v1
+kind: Service
+metadata:
+  name: tournament-api
+  namespace: tournament-platform
+  labels:
+    app.kubernetes.io/name: tournament-api
+    app.kubernetes.io/part-of: tournament-platform
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot-name: "кабачок"
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: tournament-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

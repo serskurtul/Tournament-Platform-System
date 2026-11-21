@@ -1,0 +1,27 @@
+# DVO-L4-3C8B52
+# Development: single API replica, small footprint, ingress off, NodePort access on localhost.
+api:
+  image:
+    tag: "1.0.0"
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 384Mi
+
+client:
+  replicaCount: 1
+
+postgres:
+  persistence:
+    size: 1Gi
+
+config:
+  aspnetEnvironment: Development
+  frontendOrigin: http://localhost:30173
+
+ingress:
+  enabled: false

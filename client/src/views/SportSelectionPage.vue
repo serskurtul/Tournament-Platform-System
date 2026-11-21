@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ApiError } from '../types/ApiError'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
@@ -62,7 +63,8 @@ const handleSave = async () => {
 
     finishOnboarding()
     router.push(authStore.getDashboardRouteByRole(authStore.currentUser!.role))
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     saveError.value =
       e?.response?.data?.error?.message ?? 'Failed to save preferences. Please try again.'
   } finally {
@@ -79,7 +81,8 @@ const handleSkipConfirm = async () => {
 
     finishOnboarding()
     router.push(authStore.getDashboardRouteByRole(authStore.currentUser!.role))
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     skipError.value =
       e?.response?.data?.error?.message ?? 'Failed to skip. Please try again.'
     showSkipModal.value = false

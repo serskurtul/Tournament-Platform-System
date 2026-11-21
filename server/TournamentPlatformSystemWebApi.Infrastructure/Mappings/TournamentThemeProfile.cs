@@ -17,4 +17,3 @@ public class TournamentThemeProfile : Profile
             .ForMember(d => d.UserPreferences, o => o.Ignore());
     }
 }
-

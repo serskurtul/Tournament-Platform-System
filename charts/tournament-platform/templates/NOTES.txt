@@ -1,0 +1,20 @@
+# DVO-L4-3C8B52
+Release "{{ .Release.Name }}" is installed in namespace "{{ .Release.Namespace }}" (revision {{ .Release.Revision }}).
+
+Application version: {{ .Values.api.image.tag }}
+
+Open the application:
+{{- if .Values.ingress.enabled }}
+  http://{{ .Values.ingress.host }}
+  (requires the ingress controller: minikube addons enable ingress)
+{{- else if eq .Values.client.service.type "NodePort" }}
+  minikube service {{ include "tournament.componentName" (dict "root" . "component" "client") }} -n {{ .Release.Namespace }} --url
+  or: http://$(minikube ip):{{ .Values.client.service.nodePort }}
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "tournament.componentName" (dict "root" . "component" "client") }} 8080:{{ .Values.client.service.port }}
+  then open http://localhost:8080
+{{- end }}
+
+Verify:
+  helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+  kubectl -n {{ .Release.Namespace }} get pods,deploy,rs,svc

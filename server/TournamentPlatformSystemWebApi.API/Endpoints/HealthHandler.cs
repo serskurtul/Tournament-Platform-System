@@ -44,7 +44,8 @@ namespace TournamentPlatformSystemWebApi.API.Endpoints
             {
                 success = true,
                 timestamp = DateTime.UtcNow.ToString("o"),
-                databaseState = dbPingResult.State
+                databaseState = dbPingResult.State,
+                version = TournamentPlatformSystemWebApi.API.Observability.AppInfo.Version
             };
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;

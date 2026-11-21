@@ -1,0 +1,17 @@
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "config") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+    {{- include "tournament.selectorLabels" (dict "root" . "component" "config") | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+data:
+  ASPNETCORE_ENVIRONMENT: {{ .Values.config.aspnetEnvironment | quote }}
+  FRONTEND_ORIGIN: {{ .Values.config.frontendOrigin | quote }}
+  JWT__ISSUER: {{ .Values.config.jwtIssuer | quote }}
+  POSTGRES_DB: {{ .Values.config.postgresDb | quote }}
+  POSTGRES_USER: {{ .Values.config.postgresUser | quote }}

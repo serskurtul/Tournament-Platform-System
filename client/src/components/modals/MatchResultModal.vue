@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ApiError } from '../../types/ApiError'
 import { computed, ref } from 'vue'
 import { bracketService } from '../../services/bracketService'
 import type { MatchInfo } from '../../types/Match'
@@ -66,7 +67,8 @@ const handleSave = async () => {
       winnerId,
     })
     emit('saved')
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     const msg = e?.response?.data?.error?.message
     if (e?.response?.status === 409) {
       error.value = 'Result for this match is already saved'

@@ -1,0 +1,18 @@
+# DVO-L4-3C8B52
+# Grafana dashboard delivered as a ConfigMap. The kube-prometheus-stack Grafana sidecar discovers
+# ConfigMaps labelled grafana_dashboard="1" and loads the JSON file inside.
+{{- if .Values.dashboards.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "dashboard") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+    grafana_dashboard: "1"
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+data:
+  tournament-overview.json: |
+{{ .Files.Get "files/dashboards/tournament-overview.json" | indent 4 }}
+{{- end }}

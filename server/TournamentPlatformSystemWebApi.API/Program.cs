@@ -14,8 +14,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging.Console;
+using Prometheus;
+using TournamentPlatformSystemWebApi.API.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Structured logs: one flat JSON object per line on stdout (consumed by Grafana Alloy -> Loki).
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(options => options.FormatterName = JsonLogFormatter.FormatterName);
+builder.Logging.AddConsoleFormatter<JsonLogFormatter, ConsoleFormatterOptions>();
 
 // Load optional secrets file from project root (useful in Docker or local mounts)
 // The file should be named `tournament-platform-system-secrets.json` and contain valid JSON
@@ -156,6 +164,7 @@ var app = builder.Build();
 
 // Register middlewares: logging -> exception handling -> response wrapping
 app.UseRequestLogging();
+app.UseFaultInjection();
 app.UseExceptionHandling();
 app.UseResponseWrapping();
 
@@ -167,6 +176,12 @@ app.UseCors("FrontendPolicy");
 
 // Health endpoint for liveness/readiness checks
 app.MapGet("health", HealthHandler.HandleAsync);
+
+// Application version (set by APP_VERSION env var; used by rollout verification in ЛР-5..7)
+app.MapGet("version", () => Results.Ok(new { version = AppInfo.Version }));
+
+// Prometheus scrape endpoint (no auth; exposed only inside the cluster)
+app.MapMetrics("/metrics");
 
 // Authentication & Authorization
 app.UseAuthentication();

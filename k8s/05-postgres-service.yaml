@@ -1,0 +1,22 @@
+# DVO-L3-7F2A91
+# Internal-only Service: the database is reachable from other pods, not from the host.
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: tournament-platform
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: tournament-platform
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot-name: "кабачок"
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

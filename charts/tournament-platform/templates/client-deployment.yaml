@@ -1,0 +1,49 @@
+# DVO-L4-3C8B52
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "client") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+    {{- include "tournament.selectorLabels" (dict "root" . "component" "client") | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.client.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "tournament.selectorLabels" (dict "root" . "component" "client") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "tournament.labels" . | nindent 8 }}
+        {{- include "tournament.selectorLabels" (dict "root" . "component" "client") | nindent 8 }}
+      annotations:
+        {{- include "tournament.annotations" . | nindent 8 }}
+    spec:
+      containers:
+        - name: client
+          image: "{{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}"
+          imagePullPolicy: {{ .Values.client.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            # nginx proxies /api/ to the API Service of this release.
+            - name: API_UPSTREAM
+              value: {{ printf "http://%s:%v" (include "tournament.componentName" (dict "root" . "component" "api")) .Values.api.service.port | quote }}
+          resources:
+            {{- toYaml .Values.client.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20

@@ -18,12 +18,13 @@
           <p class="dashboard-section__subtitle">{{ activeSubtitle }}</p>
 
          <div class="dashboard-section__grid">
-            <div
-              v-if="loadingActive"
-              v-for="n in 4"
-              :key="n"
-              class="tournament-card-skeleton"
-            />
+            <template v-if="loadingActive">
+              <div
+                v-for="n in 4"
+                :key="n"
+                class="tournament-card-skeleton"
+              />
+            </template>
 
             <p
               v-else-if="errorActive"
@@ -40,10 +41,10 @@
             </p>
 
             <TournamentCard
-              v-else
               v-for="item in activeTournaments"
-              :key="item.id"
+              v-else
               :id="item.id"
+              :key="item.id"
               :image="item.backgroundImg ?? defaultCardBg"
               :title="item.title"
               :type="item.sportName"
@@ -78,12 +79,13 @@
           <p class="dashboard-section__subtitle">{{ mySubtitle }}</p>
 
           <div class="dashboard-section__grid">
-            <div
-              v-if="loadingMy"
-              v-for="n in 4"
-              :key="n"
-              class="tournament-card-skeleton"
-            />
+            <template v-if="loadingMy">
+              <div
+                v-for="n in 4"
+                :key="n"
+                class="tournament-card-skeleton"
+              />
+            </template>
 
             <p
               v-else-if="!myTournaments.length"
@@ -93,10 +95,10 @@
             </p>
 
             <TournamentCard
-              v-else
               v-for="item in myTournaments"
-              :key="item.id"
+              v-else
               :id="item.id"
+              :key="item.id"
               :image="item.backgroundImg ?? defaultCardBg"
               :title="item.title"
               :type="item.sportName"

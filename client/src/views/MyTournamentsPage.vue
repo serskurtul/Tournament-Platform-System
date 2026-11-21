@@ -141,8 +141,8 @@ const visiblePages = computed(() => {
       <div v-else class="grid">
         <TournamentCard
           v-for="t in paginated"
-          :key="t.id"
           :id="t.id"
+          :key="t.id"
           :image="t.backgroundImg ?? defaultCardBg"
           :title="t.title"
           :type="t.sportName"

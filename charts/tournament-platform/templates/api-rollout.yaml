@@ -1,0 +1,48 @@
+# DVO-L4-3C8B52
+# Argo Rollouts replacement for the API Deployment (ЛР-6). Pod template is shared with api-deployment.yaml.
+{{- if .Values.rollout.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "api") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+    {{- include "tournament.selectorLabels" (dict "root" . "component" "api") | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "tournament.selectorLabels" (dict "root" . "component" "api") | nindent 6 }}
+  template:
+    {{- include "tournament.apiPodTemplate" . | nindent 4 }}
+  strategy:
+    {{- if .Values.rollout.strategy.blueGreen }}
+    blueGreen:
+      activeService: {{ include "tournament.componentName" (dict "root" . "component" "api") }}
+      previewService: {{ include "tournament.componentName" (dict "root" . "component" "api") }}-preview
+      autoPromotionEnabled: {{ .Values.rollout.strategy.blueGreen.autoPromotionEnabled | default false }}
+      scaleDownDelaySeconds: {{ .Values.rollout.strategy.blueGreen.scaleDownDelaySeconds | default 30 }}
+    {{- else }}
+    canary:
+      steps:
+        {{- range .Values.rollout.strategy.canary.steps }}
+        {{- if hasKey . "analysis" }}
+        {{- if $.Values.analysis.enabled }}
+        - analysis:
+            templates:
+              - templateName: {{ include "tournament.fullname" $ }}-success-rate
+            args:
+              - name: canary-hash
+                valueFrom:
+                  podTemplateHashValue: Latest
+        {{- end }}
+        {{- else }}
+        - {{ toJson . }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+{{- end }}

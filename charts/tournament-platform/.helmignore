@@ -1,0 +1,11 @@
+# DVO-L4-3C8B52
+# Patterns Helm ignores when packaging the chart.
+.DS_Store
+.git/
+.gitignore
+.idea/
+*.swp
+*.bak
+*.tmp
+*.orig
+*~

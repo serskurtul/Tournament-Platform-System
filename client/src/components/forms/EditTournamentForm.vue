@@ -226,6 +226,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ApiError } from '../../types/ApiError'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -345,7 +346,8 @@ const confirmDisqualify = async () => {
   try {
     await participationService.removeParticipant(props.tournamentId, participant.userId)
     participants.value = participants.value.filter(p => p.id !== participant.id)
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     showError(e?.message ?? 'Failed to disqualify participant.')
   } finally {
     isDisqualifying.value = null
@@ -380,7 +382,8 @@ const handleSubmit = async () => {
       toast.value = ''
       router.push(`/tournaments/${props.tournamentId}`)
     }, 2000)
-  } catch (e: any) {
+  } catch (err) {
+    const e = err as ApiError
     if (e?.errorCode === 'CONFLICT') {
       showError(e.message ?? 'Editing is blocked. Tournament is already active.')
     } else {

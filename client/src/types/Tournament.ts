@@ -30,8 +30,7 @@ export interface ITournamentCreate {
     maxParticipants: number
 }
 
-export interface ITournamentUpdate
-    extends Partial<ITournamentCreate> { }
+export type ITournamentUpdate = Partial<ITournamentCreate>
 
 export interface ITournamentResponse
     extends ITournament {

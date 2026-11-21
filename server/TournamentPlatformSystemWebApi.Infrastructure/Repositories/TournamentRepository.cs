@@ -407,4 +407,3 @@ public class TournamentRepository : BaseRepository<Tournament, TournamentModel>,
         return Expression.Lambda<Func<TournamentModel, bool>>(body, parameter);
     }
 }
-

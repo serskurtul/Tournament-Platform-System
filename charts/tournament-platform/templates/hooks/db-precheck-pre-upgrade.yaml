@@ -1,0 +1,34 @@
+# DVO-L4-3C8B52
+# Hook (ЛР-4 задача 9b): runs BEFORE an upgrade and fails it early if PostgreSQL is not reachable.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "db-precheck") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    {{- include "tournament.annotations" . | nindent 4 }}
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        {{- include "tournament.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: precheck
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              for i in $(seq 1 30); do
+                pg_isready -h {{ include "tournament.componentName" (dict "root" . "component" "postgres") }} -U {{ .Values.config.postgresUser }} && exit 0
+                sleep 2
+              done
+              echo "PostgreSQL is not reachable; aborting upgrade" >&2
+              exit 1
