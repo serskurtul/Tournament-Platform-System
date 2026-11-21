@@ -7,6 +7,7 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine
+RUN apk upgrade --no-cache
 COPY --from=build /app/dist /usr/share/nginx/html
 # nginx:alpine renders /etc/nginx/templates/*.template into conf.d at start (envsubst).
 # API_UPSTREAM is the backend base URL: compose uses the service name 'app', Kubernetes uses its own Service.

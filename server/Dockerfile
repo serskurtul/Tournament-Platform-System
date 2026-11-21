@@ -18,7 +18,7 @@ RUN dotnet publish -c Debug -o /app/publish --no-restore
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS runtime
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
 RUN dotnet tool install --global dotnet-ef --version 9.0.15
 ENV PATH="$PATH:/root/.dotnet/tools"
