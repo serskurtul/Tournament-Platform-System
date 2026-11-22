@@ -462,13 +462,24 @@ const handleSubmit = async () => {
 
     const response = await tournamentService.createTournament(payload)
 
+    // CA-1 (INC-001): the tournament already exists at this point, so a banner failure must not look like a
+    // failed creation (users re-submitted the form and got 409). The banner can be added from the edit page.
+    let bannerFailed = false
     if (bannerFile.value) {
       const formData = new FormData()
       formData.append('file', bannerFile.value)
-      await tournamentService.uploadTournamentImage(response.id, formData)
+      try {
+        await tournamentService.uploadTournamentImage(response.id, formData)
+      } catch {
+        bannerFailed = true
+      }
     }
 
     successMessage.value = 'Tournament created successfully'
+    if (bannerFailed) {
+      toastMessage.value =
+        'Tournament created, but the banner could not be uploaded. Add it later from the tournament edit page.'
+    }
     emit('created', response)
   } catch (error: unknown) {
     const apiError = error as IApiError

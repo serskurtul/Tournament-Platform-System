@@ -13,6 +13,9 @@
 - Storybook для `ConfirmModal` (Default / Danger / Disabled).
 - `GET /api/v1/tournaments/{id}/participants/count` — кількість активних учасників.
 - Front matter-паспорти (owner, status, review_date, tags), CODEOWNERS для `docs/`, аудит `review_date` у CI.
+- Щоденний бекап БД (Helm CronJob, ротація 14 днів), скрипти `backup_db.sh` / `restore_db.sh` з перевіркою маніфесту, runbook-и RB-001/RB-002, каталог алертів, `docs/slo.yaml`.
+- Алерти `TournamentApiDown`, `TournamentDatabaseDown`, `TournamentDatabaseBackupStale`, `TournamentBannerUploadFailing` з `runbook_url`.
+- Helm: конфігурація сховища банерів через `storage.existingSecret` (раніше не передавалась у под).
 
 ### Changed
 
@@ -21,6 +24,7 @@
 
 ### Fixed
 
+- Відмова сховища банерів повертає 503 `StorageUnavailable` без внутрішніх деталей і пише Error-лог; клієнт показує, що турнір створено, а банер можна додати пізніше (INC-001, CA-1).
 - `GET /api/v1/users/me` повертає профіль власника токена замість заглушки з випадковим `id` (RFC-001); додано відповіді 401/404. Контракт API 1.2.0.
 - Дати в JSON-відповідях тепер у RFC 3339 UTC (`...Z`). Раніше значення без зони клієнт читав як локальний час (знайдено контрактним тестом).
 - Відповіді 500 від `ExceptionHandlingMiddleware` тепер у camelCase, як решта API (схема `Error`).

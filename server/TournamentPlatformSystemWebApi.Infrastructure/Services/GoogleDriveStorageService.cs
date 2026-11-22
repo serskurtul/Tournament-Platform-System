@@ -5,6 +5,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.Extensions.Configuration;
 using TournamentPlatformSystemWebApi.Application.Interfaces;
+using TournamentPlatformSystemWebApi.Common.Exceptions;
 
 namespace TournamentPlatformSystemWebApi.Infrastructure.Services;
 
@@ -35,7 +36,7 @@ public class GoogleDriveStorageService : IStorageService
     {
         if (_storageClient == null || string.IsNullOrWhiteSpace(_bucketName))
         {
-            throw new ArgumentNullException("Service unavaible. Configuration not provided");
+            throw new StorageUnavailableException("Banner storage is not configured (GoogleCloud:ServiceAccountJson / GoogleCloud:BucketName)");
         }
         try
         {
@@ -55,7 +56,8 @@ public class GoogleDriveStorageService : IStorageService
         }
         catch (Exception ex)
         {
-            throw new Exception("Failedo upload file to Google Cloud Storage: " + ex.Message, ex);
+            // CA-1 (INC-001): a dependency failure, not a server bug; details stay in the inner exception for the log.
+            throw new StorageUnavailableException("Google Cloud Storage rejected the upload", ex);
         }
     }
 }

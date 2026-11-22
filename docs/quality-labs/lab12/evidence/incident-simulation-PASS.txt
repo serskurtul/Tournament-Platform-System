@@ -1,0 +1,26 @@
+# INC-001 re-run after CAPA CA-1/CA-2, 2026-11-22 (all times UTC), same revoked key
+16:33:27 setup: organizer incident.organizer@example.com, tournament 2d4cd210-0641-4070-ae00-f11924e467d1
+16:33:27 traffic start: 400 catalogue requests + 12 banner uploads
+16:33:28 upload #1 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:28 upload #2 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:29 upload #3 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:29 upload #4 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:29 upload #5 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:30 upload #6 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:30 upload #7 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:30 upload #8 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:31 upload #9 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:31 upload #10 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:31 upload #11 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:31 upload #12 -> HTTP 503 {"error":{"code":503,"type":"StorageUnavailable","message":"Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.","field
+16:33:31 traffic end
+16:33:31 /health -> 200
+16:33:32 error-level log lines for banner uploads: 12
+alert TournamentApiHighErrorRate: 5xx share 1.49% of 808 requests -> NOT FIRING (threshold 5%)
+banner uploads: 12 total, 12 with 5xx
+alert TournamentBannerUploadFailing (CA-2): 5xx ratio 100%, attempts 12 -> FIRING
+SLI from /tmp/incident-metrics.txt (counters since process start):
+SLI                good    total    SLI %    bad allowed bad budget used %  status
+availability        796      808    98.51     12        4.04           297  SLA BREACH
+latency             804      808    99.50      4       40.40            10  OK
+banner-upload         0       12     0.00     12        0.12         10000  SLA BREACH

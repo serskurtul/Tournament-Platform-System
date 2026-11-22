@@ -42,6 +42,24 @@ spec:
             summary: "Tournament API: no healthy targets"
             description: "Prometheus cannot scrape any API pod for 2 minutes."
             runbook_url: "{{ $rb }}/RB-001/#1-тригер"
+        # CA-2 (INC-001): a rare write path drowns in the aggregate error rate, so it gets its own alert.
+        - alert: TournamentBannerUploadFailing
+          expr: |
+            (
+              sum(increase(http_requests_total{job="{{ $api }}",route="api/v1/tournaments/{id}/image",status=~"5.."}[15m]))
+              /
+              clamp_min(sum(increase(http_requests_total{job="{{ $api }}",route="api/v1/tournaments/{id}/image"}[15m])), 1)
+            ) > 0.5
+            and
+            sum(increase(http_requests_total{job="{{ $api }}",route="api/v1/tournaments/{id}/image"}[15m])) >= 3
+          for: 5m
+          labels:
+            severity: warning
+            team: backend
+          annotations:
+            summary: "Banner uploads are failing (storage dependency)"
+            description: "More than half of banner uploads in 15 minutes ended with 5xx (at least 3 attempts)."
+            runbook_url: "{{ $rb }}/RB-002/"
     - name: tournament-db
       rules:
         - alert: TournamentDatabaseDown

@@ -409,7 +409,8 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
         [SwaggerResponse(403, Type = typeof(ErrorResponseDto), Description = "Forbidden")]
         [SwaggerResponse(404, Type = typeof(ErrorResponseDto), Description = "Tournament not found")]
         [SwaggerResponse(500, Type = typeof(ErrorResponseDto), Description = "Internal server error")]
-        public async Task<IActionResult> UploadImage(Guid id, IFormFile file)
+        [SwaggerResponse(503, Type = typeof(ErrorResponseDto), Description = "Banner storage unavailable; the tournament is saved, retry the upload later")]
+        public async Task<IActionResult> UploadImage(Guid id, IFormFile file, [FromServices] Microsoft.Extensions.Logging.ILogger<TournamentsController> logger)
         {
             if (file == null)
             {
@@ -547,15 +548,34 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
 
                 return StatusCode(StatusCodes.Status403Forbidden, err);
             }
+            catch (StorageUnavailableException ex)
+            {
+                // CA-1 (INC-001): dependency outage -> 503 with a neutral message; details go to the log, not the client.
+                logger.LogError(ex, "Banner storage unavailable for tournament {TournamentId}, traceId {TraceId}", id, HttpContext.TraceIdentifier);
+                var err = new ErrorResponseDto
+                {
+                    Error = new ErrorDetail
+                    {
+                        Code = StatusCodes.Status503ServiceUnavailable,
+                        Type = "StorageUnavailable",
+                        Message = "Banner storage is temporarily unavailable. The tournament is saved; upload the banner later.",
+                        Path = HttpContext.Request.Path.Value,
+                        Timestamp = DateTime.UtcNow.ToString("o"),
+                        TraceId = HttpContext.TraceIdentifier
+                    }
+                };
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, err);
+            }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Banner upload failed for tournament {TournamentId}, traceId {TraceId}", id, HttpContext.TraceIdentifier);
                 var err = new ErrorResponseDto
                 {
                     Error = new ErrorDetail
                     {
                         Code = StatusCodes.Status500InternalServerError,
                         Type = "InternalServerError",
-                        Message = ex.Message,
+                        Message = "Unexpected error while uploading the banner",
                         Path = HttpContext.GetEndpoint()?.DisplayName,
                         Timestamp = DateTime.UtcNow.ToString("o"),
                         TraceId = HttpContext.TraceIdentifier

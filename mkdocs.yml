@@ -66,11 +66,14 @@ nav:
       - "Handover": developer/handover.md
   - "Експлуатація":
       - "RB-001 — відновлення БД": runbooks/RB-001.md
+      - "RB-002 — відмова сховища банерів": runbooks/RB-002.md
       - "Каталог алертів": runbooks/alerts.md
       - "Управління змінами": changes/index.md
       - "RFC-001": changes/RFC-001.md
       - "Протокол CCB 2026-11-22": changes/ccb-2026-11-22.md
       - "INC-001 — відмова сховища банерів": incidents/INC-001.md
+      - "INC-001 — Post-Mortem і CAPA": incidents/INC-001-postmortem.md
+      - "План супроводу (SWEBOK)": maintenance-plan.md
   - "Рівень 3 · API":
       - api/index.md
       - "Каталог помилок": api/error-catalog.md

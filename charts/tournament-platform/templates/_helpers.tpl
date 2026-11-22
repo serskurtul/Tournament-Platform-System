@@ -94,6 +94,18 @@ spec:
               name: {{ include "tournament.componentName" (dict "root" . "component" "secrets") }}
               key: JWT__KEY
         # Demo fault injection. Lives in the pod template on purpose: changing it creates a new rollout revision.
+        {{- with .Values.storage }}
+        {{- if .existingSecret }}
+        # PA-1 (INC-001): banner storage config; without it every upload fails (see docs/runbooks/RB-002.md).
+        - name: GoogleCloud__BucketName
+          value: {{ required "storage.bucketName is required when storage.existingSecret is set" .bucketName | quote }}
+        - name: GoogleCloud__ServiceAccountJson
+          valueFrom:
+            secretKeyRef:
+              name: {{ .existingSecret }}
+              key: {{ .secretKey | default "service-account.json" }}
+        {{- end }}
+        {{- end }}
         - name: FAIL_RATE
           value: {{ .Values.api.failRate | toString | quote }}
         # $(VAR) is expanded by Kubernetes from the variables declared above.

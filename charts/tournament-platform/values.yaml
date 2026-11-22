@@ -76,6 +76,14 @@ ingress:
   className: nginx
   host: tournament.local
 
+# Banner storage (Google Cloud Storage). PA-1 (INC-001): until ЛР-12 the chart never passed this config,
+# so uploads failed in every Kubernetes environment. Create the Secret out of Git, e.g.
+#   kubectl create secret generic zvytiaha-storage --from-file=service-account.json=/secure/key.json
+storage:
+  existingSecret: ""
+  secretKey: service-account.json
+  bucketName: tournament-zvytiaga-images
+
 # Backup policy (ЛР-12, ISD §7): daily full dump at 02:15 UTC, 14 days on the backup PVC.
 backup:
   enabled: false

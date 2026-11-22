@@ -37,6 +37,7 @@ for i in $(seq 1 "$UPLOADS"); do
 done
 echo "$(utc) traffic end"
 echo "$(utc) /health -> $(curl -s -o /dev/null -w '%{http_code}' "$BASE/health")"
+[ -n "${API_LOG:-}" ] && echo "$(utc) error-level log lines for banner uploads: $(grep -c 'Banner storage unavailable\|Banner upload failed' "$API_LOG")"
 
 curl -s "$BASE/metrics" > /tmp/incident-metrics.txt
 python3 - <<'PY'
@@ -50,5 +51,7 @@ for line in open('/tmp/incident-metrics.txt'):
 share=bad/tot*100
 print(f"alert TournamentApiHighErrorRate: 5xx share {share:.2f}% of {tot:.0f} requests -> {'FIRING' if share>5 else 'NOT FIRING (threshold 5%)'}")
 print(f"banner uploads: {up_tot:.0f} total, {up_bad:.0f} with 5xx")
+ratio = up_bad / max(up_tot, 1)
+print(f"alert TournamentBannerUploadFailing (CA-2): 5xx ratio {ratio:.0%}, attempts {up_tot:.0f} -> {'FIRING' if ratio > 0.5 and up_tot >= 3 else 'NOT FIRING'}")
 PY
 python3 "$ROOT/scripts/ops/error_budget.py" --metrics /tmp/incident-metrics.txt | sed -n '/^SLI from/,$p'
