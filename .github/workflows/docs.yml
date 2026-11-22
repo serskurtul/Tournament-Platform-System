@@ -1,0 +1,72 @@
+# ЛР-11: Documentation as Code. "Не збирається — не їде": будь-який дефект документації зупиняє деплой.
+name: docs
+
+on:
+  push:
+    branches: [main]
+    paths: ["docs/**", "mkdocs.yml", ".spectral.yaml", ".markdownlint-cli2.yaml", "scripts/docs/**", ".github/workflows/docs.yml"]
+  pull_request:
+    paths: ["docs/**", "mkdocs.yml", ".spectral.yaml", ".markdownlint-cli2.yaml", "scripts/docs/**", ".github/workflows/docs.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # git-revision-date-localized needs full history for page dates
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: docs/requirements.txt
+
+      - name: Install MkDocs Material and plugins
+        run: pip install -r docs/requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Markdown style (markdownlint)
+        run: npx --yes markdownlint-cli2@0.17.2
+
+      - name: API contract lint (Spectral, 0 errors)
+        run: npx --yes @stoplight/spectral-cli@6.17.1 lint docs/api/openapi.yaml --fail-severity error
+
+      - name: Freshness audit (review_date in front matter)
+        run: python scripts/docs/review_date_audit.py
+
+      - name: Knowledge graph has no isolated pages
+        run: python scripts/docs/link_graph.py
+
+      - name: Strict build (every warning = Exit Code 1)
+        run: mkdocs build --strict --site-dir site
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
