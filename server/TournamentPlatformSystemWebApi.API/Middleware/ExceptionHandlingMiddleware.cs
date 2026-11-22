@@ -43,7 +43,8 @@ public class ExceptionHandlingMiddleware
                 }
             };
 
-            var json = JsonSerializer.Serialize(errorObj);
+            // Same casing as MVC responses, so 500s match the Error schema in docs/api/openapi.yaml.
+            var json = JsonSerializer.Serialize(errorObj, JsonSerializerOptions.Web);
             await context.Response.WriteAsync(json);
         }
     }

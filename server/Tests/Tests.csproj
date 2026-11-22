@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="../TournamentPlatformSystemWebApi.Infrastructure/TournamentPlatformSystemWebApi.Infrastructure.csproj" />
     <ProjectReference Include="../TournamentPlatformSystemWebApi.Core/TournamentPlatformSystemWebApi.Core.csproj" />
+    <ProjectReference Include="../TournamentPlatformSystemWebApi.API/TournamentPlatformSystemWebApi.API.csproj" />
   </ItemGroup>
 
 </Project>

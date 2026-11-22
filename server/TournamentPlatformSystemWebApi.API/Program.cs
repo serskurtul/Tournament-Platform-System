@@ -40,7 +40,8 @@ else
 }
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new TournamentPlatformSystemWebApi.API.Serialization.UtcDateTimeJsonConverter()));
 
 // Add in-memory cache for rate-limiting login attempts
 builder.Services.AddMemoryCache();
@@ -80,11 +81,18 @@ builder.Services.AddEndpointsApiExplorer();
 
 // Configure CORS to allow requests from frontend origin (set via configuration or env var)
 var frontendOrigin = Environment.GetEnvironmentVariable("FRONTEND_ORIGIN") ?? "http://localhost:5173";
+// Development only: the documentation site (mkdocs serve / GitHub Pages) calls the local API from Swagger UI "Try it out".
+var allowedOrigins = new List<string> { frontendOrigin };
+if (builder.Environment.IsDevelopment())
+{
+    allowedOrigins.AddRange((Environment.GetEnvironmentVariable("DOCS_ORIGINS") ?? "http://127.0.0.1:8000,http://localhost:8000,https://serskurtul.github.io")
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+}
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy", policy =>
     {
-        policy.WithOrigins(frontendOrigin)
+        policy.WithOrigins(allowedOrigins.ToArray())
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
