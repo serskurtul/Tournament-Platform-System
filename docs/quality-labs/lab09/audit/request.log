@@ -1,0 +1,2 @@
+curl "https://sonarcloud.io/api/measures/component?component=EvotecIT_OfficeIMO&metricKeys=sqale_index,ncloc,sqale_rating"
+HTTP 200

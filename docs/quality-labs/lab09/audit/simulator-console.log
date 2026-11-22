@@ -1,0 +1,10 @@
+Project EvotecIT_OfficeIMO: ncloc=1,288,166, sqale_index=484,807 min
+Principal = $420,166.07; Cost of Delay = $515,266.40/month
+  month 1: factor=0.9901 benefit=$510,164.75 NPV=$89,998.69
+  month 2: factor=0.9803 benefit=$505,113.62 NPV=$595,112.30
+  month 3: factor=0.9706 benefit=$500,112.49 NPV=$1,095,224.79
+  month 4: factor=0.9610 benefit=$495,160.88 NPV=$1,590,385.68
+  month 5: factor=0.9515 benefit=$490,258.30 NPV=$2,080,643.98
+  month 6: factor=0.9420 benefit=$485,404.26 NPV=$2,566,048.23
+Payback month: 1; Quality gate: PASS
+Financial ledger written to FINANCIAL_LEDGER.md
