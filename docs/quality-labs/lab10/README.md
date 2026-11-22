@@ -92,6 +92,10 @@ git log --oneline -- docs/SAD_Internal_View.md | wc -l          # 1 коміт �
 
 [docs/maintenance.md](../../developer/maintenance.md): власник і цикл (90 днів для експлуатаційних, 180 для архітектурних) для кожного документа, дата перегляду, прострочені позиції. Правило «зміна коду = зміна документації» закріплене: джоба `doc-contract` у `quality-metrics.yml` (падає, якщо маршрут не в SDD або порядок старту не збігається з ISD) і чекбокс у шаблоні PR.
 
+![Quality metrics runs](evidence/screenshots/actions-quality-metrics.webp)
+
+*Actions → Quality metrics (містить джобу `doc-contract`): зелені прогони після відновлення документації.*
+
 ### Краш-тест Documentation Decay (FAIL)
 
 Git-diff контрольованої зміни (коміт `docs(audit): simulate documentation decay, FAIL`):
@@ -139,6 +143,10 @@ RESULT: FAIL (documentation drift)
 | Контракти SDD ↔ код | — (SDD не було) | 24 / 25 | 25 / 25 |
 | Порядок старту ISD ↔ compose | — | 4 / 5 | 5 / 5 |
 | Змін коду після оновлення README / SDD / ISD | 14 / — / — | 1 / 1 / 2 | 0 / 0 / 0 |
+
+![git log FAIL → PASS](evidence/screenshots/git-log-fail-pass.webp)
+
+*Дерево комітів: `855a306 docs(audit): simulate documentation decay, FAIL` → `f1f0a2c docs(maintenance): restore documentation currency, PASS`.*
 
 ### Handover-пакет
 

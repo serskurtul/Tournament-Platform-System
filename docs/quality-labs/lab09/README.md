@@ -119,7 +119,9 @@ for t in range(1, HORIZON_MONTHS + 1):
 
 Окупність — **1-й місяць**, Quality Gate **PASS**. Перевірка: 510 164,75 − 420 166,07 = 89 998,68 (розбіжність 1 цент — округлення в таблиці).
 
-> **Додати:** скріншот консолі кроку «Financial simulation» з run workflow «SQALE audit & financial ledger».
+![Financial simulation console](evidence/screenshots/actions-financial-simulation.webp)
+
+*Actions → SQALE audit & financial ledger → крок «Financial simulation → FINANCIAL_LEDGER.md»: тіло боргу, CoD, 6 місяців NPV, `Payback month: 1; Quality gate: PASS`, `Financial ledger written to FINANCIAL_LEDGER.md`.*
 
 ### Аналітичний висновок щодо Software Economics
 

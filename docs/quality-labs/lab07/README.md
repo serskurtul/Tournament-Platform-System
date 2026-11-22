@@ -170,7 +170,9 @@ refactor(audit): reduce Chapin complexity using immutable Value Objects, PASS
 feat(audit): simulate data mutation issue, FAIL
 ```
 
-> **Додати скриншот:** дерево комітів (`git log --oneline --graph` або вкладка Commits на GitHub) з переходом FAIL → PASS.
+![git log FAIL → PASS](evidence/screenshots/git-log-fail-pass.webp)
+
+*`git log --oneline --graph -E --grep='FAIL|PASS|baseline' origin/main` у форку: для ЛР-7 — `13a2a94 … FAIL` → `5645be1 … PASS` (унизу).*
 
 ## 5. Код автоматизації CI/CD
 
@@ -184,7 +186,9 @@ feat(audit): simulate data mutation issue, FAIL
 
 Локальний прогін усіх кроків пройшов: 432 функції, 110 файлів, артефакт містить `lizard.csv`, `churn-*.txt`, `*/complexity.json`, `*/hotspots.{json,csv,md}`.
 
-> **Додати скриншот:** успішний запуск workflow «Quality metrics» (Job Success) у вкладці Actions з прикріпленим артефактом `quality-report`.
+![Quality metrics runs](evidence/screenshots/actions-quality-metrics.webp)
+
+*Actions → Quality metrics: усі прогони зелені (push у `main` і теги). Артефакт `quality-report` — у кожному run, розділ Artifacts.*
 
 ## 6. Лог метрик процесу (Churn Rate)
 

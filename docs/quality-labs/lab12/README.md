@@ -54,11 +54,23 @@ RFC-001 реально реалізовано за умовами CCB (комі�
 
 CCB — умовне засідання, усі ролі виконує один студент (дозволено методичкою); у протоколі це зазначено.
 
-**[ДЛЯ СТУДЕНТА]**:
+Заявку зареєстровано в трекері (GitHub Issues, шаблон `rfc.yml`) і проведено ланцюгом станів:
 
-1. Створити Issue за шаблоном RFC і провести його мітками `rfc:draft → … → rfc:implemented`. Скріншот ланцюга станів.
-2. Виконати кроки 4 і 9 чек-листа (розгортання на minikube, повідомлення).
-3. Після спостереження перевести RFC у `rfc:closed`.
+![RFC issue form](evidence/screenshots/rfc-issue-form.png)
+
+*Issue #2 «RFC-001»: документ RFC, клас ITIL «нормальна», Risk Exposure 2 × 3 = 6, план відкату; початок ланцюга `rfc:draft → rfc:assessment → rfc:pending-ccb`.*
+
+![RFC issue timeline](evidence/screenshots/rfc-issue-timeline.png)
+
+*Продовження: `rfc:approved` (протокол CCB) → `rfc:implemented` (коміт `c3ace09`, реліз v1.3.0) → `rfc:closed`, Issue закрито як completed.*
+
+Перша спроба (Issue #1) мала переплутаний порядок міток і закрита як дубль з посиланням на #2.
+
+![CI on v1.3.0](evidence/screenshots/ci-release-v1.3.0.webp)
+
+*Остання ланка простежуваності: CI #13 на тегу `v1.3.0` — зелений (тести, Trivy, публікація образів `:1.3.0`).*
+
+**[ДЛЯ СТУДЕНТА]** (необов'язково): кроки 4 і 9 Release Checklist — розгортання на minikube і повідомлення користувачам; без них чек-лист лишається «GO з умовою».
 
 ## Завдання 3. Інцидент на legacy-модулі
 
@@ -102,6 +114,10 @@ CCB — умовне засідання, усі ролі виконує один
 | CA-1 | коригувальна | `StorageUnavailableException` → 503 без деталей SDK + `LogError` з `traceId`; клієнт не показує невдале створення, якщо впав лише банер; 2 тести | повтор симуляції тим самим ключем: 12/12 → 503, 12 Error-логів (`evidence/incident-simulation-PASS.txt`) |
 | CA-2 | коригувальна | алерт `TournamentBannerUploadFailing` + RB-002 | на тих самих метриках: новий алерт FIRING, агрегатний — NOT FIRING |
 | PA-1 | попереджувальна | чарт передає конфіг сховища (раніше в K8s upload падав **завжди** — латентний інцидент, знайдений RCA); пункт «зовнішня залежність» у DoD і PR-шаблоні | `helm template` рендерить змінні; аудит адаптерів до 2026-12-15 |
+
+![git log FAIL → PASS](evidence/screenshots/git-log-fail-pass.webp)
+
+*Дерево комітів: `4d0ab8c ops(incident): capture legacy module outage, FAIL` → `994a72e docs(maintenance): deliver capa actions and swebok plan, PASS` (угорі).*
 
 ### 3.5 План супроводу
 

@@ -18,6 +18,10 @@
 
 > Аналіз SonarCloud виконано workflow «SonarCloud analysis» (run #1, 2026-11-22, проєкт `serskurtul_Tournament-Platform-System`) на стані `main` після рефакторингу (реліз v1.3.0). Сирі відповіді API — [evidence/sonar-report/](evidence/sonar-report/) (`requests.log` + JSON).
 
+![SonarCloud analysis run](evidence/screenshots/actions-sonarcloud-analysis.webp)
+
+*Actions → SonarCloud analysis #1: зелений run (3 хв 34 с), запущений вручну; артефакт `sonar-report`.*
+
 ## Завдання 1. ООП-паспорти та базова лінія
 
 ### Декларація API-запитів
@@ -279,7 +283,9 @@ arch(audit): capture god object coupling failure, FAIL
 arch(audit): capture object design baseline
 ```
 
-> **Додати скриншоти:** дерево комітів (`git log --oneline --graph`) для обох послідовностей.
+![git log FAIL → PASS](evidence/screenshots/git-log-fail-pass.webp)
+
+*Дерево комітів: god object — `9c29229` baseline → `04cbed3` FAIL → `9b1a4cb` PASS; наслідування — `f72b7f5` baseline → `61f8219` FAIL → `7bb6dae` PASS.*
 
 ## Лог валідації ШІ-Техліда
 

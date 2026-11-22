@@ -41,7 +41,11 @@ SAD переведено в `status: deprecated` з переспрямуванн
 
 `.github/CODEOWNERS` призначає `@serskurtul` власником `/docs/`, `mkdocs.yml`, `.spectral.yaml`, контракту й CHANGELOG.
 
-**[ДЛЯ СТУДЕНТА]** Settings → Branches → `main` → увімкнути *Require a pull request* і *Require review from Code Owners*. Без цього CODEOWNERS лише пропонує рев'юера, а не блокує злиття.
+Branch protection для `main`: *Require a pull request* (1 approval), *Require review from Code Owners*, обов'язковий status check `build`. Тепер зміна в `docs/` без рев'ю власника не зливається.
+
+![Branch protection](evidence/screenshots/branch-protection.png)
+
+*Settings → Branches → правило для `main`.*
 
 ### 1.4 Кущ ADR і граф знань
 
@@ -58,7 +62,9 @@ SAD переведено в `status: deprecated` з переспрямуванн
 
 Wikilinks `[[...]]` не використано: MkDocs їх не розуміє і strict-збірка впала б. Obsidian будує граф і зі звичайних Markdown-посилань, а теги бере з front matter.
 
-**[ДЛЯ СТУДЕНТА]** Obsidian → Open folder as vault → `docs/` → Graph view (увімкнути Tags) → скріншот.
+![Obsidian graph](evidence/screenshots/obsidian-graph.png)
+
+*Obsidian, vault = `docs/`, Graph view з тегами: один зв'язний граф. Кущ ADR (червоні вузли 0000–0003) прив'язаний до README, SDD, ISD; блоки експлуатації (RB, INC, alerts, maintenance-plan) і змін (RFC, CCB, release-checklist) з'єднані з архітектурою. Сірі вузли (CHANGELOG, CONTRIBUTING, docs.yml) — посилання на файли поза vault.*
 
 ## Завдання 2. API-first контракт
 
@@ -135,12 +141,45 @@ checkout (повна історія для дат) → Python 3.12 + `docs/requi
 
 Локальні логи: `evidence/strict-build-FAIL.txt`, `evidence/strict-build-PASS.txt`.
 
-**[ДЛЯ СТУДЕНТА]**:
+Протокол у GitHub Actions (FAIL- і PASS-коміти запушено окремо, щоб кожен мав свій run):
 
-1. Settings → Pages → Source: **GitHub Actions**.
-2. Після push у вкладці Actions будуть два прогони `docs`: червоний на FAIL-коміті й зелений на PASS-коміті. Скріншоти обох Job і відкритого сайту.
+![docs #1 FAIL](evidence/screenshots/docs-run1-fail.webp)
 
-Якщо обидва коміти потрапляють у `main` одним push, Actions запускається лише на останньому. Тому для червоного Job треба запушити FAIL-коміт окремо (команди — у повідомленні з бандлом).
+*docs #1 на `27d8688 … FAIL` — червоний: strict-збірка впала на мертвому посиланні.*
+
+![docs #2 first attempt](evidence/screenshots/docs-run2-deploy-fail.webp)
+
+*docs #2 на `fea9959 … PASS`, перша спроба: `build` зелений, `deploy` червоний.*
+
+![deploy 404](evidence/screenshots/deploy-pages-not-enabled.webp)
+
+*Причина червоного `deploy`: `HttpError: Not Found … Ensure GitHub Pages has been enabled`. Pages ще не було ввімкнено в налаштуваннях репозиторію; після ввімкнення (Source: GitHub Actions) — Re-run failed jobs.*
+
+![docs #2 success](evidence/screenshots/docs-run2-rerun-success.webp)
+
+*docs #2 після перезапуску: `build` і `deploy` зелені, Status Success.*
+
+![docs runs](evidence/screenshots/docs-runs-fail-pass.webp)
+
+*Підсумок workflow `docs`: #1 FAIL (червоний) → #2 PASS → #3 (реліз) — зелені.*
+
+![commits](evidence/screenshots/commits-fail-pass.webp)
+
+*Вкладка Commits: `27d8688 … FAIL` з ❌ 4/9 перевірок, `fea9959 … PASS` з ✅ 10/10.*
+
+Задеплоєний сайт https://serskurtul.github.io/Tournament-Platform-System/:
+
+![site home](evidence/screenshots/site-home.webp)
+
+*Головна сторінка бази знань (рівень 1, піраміда документації).*
+
+![revision date](evidence/screenshots/site-revision-date.webp)
+
+*Дата останнього редагування сторінки з Git (плагін git-revision-date-localized) — «22 листопада 2026 р.» внизу сторінки.*
+
+![site API](evidence/screenshots/site-api-swagger.webp)
+
+*Рівень 3 · API: Swagger UI, згенерований з `openapi.yaml` (на момент знімка — версія 1.1.1, стан PASS-коміту ЛР-11).*
 
 ### 3.4 Definition of Done і супровід
 
@@ -152,6 +191,6 @@ checkout (повна історія для дат) → Python 3.12 + `docs/requi
 
 ## Що не зроблено або обмеження
 
-- Конвеєр GitHub Actions і Pages у пісочниці не запускались (немає push-доступу). Усі кроки конвеєра прогнано локально тими самими командами.
-- У пісочниці немає доступу до unpkg.com, тому для локальної strict-збірки mermaid підмінявся локальним файлом; у CI потрібен доступ до CDN.
-- Скріншоти GitHub UI й Obsidian лишаються за студентом.
+- Конвеєр `docs.yml` відпрацював у GitHub Actions (FAIL → PASS, деплой на Pages, скріншоти вище). Перший деплой упав, бо Pages не було ввімкнено в налаштуваннях; після ввімкнення jobs перезапущено на тому самому PASS-коміті.
+- Для локальної strict-збірки без доступу до unpkg.com mermaid підмінявся локальним файлом; у CI використовується CDN.
+- «Лог валідації ШІ-Техліда» не складено.
