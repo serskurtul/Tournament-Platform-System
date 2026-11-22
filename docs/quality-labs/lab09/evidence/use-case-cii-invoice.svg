@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="open" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto"><path d="M0,0 L11,6 L0,12" fill="none" stroke="#333" stroke-width="1.4"/></marker></defs>
+<rect width="1200" height="760" fill="#fff"/>
+<rect x="230" y="40" width="740" height="690" fill="#fafafa" stroke="#333" stroke-width="1.5"/>
+<text x="600.0" y="64" text-anchor="middle" font-size="15" font-weight="bold">OfficeIMO — модуль «CII e-invoice document»</text>
+<line x1="132" y1="290" x2="410.8" y2="467.1" stroke="#333" stroke-width="1.2"/>
+<line x1="132" y1="290" x2="391.1" y2="142.9" stroke="#333" stroke-width="1.2"/>
+<line x1="132" y1="290" x2="360.9" y2="229.9" stroke="#333" stroke-width="1.2"/>
+<line x1="132" y1="290" x2="332.0" y2="300.0" stroke="#333" stroke-width="1.2"/>
+<line x1="132" y1="290" x2="480.3" y2="634.2" stroke="#333" stroke-width="1.2"/>
+<line x1="132" y1="290" x2="360.9" y2="370.1" stroke="#333" stroke-width="1.2"/>
+<line x1="132" y1="550" x2="365.2" y2="517.5" stroke="#333" stroke-width="1.2"/>
+<line x1="132" y1="550" x2="429.3" y2="645.7" stroke="#333" stroke-width="1.2"/>
+<line x1="1068" y1="550" x2="542.1" y2="418.7" stroke="#333" stroke-width="1.2"/>
+<line x1="1068" y1="550" x2="931.3" y2="590.5" stroke="#333" stroke-width="1.2"/>
+<line x1="560.7" y1="218.1" x2="719.3" y2="236.9" stroke="#333" stroke-width="1.2" stroke-dasharray="7,5" marker-end="url(#open)"/>
+<text x="640" y="222" text-anchor="middle" font-size="12" fill="#333" style="paint-order:stroke" stroke="#fafafa" stroke-width="4">«include»</text>
+<line x1="559.2" y1="285.6" x2="720.8" y2="264.4" stroke="#333" stroke-width="1.2" stroke-dasharray="7,5" marker-end="url(#open)"/>
+<text x="640" y="269" text-anchor="middle" font-size="12" fill="#333" style="paint-order:stroke" stroke="#fafafa" stroke-width="4">«include»</text>
+<line x1="563.5" y1="405.4" x2="716.5" y2="419.6" stroke="#333" stroke-width="1.2" stroke-dasharray="7,5" marker-end="url(#open)"/>
+<text x="640" y="406" text-anchor="middle" font-size="12" fill="#333" style="paint-order:stroke" stroke="#fafafa" stroke-width="4">«include»</text>
+<line x1="830.0" y1="572.0" x2="830.0" y2="468.0" stroke="#333" stroke-width="1.2" stroke-dasharray="7,5" marker-end="url(#open)"/>
+<text x="830" y="514" text-anchor="middle" font-size="12" fill="#333" style="paint-order:stroke" stroke="#fafafa" stroke-width="4">«include»</text>
+<ellipse cx="450" cy="110" rx="118" ry="38" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="450" y="107" text-anchor="middle" font-size="13">Прочитати</text>
+<text x="450" y="123" text-anchor="middle" font-size="13">заголовок рахунку</text>
+<ellipse cx="450" cy="205" rx="118" ry="38" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="450" y="202" text-anchor="middle" font-size="13">Змінити номер</text>
+<text x="450" y="218" text-anchor="middle" font-size="13">рахунку</text>
+<ellipse cx="450" cy="300" rx="118" ry="38" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="450" y="297" text-anchor="middle" font-size="13">Змінити дату</text>
+<text x="450" y="313" text-anchor="middle" font-size="13">виставлення</text>
+<ellipse cx="450" cy="395" rx="118" ry="38" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="450" y="392" text-anchor="middle" font-size="13">Вбудувати рахунок</text>
+<text x="450" y="408" text-anchor="middle" font-size="13">у PDF як Factur-X</text>
+<ellipse cx="470" cy="500" rx="118" ry="38" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="470" y="497" text-anchor="middle" font-size="13">Завантажити</text>
+<text x="470" y="513" text-anchor="middle" font-size="13">CII-рахунок</text>
+<ellipse cx="520" cy="670" rx="118" ry="38" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="520" y="667" text-anchor="middle" font-size="13">Зберегти /</text>
+<text x="520" y="683" text-anchor="middle" font-size="13">експортувати XML</text>
+<ellipse cx="830" cy="250" rx="118" ry="38" fill="#eef4ff" stroke="#333" stroke-width="1.4"/>
+<text x="830" y="239" text-anchor="middle" font-size="13">Перевірити підпис,</text>
+<text x="830" y="255" text-anchor="middle" font-size="13">структуру поля</text>
+<text x="830" y="271" text-anchor="middle" font-size="13">і перезібрати XML</text>
+<ellipse cx="830" cy="430" rx="118" ry="38" fill="#eef4ff" stroke="#333" stroke-width="1.4"/>
+<text x="830" y="427" text-anchor="middle" font-size="13">Визначити профіль</text>
+<text x="830" y="443" text-anchor="middle" font-size="13">і XMP ConformanceLevel</text>
+<ellipse cx="830" cy="610" rx="118" ry="38" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="830" y="607" text-anchor="middle" font-size="13">Перевірити</text>
+<text x="830" y="623" text-anchor="middle" font-size="13">відповідність Factur-X</text>
+<circle cx="110" cy="252" r="11" fill="#fff" stroke="#333" stroke-width="1.5"/><line x1="110" y1="263" x2="110" y2="295" stroke="#333" stroke-width="1.5"/><line x1="92" y1="274" x2="128" y2="274" stroke="#333" stroke-width="1.5"/><line x1="110" y1="295" x2="96" y2="318" stroke="#333" stroke-width="1.5"/><line x1="110" y1="295" x2="124" y2="318" stroke="#333" stroke-width="1.5"/>
+<text x="110" y="338" text-anchor="middle" font-size="13">Розробник-інтегратор</text>
+<text x="110" y="354" text-anchor="middle" font-size="13">(.NET API)</text>
+<circle cx="110" cy="512" r="11" fill="#fff" stroke="#333" stroke-width="1.5"/><line x1="110" y1="523" x2="110" y2="555" stroke="#333" stroke-width="1.5"/><line x1="92" y1="534" x2="128" y2="534" stroke="#333" stroke-width="1.5"/><line x1="110" y1="555" x2="96" y2="578" stroke="#333" stroke-width="1.5"/><line x1="110" y1="555" x2="124" y2="578" stroke="#333" stroke-width="1.5"/>
+<text x="110" y="598" text-anchor="middle" font-size="13">Файлова система</text>
+<circle cx="1090" cy="512" r="11" fill="#fff" stroke="#333" stroke-width="1.5"/><line x1="1090" y1="523" x2="1090" y2="555" stroke="#333" stroke-width="1.5"/><line x1="1072" y1="534" x2="1108" y2="534" stroke="#333" stroke-width="1.5"/><line x1="1090" y1="555" x2="1076" y2="578" stroke="#333" stroke-width="1.5"/><line x1="1090" y1="555" x2="1104" y2="578" stroke="#333" stroke-width="1.5"/>
+<text x="1090" y="598" text-anchor="middle" font-size="13">PDF-конвеєр</text>
+<text x="1090" y="614" text-anchor="middle" font-size="13">OfficeIMO</text>
+</svg>

@@ -181,7 +181,9 @@ flowchart LR
   UC7 -. include .-> M
 ```
 
-> Для звіту діаграму можна перемалювати в Draw.io у класичній UML-нотації.
+UML-версія: ![UML Use Case — CII e-invoice](evidence/use-case-cii-invoice.png)
+
+Редагована версія для Draw.io — [evidence/use-case-cii-invoice.drawio](evidence/use-case-cii-invoice.drawio) (File → Open у diagrams.net), векторна — [`.svg`](evidence/use-case-cii-invoice.svg).
 
 ### FPA калькулятор (IFPUG Ledger)
 
