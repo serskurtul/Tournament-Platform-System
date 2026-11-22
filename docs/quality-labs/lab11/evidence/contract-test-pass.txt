@@ -1,0 +1,14 @@
+register contract user: HTTP 409
+POST /api/v1/auth/login .                                                 [ 25%]
+GET /api/v1/sport .                                                       [ 50%]
+GET /api/v1/tournaments/{id}/participants .                               [ 75%]
+GET /api/v1/tournaments/{id}/participants/count .                         [100%]
+Performed checks:
+    not_a_server_error                             154 / 154 passed          PASSED 
+    status_code_conformance                        154 / 154 passed          PASSED 
+    content_type_conformance                       154 / 154 passed          PASSED 
+    response_schema_conformance                    154 / 154 passed          PASSED 
+
+JUnit XML file: build/contract-test.xml
+
+============================== 4 passed in 2.08s ===============================

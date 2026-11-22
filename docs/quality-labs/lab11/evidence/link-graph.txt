@@ -1,0 +1,24 @@
+pages: 22, links: 62, components: 1, islands: 0
+   3  api/error-catalog.md
+   5  api/index.md
+   5  architecture/adr/0000-modular-monolith-system-style.md
+   4  architecture/adr/0001-postgresql-with-ef-core.md
+   4  architecture/adr/0002-decompose-tournament-service.md
+   4  architecture/adr/0003-documentation-as-code.md
+  12  architecture/adr/README.md
+   4  architecture/data-dictionary.md
+   3  architecture/data-flow-specification.md
+   1  architecture/data-integrity.md
+   7  architecture/index.md
+  11  architecture/isd.md
+   2  architecture/sad-internal-view.md
+  14  architecture/sdd.md
+   6  developer/contributing.md
+   9  developer/handover.md
+   9  developer/index.md
+   2  developer/local-setup.md
+  10  developer/maintenance.md
+   1  developer/naming-conventions.md
+   3  developer/test-plan.md
+   5  index.md
+RESULT: PASS (single connected knowledge graph)

@@ -1,0 +1,20 @@
+$ scripts/docs/generate_sdk.sh  (openapi-generator-cli v7.10.0, typescript-fetch)
+src/apis/AuthApi.ts
+src/apis/ParticipantsApi.ts
+src/apis/SportApi.ts
+src/apis/index.ts
+src/index.ts
+src/models/ErrorError.ts
+src/models/ErrorErrorFieldErrorsInner.ts
+src/models/LoginRequest.ts
+src/models/LoginResponse.ts
+src/models/LoginResponseTokens.ts
+src/models/ModelError.ts
+src/models/Participant.ts
+src/models/ParticipantCount.ts
+src/models/Sport.ts
+src/models/User.ts
+src/models/index.ts
+src/runtime.ts
+$ tsc -p build/sdk/typescript --noEmit
+OK (0 errors)

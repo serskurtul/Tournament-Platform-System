@@ -1,0 +1,6 @@
+$ git log -1 --oneline
+27d8688 docs(ci): inject broken reference into strict build, FAIL
+$ mkdocs build --strict
+WARNING -  Doc file 'developer/index.md' contains a link 'runbook.md', but the target 'developer/runbook.md' is not found among documentation files.
+Aborted with 1 warnings in strict mode!
+Exit Code 1

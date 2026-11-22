@@ -1,0 +1,24 @@
+page                                                       owner              status      review_date  days left
+api/error-catalog.md                                       Скуртул Сергій     published   2027-02-19  89
+api/index.md                                               Скуртул Сергій     published   2027-02-19  89
+architecture/adr/0000-modular-monolith-system-style.md     Скуртул Сергій     published   2027-05-20  179
+architecture/adr/0001-postgresql-with-ef-core.md           Скуртул Сергій     published   2027-05-20  179
+architecture/adr/0002-decompose-tournament-service.md      Скуртул Сергій     published   2027-05-20  179
+architecture/adr/0003-documentation-as-code.md             Скуртул Сергій     published   2027-05-20  179
+architecture/adr/README.md                                 Скуртул Сергій     published   2027-05-20  179
+architecture/data-dictionary.md                            Скуртул Сергій     published   2027-05-20  179
+architecture/data-flow-specification.md                    Скуртул Сергій     published   2027-05-20  179
+architecture/data-integrity.md                             Скуртул Сергій     published   2027-05-20  179
+architecture/index.md                                      Скуртул Сергій     published   2027-05-20  179
+architecture/isd.md                                        Скуртул Сергій     published   2027-05-20  179
+architecture/sad-internal-view.md                          Скуртул Сергій     deprecated  2027-05-20  179
+architecture/sdd.md                                        Скуртул Сергій     published   2027-05-20  179
+developer/contributing.md                                  Скуртул Сергій     published   2027-02-19  89
+developer/handover.md                                      Скуртул Сергій     published   2027-02-19  89
+developer/index.md                                         Скуртул Сергій     published   2027-02-19  89
+developer/local-setup.md                                   Скуртул Сергій     published   2027-02-19  89
+developer/maintenance.md                                   Скуртул Сергій     published   2027-02-19  89
+developer/naming-conventions.md                            Скуртул Сергій     published   2027-02-19  89
+developer/test-plan.md                                     Скуртул Сергій     published   2027-02-19  89
+index.md                                                   Скуртул Сергій     published   2027-02-19  89
+RESULT: PASS (22 pages, 0 errors, 0 warnings)

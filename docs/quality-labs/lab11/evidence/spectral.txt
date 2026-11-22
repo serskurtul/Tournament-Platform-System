@@ -1,0 +1,10 @@
+$ spectral lint docs/api/openapi.yaml
+No results with a severity of 'error' found!
+$ spectral lint (negative test: unversioned path + inline 404)
+
+bad.yaml
+  68:10    error  path-is-versioned                  Маршрути API версіоновані (/api/v1/...).                                            paths./sport
+ 114:15    error  error-responses-use-common-schema  4xx/5xx відповіді використовують спільну схему Error (через components/responses).  paths./api/v1/tournaments/{id}/participants.get.responses[404]
+ 172:14  warning  oas3-unused-component              Potentially unused component has been detected.                                     components.responses.NotFound
+
+✖ 3 problems (2 errors, 1 warning, 0 infos, 0 hints)
