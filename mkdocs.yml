@@ -67,6 +67,9 @@ nav:
   - "Експлуатація":
       - "RB-001 — відновлення БД": runbooks/RB-001.md
       - "Каталог алертів": runbooks/alerts.md
+      - "Управління змінами": changes/index.md
+      - "RFC-001": changes/RFC-001.md
+      - "Протокол CCB 2026-11-22": changes/ccb-2026-11-22.md
   - "Рівень 3 · API":
       - api/index.md
       - "Каталог помилок": api/error-catalog.md

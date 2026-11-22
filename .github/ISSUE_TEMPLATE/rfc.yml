@@ -1,0 +1,36 @@
+name: RFC (Request for Change)
+description: Заявка на нормальну або термінову зміну (регламент — docs/changes/index.md)
+title: "RFC-XXX: "
+labels: ["rfc", "rfc:draft"]
+body:
+  - type: input
+    id: doc
+    attributes:
+      label: Документ RFC
+      description: Посилання на docs/changes/RFC-XXX.md
+    validations:
+      required: true
+  - type: dropdown
+    id: class
+    attributes:
+      label: Клас зміни (ITIL)
+      options: [стандартна, нормальна, термінова]
+    validations:
+      required: true
+  - type: input
+    id: risk
+    attributes:
+      label: Risk Exposure (ймовірність × наслідки)
+      placeholder: "2 × 3 = 6"
+    validations:
+      required: true
+  - type: textarea
+    id: rollback
+    attributes:
+      label: План відкату
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Стани (мітки): `rfc:draft` → `rfc:assessment` → `rfc:pending-ccb` → `rfc:approved` / `rfc:rejected` / `rfc:deferred` → `rfc:implemented` → `rfc:closed`.
