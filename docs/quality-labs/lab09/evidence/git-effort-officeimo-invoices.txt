@@ -1,0 +1,49 @@
+# OfficeIMO (github.com/EvotecIT/OfficeIMO) at 5c75d8cf8, 2026-11-22
+# module: CII e-invoice document (8 files)
+$ wc -l <module files>
+   32 OfficeIMO.Pdf/Invoices/PdfCiiInvoiceDocument.IO.cs
+   52 OfficeIMO.Pdf/Invoices/PdfCiiInvoiceDocument.cs
+   70 OfficeIMO.Pdf/Invoices/PdfElectronicInvoiceProfile.cs
+   95 OfficeIMO.Pdf/Model/PdfElectronicInvoiceMetadata.cs
+   21 OfficeIMO.Pdf/Options/PdfOptions.Invoices.cs
+  142 OfficeIMO.SharedSource/Invoicing/InvoicePreservedXml.cs
+   46 OfficeIMO.SharedSource/Invoicing/InvoiceProfileDeclaration.cs
+    6 OfficeIMO.SharedSource/Invoicing/InvoiceSourceFieldException.cs
+   58 OfficeIMO.SharedSource/Invoicing/InvoiceXml.cs
+  522 total
+
+$ python3 scripts/quality/git_effort.py --follow -- <module files>
+author                       commits sessions   hours
+Przemysław Kłys                    9        8     8.1
+Simon Cropp                        2        2     2.0
+TOTAL                             11             10.1
+params: max gap 120 min, first-commit credit 60 min, window start .. now
+
+$ git log --no-merges --follow-equivalent (paths incl. former names)
+25c619a69 2026-11-09 Simon Cropp | Enable implicit usings and refresh generated source references (#3342)
+f2bf80ee8 2026-11-06 Simon Cropp | Use ArgumentException throw helpers for null-or-whitespace checks (#3269)
+2a24e1d52 2026-11-04 Przemysław Kłys | I finish the argument guard migration across 3.6
+e12622e81 2026-10-27 Przemysław Kłys | Unify document lifecycle and conversion APIs across packages
+dd4de14d7 2026-10-01 Przemysław Kłys | Improve invoice editing and workflows, add native FA3 and KSeF integration (#2673)
+ae18c2d65 2026-09-22 Przemysław Kłys | Bound PDF conversion output and preserve visible content
+29b75e354 2026-09-10 Przemysław Kłys | Keep PDF profile checks independent of the invoice engine
+13c5da8fb 2026-09-10 Przemysław Kłys | fix(invoices): inspect original XMP scalar declarations
+04a07ab52 2026-09-10 Przemysław Kłys | fix(invoices): enforce XML and XMP profile consistency
+4745b7192 2026-09-06 Przemysław Kłys | Add CII invoice editing to OfficeIMO.Pdf (#2457)
+d370aa208 2026-06-03 Przemysław Kłys | Add PDF compliance readiness groundwork (#1881)
+
+# excluded: commits touching only removed PdfInvoiceDocument* files (moved to OfficeIMO.Invoicing.Pdf adapter in bdb78b5d6)
+bdb78b5d6 2026-09-10 Przemysław Kłys | Move typed invoice PDFs into an optional adapter
+96609adb7 2026-09-10 Przemysław Kłys | Keep invoice PDF document types and tax labels faithful to XML
+8f8af58db 2026-09-10 Przemysław Kłys | Generate invoice PDF and CII attachment from one snapshot
+
+$ author-days (upper bound)
+Przemysław Kłys 2026-06-03
+Przemysław Kłys 2026-09-06
+Przemysław Kłys 2026-09-10
+Przemysław Kłys 2026-09-22
+Przemysław Kłys 2026-10-01
+Przemysław Kłys 2026-10-27
+Przemysław Kłys 2026-11-04
+Simon Cropp 2026-11-06
+Simon Cropp 2026-11-09
