@@ -16,7 +16,7 @@
 - **LCOM\*** — Henderson-Sellers, шкала 0..1 (0 — ідеальна згуртованість). **LCOM4** — кількість зв'язних компонент методів (1 — клас робить одну справу).
 - **DIT** рахує `System.Object` (звичайний клас має DIT = 1, як у Visual Studio Code Metrics).
 
-> **Що треба зробити тобі для Завдання 1:** імпортувати репозиторій у SonarCloud, додати секрет `SONAR_TOKEN` і запустити workflow «SonarCloud analysis» у вкладці Actions. Артефакт `sonar-report` міститиме `requests.log` (усі `curl`-запити) і сирі JSON-відповіді для звіту. З цієї сесії SonarCloud був недоступний, тож відповіді API тут не наведено.
+> Аналіз SonarCloud виконано workflow «SonarCloud analysis» (run #1, 2026-11-22, проєкт `serskurtul_Tournament-Platform-System`) на стані `main` після рефакторингу (реліз v1.3.0). Сирі відповіді API — [evidence/sonar-report/](evidence/sonar-report/) (`requests.log` + JSON).
 
 ## Завдання 1. ООП-паспорти та базова лінія
 
@@ -31,6 +31,20 @@ curl -u $SONAR_TOKEN: "https://sonarcloud.io/api/measures/component?component=<p
 # Рівень проєкту
 curl -u $SONAR_TOKEN: "https://sonarcloud.io/api/measures/component?component=<project>&metricKeys=complexity,...,sqale_index,sqale_debt_ratio"
 ```
+
+### Відповідь SonarCloud API ([evidence/sonar-report/](evidence/sonar-report/))
+
+Запит із ключами методички для всіх трьох файлів → **HTTP 404**, тіло: `{"errors":[{"msg":"The following metric keys are not found: coupling_between_objects"}]}` (`file*-lab-keys.json`). Це документальне підтвердження: SonarCloud не має метрик CBO/LCOM4 для C#, тому CK рахує `tools/CkMetrics`.
+
+| Файл (SonarCloud) | complexity | cognitive | functions | ncloc | code smells | WMC з `tools/CkMetrics` |
+|-------------------|-----------:|----------:|----------:|------:|------------:|------------------------:|
+| `Core/Logic/SingleEliminationBracketGenerator.cs` | 23 | 18 | 3 | 87 | 4 | **23** |
+| `Infrastructure/Repositories/TournamentRepository.cs` | 73 | 55 | 24 | 348 | 8 | **73** |
+| `Application/DTOs/TournamentCreateDto.cs` | 16 | 0 | 16 | 26 | 0 | 0 |
+
+Рівень проєкту (`project.json`): ncloc **21 168**, complexity **2 308**, cognitive **1 235**, functions 1 123, classes 169, code smells **81**, дублювання **5,8%**, `sqale_index` **196 хв**, `sqale_debt_ratio` **0,0%** (196 / (21 168 × 30) ≈ 0,03%, округлено).
+
+**Перехресна валідація.** WMC власного Roslyn-інструмента дослівно збігається з `complexity` SonarCloud для класів з логікою (23 = 23, 73 = 73). Отже, CK-таблиці нижче виміряні сумісною з промисловим аналізатором методикою. Розбіжність на DTO методична: SonarCloud рахує кожну автовластивість як функцію зі складністю 1 (16 властивостей → 16), `tools/CkMetrics` вважає автовластивості станом, а не поведінкою (WMC = 0).
 
 Аналогічний виклик інструмента CK:
 
