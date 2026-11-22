@@ -64,6 +64,9 @@ nav:
       - "План тестування": developer/test-plan.md
       - "Регламент документації": developer/maintenance.md
       - "Handover": developer/handover.md
+  - "Експлуатація":
+      - "RB-001 — відновлення БД": runbooks/RB-001.md
+      - "Каталог алертів": runbooks/alerts.md
   - "Рівень 3 · API":
       - api/index.md
       - "Каталог помилок": api/error-catalog.md

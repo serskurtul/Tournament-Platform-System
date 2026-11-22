@@ -1,0 +1,81 @@
+# ЛР-12: daily full logical backup of PostgreSQL (backup policy in docs/architecture/isd.md §7).
+# Dumps go to a dedicated PVC with retention; the off-site copy (rule 3-2-1) is synced from it by the operator.
+{{- if .Values.backup.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "db-backup") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: {{ .Values.backup.size }}
+  {{- with .Values.backup.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "tournament.componentName" (dict "root" . "component" "db-backup") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tournament.labels" . | nindent 4 }}
+  annotations:
+    {{- include "tournament.annotations" . | nindent 4 }}
+    runbook: docs/runbooks/RB-001.md
+spec:
+  schedule: {{ .Values.backup.schedule | quote }}
+  timeZone: "Etc/UTC"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            {{- include "tournament.labels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: pg-dump
+              image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+              command: ["/bin/sh", "-ec"]
+              args:
+                - |
+                  ts=$(date -u +%Y%m%dT%H%M%SZ)
+                  pg_dump -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -Fc --no-owner -f "/backups/tournament_${ts}.dump"
+                  sha256sum "/backups/tournament_${ts}.dump" > "/backups/tournament_${ts}.sha256"
+                  find /backups -name 'tournament_*' -mtime +{{ .Values.backup.retentionDays }} -delete
+                  ls -lh /backups | tail -n 5
+              env:
+                - name: PGHOST
+                  value: {{ include "tournament.componentName" (dict "root" . "component" "postgres") }}
+                - name: PGUSER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "tournament.componentName" (dict "root" . "component" "config") }}
+                      key: POSTGRES_USER
+                - name: PGDATABASE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "tournament.componentName" (dict "root" . "component" "config") }}
+                      key: POSTGRES_DB
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "tournament.componentName" (dict "root" . "component" "secrets") }}
+                      key: POSTGRES_PASSWORD
+              volumeMounts:
+                - name: backups
+                  mountPath: /backups
+          volumes:
+            - name: backups
+              persistentVolumeClaim:
+                claimName: {{ include "tournament.componentName" (dict "root" . "component" "db-backup") }}
+{{- end }}

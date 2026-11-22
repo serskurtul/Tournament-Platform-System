@@ -33,3 +33,8 @@ secrets:
 ingress:
   enabled: true
   host: tournament.example.com
+
+# ЛР-12: daily DB backup with 14-day retention (ISD §7).
+backup:
+  enabled: true
+  size: 20Gi

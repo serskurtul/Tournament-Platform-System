@@ -76,6 +76,14 @@ ingress:
   className: nginx
   host: tournament.local
 
+# Backup policy (ЛР-12, ISD §7): daily full dump at 02:15 UTC, 14 days on the backup PVC.
+backup:
+  enabled: false
+  schedule: "15 2 * * *"
+  retentionDays: 14
+  size: 2Gi
+  storageClass: ""
+
 db:
   # Seed data is applied only on the first install (Release.IsInstall), never on upgrades.
   seedOnInstall: true
@@ -98,6 +106,8 @@ metrics:
     interval: 15s
   alerts:
     enabled: false
+    # Every alert carries a runbook link ("an alert without a runbook is noise", ЛР-12).
+    runbookBaseUrl: https://serskurtul.github.io/Tournament-Platform-System/runbooks
 
 dashboards:
   enabled: false

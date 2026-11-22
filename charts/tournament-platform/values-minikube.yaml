@@ -51,3 +51,7 @@ metrics:
 
 dashboards:
   enabled: true
+
+# ЛР-12: daily DB backup (ISD §7).
+backup:
+  enabled: true

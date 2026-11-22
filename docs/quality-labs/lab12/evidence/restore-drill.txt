@@ -1,0 +1,26 @@
+# Restore drill, 2026-11-22T16:18:51Z (UTC)
+$ scripts/ops/backup_db.sh backups
+gpg: directory '/root/.gnupg' created
+gpg: keybox '/root/.gnupg/pubring.kbx' created
+backup: backups/tournament_20261122T161851Z.dump.gpg (12K), tables: 12
+$ cat backups/tournament_20261122T161851Z.manifest
+__EFMigrationsHistory=7
+account_state=4
+match=9
+refresh_token=1
+team=16
+tournament=5
+tournament_theme=15
+user=13
+user_details=13
+user_phone=14
+user_team=10
+user_tournament_theme_preference=2
+$ scripts/ops/restore_db.sh backups/tournament_20261122T161851Z.dump.gpg tournament_drill
+backups/tournament_20261122T161851Z.dump.gpg: OK
+NOTICE:  database "tournament_drill" does not exist, skipping
+verify: row counts match manifest (12 tables)
+restore into 'tournament_drill' finished in 2 s
+$ restore into production name without CONFIRM
+refusing to overwrite production database '<POSTGRES_DB>' without CONFIRM=yes
+exit=2

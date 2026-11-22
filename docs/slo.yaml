@@ -1,0 +1,54 @@
+# ЛР-12: контракт рівня послуг "як код". Перевірка й розрахунок бюджету: python scripts/ops/error_budget.py
+# SLI рахуються з метрик API (RequestLoggingMiddleware): http_requests_total{method,route,status},
+# http_request_duration_seconds_bucket{...,le}. Службові маршрути (health, version, metrics) виключено.
+service: zvytiaha-api
+owner: Скуртул Сергій
+review_date: 2027-02-20
+window:
+  type: rolling
+  days: 30            # 30 × 24 × 60 = 43 200 хв
+excluded_routes: [health, version, metrics]
+
+slis:
+  - id: availability
+    name: Доступність API
+    definition: >
+      Частка HTTP-запитів до API (крім службових маршрутів), що завершилися НЕ статусом 5xx,
+      за ковзне вікно 30 днів. 4xx вважаються успіхом сервісу (помилка клієнта).
+    good: 'sum(increase(http_requests_total{route!~"health|version|metrics",status!~"5.."}[30d]))'
+    total: 'sum(increase(http_requests_total{route!~"health|version|metrics"}[30d]))'
+    slo: 99.5         # внутрішня ціль команди
+    sla: 99.0         # зовнішня обіцянка клієнту
+    sla_remedy: "кредит 10% місячної плати за кожні повні 0.5 п.п. нижче SLA"
+
+  - id: latency
+    name: Швидкість відповіді
+    definition: >
+      Частка запитів до API (крім службових), обслужених не довше ніж за 320 мс
+      (межа бакета le="0.32" гістограми http_request_duration_seconds), за 30 днів.
+    good: 'sum(increase(http_request_duration_seconds_bucket{route!~"health|version|metrics",le="0.32"}[30d]))'
+    total: 'sum(increase(http_request_duration_seconds_count{route!~"health|version|metrics"}[30d]))'
+    slo: 95.0
+    sla: 90.0
+    sla_remedy: "кредит 5% місячної плати"
+
+  - id: banner-upload
+    name: Успішність завантаження банерів
+    definition: >
+      Частка запитів POST api/v1/tournaments/{id}/image, що завершилися НЕ статусом 5xx, за 30 днів.
+      Окремий SLI, бо рідкісний маршрут тоне в загальній доступності (див. INC-001).
+    good: 'sum(increase(http_requests_total{method="POST",route="api/v1/tournaments/{id}/image",status!~"5.."}[30d]))'
+    total: 'sum(increase(http_requests_total{method="POST",route="api/v1/tournaments/{id}/image"}[30d]))'
+    slo: 99.0
+    sla: 97.0
+    sla_remedy: "кредит 5% місячної плати"
+
+error_budget_policy:
+  - consumed_below: 50
+    action: "Звичайний режим: релізи за регламентом CCB."
+  - consumed_below: 75
+    action: "Попередження: on-call переглядає топ-причин витрат; нові ризикові зміни (Risk Exposure ≥ 9) лише з планом відкату, перевіреним на staging."
+  - consumed_below: 100
+    action: "Обмеження: лише стандартні зміни та виправлення надійності; feature-релізи переносяться на наступне засідання CCB."
+  - consumed_below: null
+    action: "Change freeze: бюджет вичерпано. Зливаються лише виправлення надійності, CAPA та термінові зміни (emergency RFC). Freeze знімає CCB, коли SLI повертається вище SLO у ковзному вікні."

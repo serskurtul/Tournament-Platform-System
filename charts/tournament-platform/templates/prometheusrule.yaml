@@ -1,6 +1,10 @@
 # DVO-L4-3C8B52
-# Optional alert (ЛР-7 задача d*): share of 5xx responses above 5% for 1 minute.
+# Alert catalogue (ЛР-7, extended in ЛР-12). Source of truth for names/severity: docs/runbooks/alerts.md.
 {{- if .Values.metrics.alerts.enabled }}
+{{- $api := include "tournament.componentName" (dict "root" . "component" "api") }}
+{{- $pg := include "tournament.componentName" (dict "root" . "component" "postgres") }}
+{{- $backup := include "tournament.componentName" (dict "root" . "component" "db-backup") }}
+{{- $rb := .Values.metrics.alerts.runbookBaseUrl }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -16,14 +20,48 @@ spec:
       rules:
         - alert: TournamentApiHighErrorRate
           expr: |
-            sum(rate(http_requests_total{job="{{ include "tournament.componentName" (dict "root" . "component" "api") }}",status=~"5.."}[2m]))
+            sum(rate(http_requests_total{job="{{ $api }}",status=~"5.."}[2m]))
             /
-            sum(rate(http_requests_total{job="{{ include "tournament.componentName" (dict "root" . "component" "api") }}"}[2m]))
+            sum(rate(http_requests_total{job="{{ $api }}"}[2m]))
             > 0.05
           for: 1m
           labels:
             severity: warning
+            team: backend
           annotations:
             summary: "Tournament API: more than 5% of requests fail with 5xx"
             description: "Share of 5xx responses has stayed above 5% for 1 minute."
+            runbook_url: "{{ $rb }}/RB-001/#1-тригер"
+        - alert: TournamentApiDown
+          expr: sum(up{job="{{ $api }}"}) == 0
+          for: 2m
+          labels:
+            severity: critical
+            team: sre
+          annotations:
+            summary: "Tournament API: no healthy targets"
+            description: "Prometheus cannot scrape any API pod for 2 minutes."
+            runbook_url: "{{ $rb }}/RB-001/#1-тригер"
+    - name: tournament-db
+      rules:
+        - alert: TournamentDatabaseDown
+          expr: kube_deployment_status_replicas_available{namespace="{{ .Release.Namespace }}",deployment="{{ $pg }}"} < 1
+          for: 2m
+          labels:
+            severity: critical
+            team: sre
+          annotations:
+            summary: "PostgreSQL has no available replica"
+            description: "The database deployment has been unavailable for 2 minutes; data volume may be lost."
+            runbook_url: "{{ $rb }}/RB-001/"
+        - alert: TournamentDatabaseBackupStale
+          expr: time() - kube_cronjob_status_last_successful_time{namespace="{{ .Release.Namespace }}",cronjob="{{ $backup }}"} > 26 * 3600
+          for: 10m
+          labels:
+            severity: warning
+            team: sre
+          annotations:
+            summary: "No successful database backup for more than 26 hours"
+            description: "RPO (24 h) is at risk: the daily backup CronJob has not succeeded."
+            runbook_url: "{{ $rb }}/RB-001/#7-резервна-копія-не-створилась"
 {{- end }}
