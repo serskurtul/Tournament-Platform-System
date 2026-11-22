@@ -270,17 +270,45 @@ namespace TournamentPlatformSystemWebApi.API.Controllers
         [SwaggerOperation(Summary = "Отримання даних поточного користувача", Description = "Повертає профіль поточного користувача. Роль: Player/Organizer.")]
         [SwaggerResponse(200, Type = typeof(UserDto), Description = "Дані користувача")]
         [SwaggerResponse(401, Type = typeof(ErrorResponseDto), Description = "Токен відсутній або недійсний")]
-        public IActionResult Me()
+        [SwaggerResponse(404, Type = typeof(ErrorResponseDto), Description = "Користувача з токена не знайдено")]
+        public async Task<IActionResult> Me([FromServices] IUserRepository users)
         {
-            var user = new UserDto
+            // RFC-001: profile of the token owner (was a hard-coded stub with a random id).
+            var sub = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value;
+            if (!Guid.TryParse(sub, out var userId))
             {
-                Id = Guid.NewGuid(),
-                Email = "player@example.com",
-                FullName = "Sample Player",
-                Role = "Player"
-            };
-            return Ok(user);
+                return Unauthorized(Error(StatusCodes.Status401Unauthorized, "Unauthorized", "Invalid user"));
+            }
+
+            var user = await users.GetUserWithDetails(userId);
+            if (user == null)
+            {
+                return NotFound(Error(StatusCodes.Status404NotFound, "NotFound", "User not found"));
+            }
+
+            var isOrganizer = user.IsOrganizer ?? false;
+            return Ok(new UserDto
+            {
+                Id = user.Id,
+                Email = user.UserDetail?.Email,
+                FullName = user.FullName,
+                Role = isOrganizer ? "organizer" : "player"
+            });
         }
+
+        private ErrorResponseDto Error(int code, string type, string message) => new()
+        {
+            Error = new ErrorDetail
+            {
+                Code = code,
+                Type = type,
+                Message = message,
+                Path = HttpContext?.Request.Path.Value,
+                Timestamp = DateTime.UtcNow.ToString("o"),
+                TraceId = HttpContext?.TraceIdentifier
+            }
+        };
+
         private void AppendRefreshCookies(string token)
         {
             var cookieOptions = new CookieOptions

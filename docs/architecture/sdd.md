@@ -89,7 +89,7 @@ erDiagram
 | `POST /api/v1/auth/register` | Реєстрація (гравець / організатор) | анонімно | AuthenticationService |
 | `POST /api/v1/auth/login` | Вхід, видача JWT + refresh-cookie | анонімно | AuthenticationService |
 | `POST /api/v1/auth/refresh` | Оновлення пари токенів | refresh-cookie | AuthenticationService |
-| `GET /api/v1/users/me` | Поточний користувач (**зараз повертає заглушку**, див. ЛР-9) | JWT | AuthController |
+| `GET /api/v1/users/me` | Профіль власника токена (RFC-001; до 1.2.0 — заглушка) | JWT | AuthController + IUserRepository |
 | `GET /api/v1/users` | Пошук користувачів | JWT | UserService |
 | `GET /api/v1/users/me/onboarding-status` | Чи пройдено онбординг | JWT | UserPreferencesService |
 | `PATCH /api/v1/users/me/onboarding-complete` | Позначити онбординг завершеним | JWT | UserPreferencesService |

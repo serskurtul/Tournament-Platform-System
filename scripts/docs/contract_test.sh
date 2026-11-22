@@ -11,7 +11,10 @@ curl -s -o /dev/null -w "register contract user: HTTP %{http_code}\n" -X POST "$
   -H 'Content-Type: application/json' \
   -d '{"email":"contract.player@example.com","password":"Contract#2026","fullName":"Contract Player","role":"player","dateOfBirth":"2000-01-01","phoneNumber":"+380661234500"}'
 mkdir -p "$ROOT/build"
-st run "$ROOT/docs/api/openapi.yaml" --base-url "$BASE_URL" \
+TOKEN="$(curl -s -X POST "$BASE_URL/api/v1/auth/login" -H 'Content-Type: application/json' \
+  -d '{"email":"contract.player@example.com","password":"Contract#2026","rememberMe":false}' \
+  | python3 -c 'import sys,json; print(json.load(sys.stdin)["tokens"]["accessToken"])')"
+st run "$ROOT/docs/api/openapi.yaml" --base-url "$BASE_URL" -H "Authorization: Bearer $TOKEN" \
   --checks not_a_server_error,status_code_conformance,content_type_conformance,response_schema_conformance \
   --hypothesis-max-examples "${MAX_EXAMPLES:-50}" --hypothesis-seed 11 \
   --generation-allow-x00 false \
