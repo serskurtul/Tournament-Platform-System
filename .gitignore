@@ -84,3 +84,4 @@ nunit-*.xml
 server/secrets/tournament-platform-system-secrets.json
 # Python bytecode
 __pycache__/
+/build/

@@ -1,0 +1,41 @@
+# ЛР-11: правила для контракту docs/api/openapi.yaml. Ціль — 0 errors.
+extends: ["spectral:oas"]
+rules:
+  operation-operationId: error
+  operation-description: off
+  operation-tags: error
+  operation-summary-required:
+    description: Кожна операція має короткий summary для довідки.
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: truthy
+  error-responses-use-common-schema:
+    description: 4xx/5xx відповіді використовують спільну схему Error (через components/responses).
+    resolved: false
+    severity: error
+    given: "$.paths[*][*].responses[?(@property.match(/^[45]/))]"
+    then:
+      - field: "$ref"
+        function: truthy
+      - field: "$ref"
+        function: pattern
+        functionOptions:
+          match: "^#/components/responses/"
+  success-response-has-example:
+    description: Успішна відповідь містить приклад.
+    severity: warn
+    given: "$.paths[*][*].responses[?(@property.match(/^2/))].content.application/json"
+    then:
+      field: examples
+      function: truthy
+  path-is-versioned:
+    description: Маршрути API версіоновані (/api/v1/...).
+    severity: error
+    given: "$.paths"
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: "^/api/v\\d+/"

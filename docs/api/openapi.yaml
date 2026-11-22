@@ -1,0 +1,321 @@
+openapi: 3.0.3
+info:
+  title: ZVYTIAHA Tournament Platform API
+  version: 1.1.1
+  description: |
+    Контракт публічної частини API турнірної платформи ZVYTIAHA (Single Source of Truth).
+    Swagger UI на сайті документації, SDK і контрактний тест генеруються з цього файлу.
+    Зміна поведінки ендпоінта без зміни цього файлу порушує Definition of Done (див. CONTRIBUTING).
+  contact:
+    name: Команда ZVYTIAHA
+    url: https://github.com/serskurtul/Tournament-Platform-System
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:5050
+    description: Локальний запуск через docker compose
+tags:
+  - name: Auth
+    description: Автентифікація
+  - name: Sport
+    description: Довідник видів спорту
+  - name: Participants
+    description: Учасники турнірів
+paths:
+  /api/v1/auth/login:
+    post:
+      operationId: login
+      tags: [Auth]
+      summary: Вхід за email і паролем
+      description: Повертає access-токен і профіль; refresh-токен встановлюється в HttpOnly-cookie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              player:
+                summary: Гравець
+                value:
+                  email: contract.player@example.com
+                  password: Contract#2026
+                  rememberMe: false
+      responses:
+        '200':
+          description: Успішний вхід
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                ok:
+                  value:
+                    tokens:
+                      accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.signature
+                    user:
+                      id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      email: contract.player@example.com
+                      fullName: Іван Петренко
+                      role: player
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /api/v1/sport:
+    get:
+      operationId: listSports
+      tags: [Sport]
+      summary: Список видів спорту
+      responses:
+        '200':
+          description: Колекція видів спорту
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sport'
+              examples:
+                ok:
+                  value:
+                    - id: 0b9a6c1e-6b7a-4c1e-9a43-2f0f3b7c1d10
+                      name: Футбол
+                      imageUrl: https://example.com/img/football.png
+  /api/v1/tournaments/{id}/participants:
+    get:
+      operationId: listTournamentParticipants
+      tags: [Participants]
+      summary: Учасники турніру
+      parameters:
+        - $ref: '#/components/parameters/TournamentId'
+      responses:
+        '200':
+          description: Список учасників
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Participant'
+              examples:
+                ok:
+                  value:
+                    - id: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+                      name: Іван Петренко
+                      userId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      tournamentId: 9b2c1f0e-1d2a-4b8f-8a3e-5c6d7e8f9a0b
+                      isDisqualified: false
+                      createdAt: '2026-11-01T10:00:00Z'
+                      updatedAt: null
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/tournaments/{id}/participants/count:
+    get:
+      operationId: countActiveParticipants
+      tags: [Participants]
+      summary: Кількість активних учасників
+      description: Кількість недискваліфікованих учасників. Для неіснуючого турніру повертає 0.
+      parameters:
+        - $ref: '#/components/parameters/TournamentId'
+      responses:
+        '200':
+          description: Кількість учасників
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParticipantCount'
+              examples:
+                ok:
+                  value:
+                    tournamentId: 9b2c1f0e-1d2a-4b8f-8a3e-5c6d7e8f9a0b
+                    activeParticipants: 12
+        '400':
+          $ref: '#/components/responses/BadRequest'
+components:
+  parameters:
+    TournamentId:
+      name: id
+      in: path
+      required: true
+      description: Ідентифікатор турніру
+      schema:
+        type: string
+        format: uuid
+      example: 33333333-0000-0000-0000-000000000001
+  responses:
+    BadRequest:
+      description: Невалідні дані запиту (порожні поля, id не у форматі UUID)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            validation:
+              value:
+                error:
+                  code: 400
+                  type: ValidationError
+                  message: One or more validation errors occurred.
+                  fieldErrors:
+                    - field: Email
+                      message: The Email field is required.
+                  path: /api/v1/auth/login
+                  timestamp: '2026-11-21T10:00:00.0000000Z'
+                  traceId: 0HN7A1B2C3D4E:00000001
+    Unauthorized:
+      description: Немає або невалідні облікові дані
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Ресурс не знайдено
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Забагато невдалих спроб входу
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      description: Єдиний формат помилки API (див. каталог помилок)
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code]
+          properties:
+            code:
+              type: integer
+              description: HTTP-статус
+              example: 404
+            type:
+              type: string
+              nullable: true
+              example: NotFound
+            message:
+              type: string
+              nullable: true
+              example: Tournament not found
+            fieldErrors:
+              type: array
+              nullable: true
+              items:
+                type: object
+                required: [field, message]
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
+            path:
+              type: string
+              nullable: true
+            timestamp:
+              type: string
+              nullable: true
+            traceId:
+              type: string
+              nullable: true
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        rememberMe:
+          type: boolean
+          default: false
+    LoginResponse:
+      type: object
+      properties:
+        tokens:
+          type: object
+          nullable: true
+          properties:
+            accessToken:
+              type: string
+              nullable: true
+        user:
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      nullable: true
+      required: [id]
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+          description: Роль (player або organizer)
+          example: player
+    Sport:
+      type: object
+      required: [id, name, imageUrl]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        imageUrl:
+          type: string
+    Participant:
+      type: object
+      required: [id, name, userId, tournamentId]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        userId:
+          type: string
+          format: uuid
+        tournamentId:
+          type: string
+          format: uuid
+        isDisqualified:
+          type: boolean
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+    ParticipantCount:
+      type: object
+      required: [tournamentId, activeParticipants]
+      properties:
+        tournamentId:
+          type: string
+          format: uuid
+        activeParticipants:
+          type: integer
+          minimum: 0
