@@ -18,7 +18,7 @@
 |------|----------|
 | Проєкт | **OfficeIMO** (Evotec) — .NET-бібліотека для створення й читання Word, Excel, PowerPoint, PDF, e-invoice (Factur-X/ZUGFeRD, KSeF) без встановленого Microsoft Office |
 | Репозиторій | https://github.com/EvotecIT/OfficeIMO (MIT, ~19 650 комітів, активний: останній коміт 2026-11-22) |
-| Project key / organization | `EvotecIT_OfficeIMO` / organization key — поле `organization` у відповіді `curl -s "https://sonarcloud.io/api/components/show?component=EvotecIT_OfficeIMO"` (**вписати перед здачею**) |
+| Project key / organization | `EvotecIT_OfficeIMO` / `evotecit` (поле `organization` з `GET /api/components/show?component=EvotecIT_OfficeIMO`) |
 | Стек | C# (збігається зі стеком бекенду ZVYTIAHA) |
 | Масштаб | ncloc = **1 288 166** (≥ 50 000 ✔) |
 
