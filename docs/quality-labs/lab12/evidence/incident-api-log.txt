@@ -1,0 +1,9 @@
+# API log during INC-001 (JSON stdout): only access-log lines, no exception logged
+$ grep -c '"level":"Error"' api.log
+0
+$ grep 'route":"api/v1/tournaments/{id}/image' api.log | head -3
+{"time":"2026-11-22T16:27:20.867Z","level":"Information","category":"TournamentPlatformSystemWebApi.API.Middleware.RequestLoggingMiddleware","message":"HTTP POST api/v1/tournaments/{id}/image responded 500 in 545.41 ms","method":"POST","route":"api/v1/tournaments/{id}/image","status":500,"durationMs":545.41}
+{"time":"2026-11-22T16:27:21.176Z","level":"Information","category":"TournamentPlatformSystemWebApi.API.Middleware.RequestLoggingMiddleware","message":"HTTP POST api/v1/tournaments/{id}/image responded 500 in 36.75 ms","method":"POST","route":"api/v1/tournaments/{id}/image","status":500,"durationMs":36.75}
+{"time":"2026-11-22T16:27:21.474Z","level":"Information","category":"TournamentPlatformSystemWebApi.API.Middleware.RequestLoggingMiddleware","message":"HTTP POST api/v1/tournaments/{id}/image responded 500 in 38.69 ms","method":"POST","route":"api/v1/tournaments/{id}/image","status":500,"durationMs":38.69}
+$ last upload response body
+{"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\"","fieldErrors":null,"path":"TournamentPlatformSystemWebApi.API.Controllers.TournamentsController.UploadImage (TournamentPlatformSystemWebApi.API)","timestamp":"2026-11-22T16:27:24.1957042Z","traceId":"0HNQ8MLSHSQ5A:00000001"}}

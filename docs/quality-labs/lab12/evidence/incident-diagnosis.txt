@@ -1,0 +1,9 @@
+# INC-001 on-call diagnosis log (2026-11-22, UTC)
+16:28:26 [1] /health -> {"success":true,"timestamp":"2026-11-22T16:28:26.3009475Z","databaseState":"Open","version":"1.0.0"}
+16:28:26 [2] 5xx by route from /metrics:
+http_requests_total{method="POST",route="api/v1/tournaments/{id}/image",status="500"} 12
+16:28:26 [3] error-level log lines: 0; access-log lines for image route with 500: 12
+16:28:26 [4] hypothesis (from the 500 response body): storage rejects service-account key (invalid_grant); DB and catalogue healthy
+16:28:41 [5] reproduce upload to confirm the hypothesis (tournament e9ebd8b2-3ba6-4775-9827-5ef334111fec, created by the organizer during the incident):
+{"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\"","fieldErr
+16:28:41 [6] workaround decided: create tournaments without a banner (field is optional). Customer notice: not sent (drill, no real users)

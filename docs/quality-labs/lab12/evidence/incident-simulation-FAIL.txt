@@ -1,0 +1,24 @@
+# INC-001 simulation, 2026-11-22 (all times UTC)
+16:27:19 setup: organizer incident.organizer@example.com, tournament fc7d1759-43c7-4eb3-92e6-610e19cd9536
+16:27:19 traffic start: 400 catalogue requests + 12 banner uploads
+16:27:20 upload #1 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:21 upload #2 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:21 upload #3 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:21 upload #4 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:22 upload #5 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:22 upload #6 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:22 upload #7 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:22 upload #8 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:23 upload #9 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:23 upload #10 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:23 upload #11 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:24 upload #12 -> HTTP 500 {"error":{"code":500,"type":"InternalServerError","message":"Failedo upload file to Google Cloud Storage: Error:\"invalid_grant\", Description:\"Invalid grant: account not found\", Uri:\"\""…(truncated by the script, head -c 160)
+16:27:24 traffic end
+16:27:24 /health -> 200
+alert TournamentApiHighErrorRate: 5xx share 1.49% of 808 requests -> NOT FIRING (threshold 5%)
+banner uploads: 12 total, 12 with 5xx
+SLI from /tmp/incident-metrics.txt (counters since process start):
+SLI                good    total    SLI %    bad allowed bad budget used %  status
+availability        796      808    98.51     12        4.04           297  SLA BREACH
+latency             804      808    99.50      4       40.40            10  OK
+banner-upload         0       12     0.00     12        0.12         10000  SLA BREACH

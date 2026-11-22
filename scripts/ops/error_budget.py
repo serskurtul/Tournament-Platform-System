@@ -18,7 +18,8 @@ from pathlib import Path
 
 import yaml
 
-SAMPLE_RE = re.compile(r'^(\w+)\{([^}]*)\}\s+([0-9.eE+-]+)$')
+# Label values may contain braces (route="api/v1/tournaments/{id}/image"), so match quoted strings explicitly.
+SAMPLE_RE = re.compile(r'^(\w+)\{((?:[^"}]|"(?:[^"\\]|\\.)*")*)\}\s+([0-9.eE+-]+)$')
 LABEL_RE = re.compile(r'(\w+)="((?:[^"\\]|\\.)*)"')
 
 

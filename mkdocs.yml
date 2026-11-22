@@ -70,6 +70,7 @@ nav:
       - "Управління змінами": changes/index.md
       - "RFC-001": changes/RFC-001.md
       - "Протокол CCB 2026-11-22": changes/ccb-2026-11-22.md
+      - "INC-001 — відмова сховища банерів": incidents/INC-001.md
   - "Рівень 3 · API":
       - api/index.md
       - "Каталог помилок": api/error-catalog.md
@@ -86,4 +87,5 @@ nav:
           - architecture/adr/0001-postgresql-with-ef-core.md
           - architecture/adr/0002-decompose-tournament-service.md
           - architecture/adr/0003-documentation-as-code.md
+      - "Legacy: сховище банерів": architecture/legacy/storage-service.md
       - "SAD (deprecated)": architecture/sad-internal-view.md

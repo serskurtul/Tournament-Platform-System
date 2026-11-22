@@ -1,0 +1,5 @@
+# User retry after a failed banner upload (same form submitted twice)
+$ POST /api/v1/tournaments (attempt 1)
+{"id":"e9ebd8b2-3ba6-4775-9827-5ef334111fec","detailsUrl":"http://localhost:5050/api/v1/tournaments/e9ebd8b2-3ba6-4775-9827-5ef334111fec"}  HTTP 201
+$ POST /api/v1/tournaments (attempt 2)
+{"error":{"code":409,"type":"Conflict","message":"Tournament title must be unique for the organizer","fieldErrors":null,"path":"TournamentPlatformSystemWebApi.API.Controllers.TournamentsController.CreateTournament (Tourn
