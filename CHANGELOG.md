@@ -5,6 +5,8 @@
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-11-22
+
 ### Added
 
 - База знань MkDocs Material за чотирирівневою пірамідою (`docs/`), деплой на GitHub Pages (`.github/workflows/docs.yml`).
@@ -47,7 +49,8 @@
 
 - Release Candidate курсового проєкту (MVP: реєстрація, турніри, сітка single elimination).
 
-[Unreleased]: https://github.com/serskurtul/Tournament-Platform-System/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/serskurtul/Tournament-Platform-System/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/serskurtul/Tournament-Platform-System/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/serskurtul/Tournament-Platform-System/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/serskurtul/Tournament-Platform-System/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/serskurtul/Tournament-Platform-System/releases/tag/v1.0.1

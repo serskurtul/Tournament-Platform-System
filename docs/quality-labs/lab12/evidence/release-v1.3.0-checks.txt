@@ -1,0 +1,25 @@
+# Release v1.3.0 go/no-go checks, 2026-11-22T16:36:00Z, commit 994a72e
+$ dotnet test server/Tests
+Passed!  - Failed:     0, Passed:    53, Skipped:     0, Total:    53, Duration: 1 s - Tests.dll (net9.0)
+$ (client) npm run lint && npm run build
+lint OK
+✓ built in 581ms
+$ scripts/docs/contract_test.sh
+============================== 5 passed in 1.90s ===============================
+$ spectral lint docs/api/openapi.yaml
+No results with a severity of 'error' found!
+$ mkdocs build --strict
+exit 0
+$ helm lint charts/tournament-platform -f values-prod.yaml
+1 chart(s) linted, 0 chart(s) failed
+$ git diff --stat v1.2.0..HEAD -- server/*/Migrations
+migrations changed: 0
+$ doc_contract_check / review_date / link_graph
+RESULT: PASS (documentation matches code)
+RESULT: PASS (32 pages, 0 errors, 0 warnings)
+RESULT: PASS (single connected knowledge graph)
+$ error_budget.py (spec validation)
+SLI             SLO %  SLA % buffer pp budget(SLO) min budget(SLA) min
+availability    99.50  99.00      0.50           216.0           432.0
+latency         95.00  90.00      5.00          2160.0          4320.0
+banner-upload   99.00  97.00      2.00           432.0          1296.0
