@@ -114,3 +114,4 @@
 ## Документація
 
 - [ ] Зачеплені документи оновлено (README / [SDD](../docs/architecture/sdd.md) / [ISD](../docs/architecture/isd.md) / ADR) або зміна не впливає на поведінку системи
+- [ ] **docs-or-don't-merge:** публічна поведінка змінилась → оновлено `docs/api/openapi.yaml` (SemVer `info.version`), `CHANGELOG.md` і `review_date` змінених сторінок ([CONTRIBUTING](../docs/developer/contributing.md))

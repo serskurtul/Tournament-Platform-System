@@ -1,3 +1,10 @@
+---
+owner: Скуртул Сергій
+status: published
+review_date: 2027-02-19
+tags: [developer, process]
+---
+
 # Handover Package — ZVYTIAHA
 
 Мінімальний пакет передачі системи команді супроводу. Власники й цикли перегляду — у [регламенті](maintenance.md).
@@ -6,7 +13,7 @@
 
 | Документ | Що відповідає | Власник | Статус актуальності (2026-11-21) |
 |----------|---------------|---------|----------------------------------|
-| [README.md](../../README.md) | Що це, як запустити, шлях новачка | Анур'єва Катерина | ✅ актуальний |
+| [README.md](https://github.com/serskurtul/Tournament-Platform-System/blob/main/README.md) | Що це, як запустити, шлях новачка | Анур'єва Катерина | ✅ актуальний |
 | [docs/sdd.md](../architecture/sdd.md) | Компоненти, модель даних, API (перевіряється в CI) | Скуртул Сергій | ✅ актуальний |
 | [docs/isd.md](../architecture/isd.md) | Середовища, змінні, CI/CD, порядок старту (перевіряється в CI), RTO/RPO | Скуртул Сергій | ✅ актуальний |
 | [docs/architecture/adr/](../architecture/adr/README.md) | Чому прийнято ключові рішення | Скуртул Сергій, Дудко Володимир | ✅ актуальний |
@@ -14,13 +21,13 @@
 | [docs/DATA_DICTIONARY.md](../architecture/data-dictionary.md) | Поля таблиць | Дудко Володимир | ⚠️ перегляд прострочено (163 дні) |
 | [docs/TestPlan.md](test-plan.md) | Стратегія тестування | Загребенюк Богдан | ⚠️ дрейф (24 зміни тестів без оновлення) |
 | [docs/Data_Flow_Specification.md](../architecture/data-flow-specification.md) | Потоки даних між шарами | Скуртул Сергій | ⚠️ дрейф (98 змін коду без оновлення) |
-| [k8s/README.md](../../k8s/README.md), [charts/…/README.md](../../charts/tournament-platform/README.md) | Розгортання в Kubernetes | Скуртул Сергій | ✅ актуальні |
+| [k8s/README.md](https://github.com/serskurtul/Tournament-Platform-System/blob/main/k8s/README.md), [charts/…/README.md](https://github.com/serskurtul/Tournament-Platform-System/blob/main/charts/tournament-platform/README.md) | Розгортання в Kubernetes | Скуртул Сергій | ✅ актуальні |
 
 ## 2. Онбординг нового розробника (від README до локального запуску)
 
-1. Клонувати репозиторій і прочитати [README](../../README.md): призначення, «Шлях новачка».
+1. Клонувати репозиторій і прочитати [README](https://github.com/serskurtul/Tournament-Platform-System/blob/main/README.md): призначення, «Шлях новачка».
 2. `cp .env.example .env`, за потреби змінити паролі; `docker compose up --build`. Init-контейнер сам застосує міграції й seed.
-3. Перевірити: http://localhost:5050/version (API живий), http://localhost:5050/swagger (контракти), http://localhost:5173 (UI). Пройти сценарій організатора: турнір → учасники → старт → результат.
+3. Перевірити: <http://localhost:5050/version> (API живий), <http://localhost:5050/swagger> (контракти), <http://localhost:5173> (UI). Пройти сценарій організатора: турнір → учасники → старт → результат.
 4. Знайти свій модуль у [SDD §2](../architecture/sdd.md#2-компоненти) і його API в [SDD §4](../architecture/sdd.md#4-api-контракти-apiv1-json); локально: `dotnet test server/Tests`, `npm run lint && npm run build` у `client/`.
 5. Перед першим PR — [регламент](maintenance.md): оновити зачеплені документи; CI-джоба `doc-contract` перевірить SDD/ISD.
 

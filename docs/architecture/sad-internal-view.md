@@ -1,3 +1,10 @@
+---
+owner: Скуртул Сергій
+status: deprecated
+review_date: 2027-05-20
+tags: [architecture, deprecated]
+---
+
 # Software Architecture Document: Internal View (SAD)
 
 > **Deprecated (2026-11-21).** Документ описує структуру березня 2026 і містить застарілі дані (наприклад, єдиний `TournamentService`). Актуальна внутрішня структура — [sdd.md](sdd.md), рішення — [architecture/adr](adr/README.md).
@@ -51,11 +58,9 @@ graph TD
     API -.->|Dependency Injection| INFRA
 ```
 
-
-
 ## 5. Правила взаємодії та Dependency Injection
 
-1.  **Напрямок залежностей:** `Web API` $\rightarrow$ `Application` $\rightarrow$ `Domain`. `Infrastructure` також залежить від `Application` (реалізуючи його інтерфейси).
-2.  **Statelessness:** Сервіси в шарі Application не повинні зберігати стан між запитами.
-3.  **Data Transfer:** Між API та Application передаються лише **DTO (Data Transfer Objects)**. Сутності Domain не виходять за межі Application Layer, щоб не "протікала" структура БД на клієнта.
-4.  **DI Container:** Реєстрація всіх залежностей відбувається в проекті Web/API (Composition Root) за допомогою стандартного `IServiceCollection`.
+1. **Напрямок залежностей:** `Web API` $\rightarrow$ `Application` $\rightarrow$ `Domain`. `Infrastructure` також залежить від `Application` (реалізуючи його інтерфейси).
+2. **Statelessness:** Сервіси в шарі Application не повинні зберігати стан між запитами.
+3. **Data Transfer:** Між API та Application передаються лише **DTO (Data Transfer Objects)**. Сутності Domain не виходять за межі Application Layer, щоб не "протікала" структура БД на клієнта.
+4. **DI Container:** Реєстрація всіх залежностей відбувається в проекті Web/API (Composition Root) за допомогою стандартного `IServiceCollection`.

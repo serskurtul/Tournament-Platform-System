@@ -1,7 +1,15 @@
-## Data Dictionary - Tournament Platform System
+---
+owner: Скуртул Сергій
+status: published
+review_date: 2027-05-20
+tags: [architecture, data]
+---
 
-#### Посилання на ER-діаграму https://github.com/katushhiaa/Tournament-Platform-System/wiki/ER%E2%80%90Diagram-and-Domain-Model-&-Schema-Specification
-#### Посилання на DDL https://github.com/katushhiaa/Tournament-Platform-System/blob/main/db/init_db.sql
+# Data Dictionary - Tournament Platform System
+
+## Посилання на ER-діаграму <https://github.com/katushhiaa/Tournament-Platform-System/wiki/ER%E2%80%90Diagram-and-Domain-Model-&-Schema-Specification>
+
+## Посилання на DDL <https://github.com/katushhiaa/Tournament-Platform-System/blob/main/db/init_db.sql>
 
 **Дата оновлення:** 2026-06-11 (На основі файлу бекапу)
 
@@ -20,6 +28,7 @@
 | `created_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Дата створення |
 
 **Зв'язки:**
+
 - 1:N → USER (одне стану → багато користувачів)
 
 ---
@@ -40,6 +49,7 @@
 | `deleted_at` | TIMESTAMP | NULLABLE | Дата soft delete (GDPR) |
 
 **Зв'язки:**
+
 - N:1 ← ACCOUNT_STATE (account_state_id)
 - 1:N → TOURNAMENT (organizer_id)
 - 1:N → USER_TEAM (user_id)
@@ -65,6 +75,7 @@
 | `preferences_setup_completed`| BOOLEAN | NOT NULL, DEFAULT false | Чи завершено налаштування преференцій |
 
 **Зв'язки:**
+
 - 1:1 ← USER (user_id, CASCADE DELETE)
 
 ---
@@ -82,6 +93,7 @@
 | `deleted_at` | TIMESTAMP | NULLABLE | Дата soft delete |
 
 **Зв'язки:**
+
 - N:1 ← USER (user_id, CASCADE DELETE)
 
 ---
@@ -98,6 +110,7 @@
 | `image_url` | TEXT | NULLABLE | Посилання на зображення теми |
 
 **Зв'язки:**
+
 - 1:N → TOURNAMENT (theme_id)
 - 1:N → USER_TOURNAMENT_THEME_PREFERENCE (theme_id)
 
@@ -125,6 +138,7 @@
 | `updated_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Дата останньої зміни |
 
 **Зв'язки:**
+
 - N:1 ← USER (organizer_id)
 - N:1 ← TOURNAMENT_THEME (theme_id)
 - 1:N → TEAM (CASCADE DELETE)
@@ -148,6 +162,7 @@
 *Обмеження:* Унікальна пара `name` + `tournament_id`.
 
 **Зв'язки:**
+
 - N:1 ← TOURNAMENT (tournament_id, CASCADE DELETE)
 - 1:N → USER_TEAM (team_id)
 - 1:N → MATCH (як team_a_id, team_b_id, winner_id)
@@ -168,6 +183,7 @@
 *Обмеження:* Унікальна пара `user_id` + `team_id`.
 
 **Зв'язки:**
+
 - N:1 ← USER (user_id)
 - N:1 ← TEAM (team_id)
 
@@ -187,6 +203,7 @@
 *Обмеження:* Унікальна пара `user_id` + `theme_id`.
 
 **Зв'язки:**
+
 - N:1 ← USER (user_id, CASCADE DELETE)
 - N:1 ← TOURNAMENT_THEME (theme_id, CASCADE DELETE)
 
@@ -217,6 +234,7 @@
 *Обмеження:* Унікальна комбінація `tournament_id` + `level` + `order_number`.
 
 **Зв'язки:**
+
 - N:1 ← TOURNAMENT (tournament_id, CASCADE DELETE)
 - N:1 ← TEAM (team_a_id)
 - N:1 ← TEAM (team_b_id)
@@ -240,4 +258,5 @@
 | `is_revoked` | BOOLEAN | NOT NULL, DEFAULT false | Чи був відкликаний |
 
 **Зв'язки:**
+
 - N:1 ← USER (user_id, CASCADE DELETE)

@@ -1,3 +1,10 @@
+---
+owner: Скуртул Сергій
+status: published
+review_date: 2027-05-20
+tags: [architecture, ops]
+---
+
 # Infrastructure Specification Document (ISD) — ZVYTIAHA
 
 Що всередині системи, описано в [SDD](sdd.md). Тут — де і на чому вона працює, як збирається, розгортається, спостерігається і відновлюється.
@@ -26,7 +33,7 @@
 | `pgadmin -> db (service_healthy)` | адмінка чекає на БД |
 | `client -> app (service_healthy)` | SPA стартує лише після того, як API пройшов healthcheck (`curl /version`, кожні 10 с, до 10 спроб) |
 
-**Kubernetes.** Namespace `tournament-platform`: Deployment (або Argo Rollout) API з liveness `/version` і readiness `/health`; Deployment клієнта; PostgreSQL з PVC; Job/hook міграцій; Service-и `ClusterIP` / `NodePort 30173`; Ingress `tournament.local`. Деталі — [`k8s/README.md`](../../k8s/README.md), [`charts/tournament-platform/README.md`](../../charts/tournament-platform/README.md).
+**Kubernetes.** Namespace `tournament-platform`: Deployment (або Argo Rollout) API з liveness `/version` і readiness `/health`; Deployment клієнта; PostgreSQL з PVC; Job/hook міграцій; Service-и `ClusterIP` / `NodePort 30173`; Ingress `tournament.local`. Деталі — [`k8s/README.md`](https://github.com/serskurtul/Tournament-Platform-System/blob/main/k8s/README.md), [`charts/tournament-platform/README.md`](https://github.com/serskurtul/Tournament-Platform-System/blob/main/charts/tournament-platform/README.md).
 
 **GitOps.** Argo CD (App of Apps): `bootstrap/root-app.yaml` → `argocd-apps/` (застосунок, Argo Rollouts, kube-prometheus-stack, Loki, Alloy). Реліз — зміна тегу образу в `values-minikube.yaml`; canary з кроком analysis (поріг успішних запитів 95%).
 

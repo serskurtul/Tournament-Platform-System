@@ -1,3 +1,10 @@
+---
+owner: Скуртул Сергій
+status: published
+review_date: 2027-05-20
+tags: [architecture, adr]
+---
+
 # ADR-0002: Декомпозиція `TournamentService` за відповідальностями
 
 - **Статус:** Accepted
@@ -26,3 +33,7 @@
 - (+) `TournamentsController` залежить від п'яти вузьких контрактів.
 - (−) Більше файлів і реєстрацій у DI.
 - (−) Пороги CBO ≤ 8 / LCOM* ≤ 0.2 досягнуто не для всіх класів. Наступний крок — розвести `TournamentCatalogService` (LCOM4 = 2) і зменшити залежність `MatchService` від конкретних DTO.
+
+## Пов'язані документи
+
+[SDD](../sdd.md) · [ISD](../isd.md) · [журнал ADR](README.md)

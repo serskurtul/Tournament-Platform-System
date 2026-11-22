@@ -10,7 +10,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=flat&logo=postgresql)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker)
 ![Status](https://img.shields.io/badge/Status-Stable-brightgreen?style=flat)
-![Version](https://img.shields.io/badge/Version-1.0.0-orange?style=flat)
+![Version](https://img.shields.io/badge/Version-1.2.0-orange?style=flat)
 
 </div>
 
@@ -29,16 +29,29 @@
 4. Чому система влаштована саме так — [ADR](docs/architecture/adr/README.md).
 5. Перед першим PR — [регламент документації](docs/developer/maintenance.md): зміна коду = зміна документації.
 
-### 📚 Документація (архітектурний паспорт)
+### 📚 Документація (база знань)
 
-| Документ | Для кого | Про що |
-|----------|----------|--------|
-| [docs/architecture/sdd.md](docs/architecture/sdd.md) | розробники, QA | C4-контейнери, компоненти, модель даних, API-контракти |
-| [docs/architecture/isd.md](docs/architecture/isd.md) | DevOps | Середовища, змінні, CI/CD, моніторинг, резервне копіювання (RTO/RPO) |
-| [docs/architecture/adr/](docs/architecture/adr/README.md) | розробники, архітектор | Журнал архітектурних рішень |
-| [docs/developer/maintenance.md](docs/developer/maintenance.md) | усі | Власники документів і цикли перегляду |
-| [docs/developer/handover.md](docs/developer/handover.md) | команда супроводу | Пакет передачі знань, Bus Factor |
-| [docs/developer/test-plan.md](docs/developer/test-plan.md), [docs/api/error-catalog.md](docs/api/error-catalog.md) | QA | План тестування, каталог помилок API |
+Сайт: **<https://serskurtul.github.io/Tournament-Platform-System/>** (MkDocs Material, збирається з `docs/` конвеєром [docs.yml](.github/workflows/docs.yml)). Локально: `pip install -r docs/requirements.txt && mkdocs serve`.
+
+| Рівень | Питання | Де |
+|--------|---------|----|
+| 1 | Що це і як запустити? | це README |
+| 2 | Як долучитися до розробки? | [docs/developer/](docs/developer/index.md): [CONTRIBUTING](docs/developer/contributing.md), локальне середовище, стандарти коду, план тестування |
+| 3 | Як інтегруватися? | [docs/api/](docs/api/index.md): контракт [openapi.yaml](docs/api/openapi.yaml), Swagger UI, каталог помилок |
+| 4 | Чому система влаштована саме так? | [docs/architecture/](docs/architecture/index.md): [SDD](docs/architecture/sdd.md), [ISD](docs/architecture/isd.md), [ADR](docs/architecture/adr/README.md) |
+
+#### Definition of Done: документаційні перевірки
+
+PR, що змінює публічну поведінку, не зливається без оновлення `docs/`, `openapi.yaml` і [CHANGELOG](CHANGELOG.md) ([чек-лист docs-or-don't-merge](docs/developer/contributing.md)).
+
+| Що перевіряємо | Інструмент | Падає, якщо |
+|----------------|-----------|-------------|
+| Контракти API | Spectral (`.spectral.yaml`) | є хоч одна error у `docs/api/openapi.yaml` |
+| Розмітка | markdownlint (`.markdownlint-cli2.yaml`) | порушено стиль Markdown |
+| Посилання й навігація | `mkdocs build --strict` | мертве посилання, сторінка поза `nav`, будь-яке попередження |
+| Актуальність | `scripts/docs/review_date_audit.py` | `review_date` у front matter прострочено |
+| Зв'язність бази знань | `scripts/docs/link_graph.py` | є сторінка без жодного посилання |
+| Код ↔ документація | `scripts/quality/doc_contract_check.py` | маршрут або залежність compose не описані в SDD/ISD |
 
 ## ✨ Features
 

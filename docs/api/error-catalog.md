@@ -1,3 +1,10 @@
+---
+owner: Скуртул Сергій
+status: published
+review_date: 2027-02-19
+tags: [api]
+---
+
 # Error Catalog and Transactional Code Snippets
 
 ## 1. Error Response Schema
@@ -21,6 +28,7 @@ All API errors return `ErrorResponseDto`:
 ```
 
 Fields:
+
 - `code` — HTTP status code.
 - `type` — error category.
 - `message` — human-readable description.

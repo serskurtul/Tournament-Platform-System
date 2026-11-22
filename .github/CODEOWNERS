@@ -1,0 +1,7 @@
+# ЛР-11: власник документації. Зміни в docs/ і контракті API не зливаються без його рев'ю
+# (увімкнути в Settings → Branches → main: "Require review from Code Owners").
+/docs/                 @serskurtul
+/mkdocs.yml            @serskurtul
+/.spectral.yaml        @serskurtul
+/docs/api/openapi.yaml @serskurtul
+/CHANGELOG.md          @serskurtul

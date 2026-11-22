@@ -1,0 +1,83 @@
+# ЛР-11: Documentation as Code. Build locally: pip install -r docs/requirements.txt && mkdocs serve
+site_name: ZVYTIAHA — база знань
+site_description: Документація турнірної платформи ZVYTIAHA (Documentation as Code)
+site_url: https://serskurtul.github.io/Tournament-Platform-System/
+repo_url: https://github.com/serskurtul/Tournament-Platform-System
+repo_name: serskurtul/Tournament-Platform-System
+edit_uri: edit/main/docs/
+docs_dir: docs
+
+theme:
+  name: material
+  language: uk
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - content.code.copy
+
+# Process records and assets that are not part of the knowledge base site.
+exclude_docs: |
+  labs/
+  quality-labs/
+  marketing/
+  gif/
+  screenshots/
+  requirements.txt
+
+# Strict build turns every warning into a failure ("не збирається — не їде").
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+  links:
+    not_found: warn
+    absolute_links: warn
+    unrecognized_links: warn
+
+plugins:
+  - search
+  - mermaid2
+  - swagger-ui-tag
+  - git-revision-date-localized:
+      type: date
+      fallback_to_build_date: true
+
+markdown_extensions:
+  - tables
+  - admonition
+  - attr_list
+  - toc:
+      permalink: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+
+nav:
+  - "Рівень 1 · Що це і як запустити": index.md
+  - "Рівень 2 · Розробникам":
+      - developer/index.md
+      - "Як долучитися (CONTRIBUTING)": developer/contributing.md
+      - "Локальне середовище": developer/local-setup.md
+      - "Стандарти коду (іменування)": developer/naming-conventions.md
+      - "План тестування": developer/test-plan.md
+      - "Регламент документації": developer/maintenance.md
+      - "Handover": developer/handover.md
+  - "Рівень 3 · API":
+      - api/index.md
+      - "Каталог помилок": api/error-catalog.md
+  - "Рівень 4 · Архітектура":
+      - architecture/index.md
+      - "SDD — проєктування": architecture/sdd.md
+      - "ISD — інфраструктура": architecture/isd.md
+      - "Словник даних": architecture/data-dictionary.md
+      - "Цілісність даних": architecture/data-integrity.md
+      - "Потоки даних": architecture/data-flow-specification.md
+      - "ADR — архітектурні рішення":
+          - architecture/adr/README.md
+          - architecture/adr/0000-modular-monolith-system-style.md
+          - architecture/adr/0001-postgresql-with-ef-core.md
+          - architecture/adr/0002-decompose-tournament-service.md
+          - architecture/adr/0003-documentation-as-code.md
+      - "SAD (deprecated)": architecture/sad-internal-view.md

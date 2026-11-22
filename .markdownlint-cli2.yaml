@@ -1,0 +1,16 @@
+# ЛР-11: markdownlint для сторінок сайту документації (docs/ без звітів лабораторних і маркетингу).
+config:
+  default: true
+  MD013: false          # довгі рядки: таблиці й українські речення
+  MD033:
+    allowed_elements: [swagger-ui, br, details, summary, img]
+  MD041: false          # перший рядок — front matter, а не заголовок
+  MD024:
+    siblings_only: true
+  MD060: false
+globs:
+  - "docs/**/*.md"
+ignores:
+  - "docs/labs/**"
+  - "docs/quality-labs/**"
+  - "docs/marketing/**"

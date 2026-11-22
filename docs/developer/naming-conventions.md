@@ -1,3 +1,10 @@
+---
+owner: Скуртул Сергій
+status: published
+review_date: 2027-02-19
+tags: [developer, standards]
+---
+
 Code Style Guide
 Базові стандарти
 У проєкті використовуються такі базові галузеві стандарти:
